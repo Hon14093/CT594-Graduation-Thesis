@@ -1,23 +1,21 @@
-# Use official Node image
-FROM node:20-slim
+FROM node:21-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy dependencies
 COPY package*.json ./
 
-# Install dependencies
+RUN rm -rf node_modules package-lock.json
+
 RUN npm install
 
-# Copy rest of the app
+RUN npm update
+
 COPY . .
 
-# Expose Vite dev port
 EXPOSE 5173
 
 # Vite needs HOST=0.0.0.0 for external access
-ENV key="0.0.0.0"
+ENV HOST="0.0.0.0"
 
 # Run dev server
 CMD ["npm", "run", "dev"]
