@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -12,4 +6,42 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model brand {
+  brand_id   Int       @id @default(autoincrement())
+  brand_name String    @db.VarChar(100)
+  product    product[]
+}
+
+model category {
+  category_id    Int        @id @default(autoincrement())
+  category_name  String     @db.VarChar(100)
+  parent_id      Int?
+  category       category?  @relation("categoryTocategory", fields: [parent_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
+  other_category category[] @relation("categoryTocategory")
+  product        product[]
+
+  @@unique([category_name, parent_id])
+}
+
+model product {
+  product_id   String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_name String    @db.VarChar(200)
+  brand_id     Int?
+  category_id  Int?
+  description  String?
+  image_url    String?   @db.VarChar(300)
+  brand        brand?    @relation(fields: [brand_id], references: [brand_id], onDelete: NoAction, onUpdate: NoAction)
+  category     category? @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
+  variant      variant[]
+}
+
+model variant {
+  id            String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_id    String  @db.Uuid
+  product_price Float   @db.Real
+  stock         Int
+  specs         Json?   @default("{}")
+  product       product @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
 }
