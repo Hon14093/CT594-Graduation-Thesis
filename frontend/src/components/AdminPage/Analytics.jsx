@@ -20,7 +20,7 @@ export default function Analytics() {
                     <Breadcrumb>
                         <BreadcrumbList>
                             <BreadcrumbItem className="hidden md:block">
-                                <BreadcrumbLink href="#">R&G</BreadcrumbLink>
+                                <BreadcrumbLink href="#">Quản lý</BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator className="hidden md:block" />
                             <BreadcrumbItem>

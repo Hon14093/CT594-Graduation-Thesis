@@ -16,6 +16,7 @@ export default function AdminPage() {
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/discounts" element={<Discounts />} />
                 <Route path="/products" element={<Products />} />    
+                
                 {/* <Route path="/products/variations" element={<Variations />} /> */}
                 {/* <Route path="/orders" element={<Orders />} /> */}
                 {/* <Route path="/check-orders" element={<CheckOrders />} /> */}

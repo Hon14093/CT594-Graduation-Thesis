@@ -1,14 +1,14 @@
-FROM node:21-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json .
 
-RUN rm -rf node_modules package-lock.json
+# RUN rm -rf node_modules package-lock.json
 
 RUN npm install
 
-RUN npm update
+# RUN npm update
 
 COPY . .
 
