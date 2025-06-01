@@ -3,7 +3,12 @@ const prisma = new PrismaClient();
 
 export const returnAllProducts = async (req,res) => {
     try {
-        const products = await prisma.product.findMany();
+        const products = await prisma.product.findMany({
+            include: {
+                category: true,
+            }
+        });
+
         res.status(200).json({
             success: true,
             message: 'Get all products',

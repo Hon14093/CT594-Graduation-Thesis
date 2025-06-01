@@ -18,12 +18,12 @@ import { DataTable } from '../data-table'
 import { productColumns } from '../columns'
 import { getProducts } from '@/hooks/product-api'
 
-export default function Products() {
+export default function Categories() {
     const [data, setData] = useState([]);
 
-    useEffect(() => {
-        getProducts(setData);
-    }, [])
+    // useEffect(() => {
+    //     getProducts(setData);
+    // }, [])
     
     return (
         <SidebarInset>
@@ -38,7 +38,7 @@ export default function Products() {
                             </BreadcrumbItem>
                             <BreadcrumbSeparator className="hidden md:block" />
                             <BreadcrumbItem>
-                                <BreadcrumbPage>Sản phẩm</BreadcrumbPage>
+                                <BreadcrumbPage>Danh mục</BreadcrumbPage>
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
@@ -49,17 +49,10 @@ export default function Products() {
                 <CardHeader>
                     <div className='flex'>
                         <div className='font-bold text-2xl'>
-                            Danh sách sản phẩm
+                            Danh sách Danh mục
                         </div>
 
                         <div className='ml-auto'>
-                            <Link to='/admin/products/variations'>
-                                <Button variant='outline' className='mr-3'>
-                                    <PackagePlus />
-                                    Biến thể
-                                </Button>
-                            </Link>
-
                             <CreateModal />
                         </div>
                     </div>                    

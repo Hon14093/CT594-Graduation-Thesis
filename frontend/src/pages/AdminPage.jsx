@@ -3,6 +3,8 @@ import { Routes, Route } from 'react-router-dom'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
 import Analytics from '@/components/AdminPage/Analytics'
+import Brands from '@/components/AdminPage/Brands'
+import Categories from '@/components/AdminPage/Categories'
 import Discounts from '@/components/AdminPage/Discounts'
 import Products from '@/components/AdminPage/Products'
 
@@ -14,6 +16,8 @@ export default function AdminPage() {
             <Routes>
                 <Route path="/" element={<Analytics />} />
                 <Route path="/analytics" element={<Analytics />} />
+                <Route path="/brands" element={<Brands />} />
+                <Route path="/categories" element={<Categories />} />
                 <Route path="/discounts" element={<Discounts />} />
                 <Route path="/products" element={<Products />} />    
                 

@@ -1,24 +1,19 @@
 import * as React from "react"
 import {
-	AudioWaveform,
-	BookOpen,
-	Bot,
 	ChartColumn,
-	Laptop,
-	Frame,
-	GalleryVerticalEnd,
-	Map,
-	PieChart,
 	TicketPercent,
 	Boxes,
-	Settings2,
-	SquareTerminal,
+	ClipboardList,
+	BriefcaseBusiness,
+
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
+import logo from "../assets/Logo_white.png"
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
+import { Link } from "react-router-dom"
 import {
 	Sidebar,
 	SidebarContent,
@@ -33,13 +28,6 @@ const data = {
 		email: "m@example.com",
 		avatar: "/avatars/shadcn.jpg",
 	},
-	teams: [
-		{
-			name: "Laptopia",
-			logo: Laptop,
-			// plan: "Enterprise",
-		},
-	],
 	projects: [
 		{
 			name: "Thống Kê",
@@ -47,15 +35,25 @@ const data = {
 			icon: ChartColumn,
 		},
 		{
-			name: "Products",
+			name: "Sản Phẩm",
 			url: "http://localhost:5173/admin/products",
 			icon: Boxes,
 		},
 		{
-			name: "Discounts",
+			name: "Danh Mục",
+			url: "http://localhost:5173/admin/categories",
+			icon: ClipboardList,
+		},
+		{
+			name: "Khuyến Mãi",
 			url: "http://localhost:5173/admin/discounts",
 			icon: TicketPercent,
 		},
+		{
+			name: "Thương Hiệu",
+			url: "http://localhost:5173/admin/brands",
+			icon: BriefcaseBusiness,
+		}
 	],
 }
 
@@ -65,7 +63,9 @@ export function AppSidebar({
 	return (
 		(<Sidebar collapsible="icon" {...props}>
 			<SidebarHeader className='bg-techBlue text-white'>
-				<TeamSwitcher teams={data.teams} />
+				<Link className="flex items-center gap-2 px-4 pt-4" to="/">
+					<img src={logo} alt="" className="w-[100%]" />
+				</Link>
 			</SidebarHeader>
 
 			<SidebarContent className='bg-techBlue text-white'>
@@ -73,7 +73,7 @@ export function AppSidebar({
 			</SidebarContent>
 
 			<SidebarFooter className='bg-techBlue text-white'>
-				<NavUser user={data.user} />
+				{/* <NavUser user={data.user} /> */}
 			</SidebarFooter>
 
 			<SidebarRail />
