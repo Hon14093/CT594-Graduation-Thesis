@@ -1,4 +1,10 @@
-import { Folder, Forward, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+	ChartColumn,
+	TicketPercent,
+	Boxes,
+	ClipboardList,
+	BriefcaseBusiness,
+} from "lucide-react"
 
 import {
     SidebarGroup,
@@ -19,11 +25,12 @@ export function NavProjects({
             <SidebarGroupLabel className='text-white'>Quản lý</SidebarGroupLabel>
             <SidebarMenu>
                 {projects.map((item) => (
-                    <SidebarMenuItem key={item.name}>
+                    <SidebarMenuItem key={item.name} className='pb-2'>
                         <SidebarMenuButton asChild>
-                            <Link to={item.url}>
-                                <item.icon />
-                                <span>{item.name}</span>
+                            <Link to={item.url} className="p-2 h-10">
+                                {/* <item.icon size={50}/>  */}
+                                <item.icon className="!size-5" />
+                                <span className="text-lg">{item.name}</span>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

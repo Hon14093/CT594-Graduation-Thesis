@@ -13,17 +13,17 @@ import { Link } from 'react-router-dom'
 import { Card, CardHeader, CardContent } from '../ui/card'
 import { Button } from '../ui/button'
 import { PackagePlus } from 'lucide-react'
-import CreateModal from './modals/products/CreateModal'
+import CreateModal from '../modals/brand/CreateModal'
 import { DataTable } from '../data-table'
 import { productColumns } from '../columns'
-import { getProducts } from '@/hooks/product-api'
+import { getBrands } from '@/hooks/product-api'
 
 export default function Brands() {
     const [data, setData] = useState([]);
 
-    // useEffect(() => {
-    //     getProducts(setData);
-    // }, [])
+    useEffect(() => {
+        getBrands(setData);
+    }, [])
     
     return (
         <SidebarInset>
@@ -48,7 +48,7 @@ export default function Brands() {
             <Card className="mx-5">
                 <CardHeader>
                     <div className='flex'>
-                        <div className='font-bold text-2xl'>
+                        <div className='font-semibold text-3xl'>
                             Danh sách thương hiệu
                         </div>
 

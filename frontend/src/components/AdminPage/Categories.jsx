@@ -13,17 +13,17 @@ import { Link } from 'react-router-dom'
 import { Card, CardHeader, CardContent } from '../ui/card'
 import { Button } from '../ui/button'
 import { PackagePlus } from 'lucide-react'
-import CreateModal from './modals/products/CreateModal'
+import CreateModal from '../modals/category/CreateModal'
 import { DataTable } from '../data-table'
 import { productColumns } from '../columns'
-import { getProducts } from '@/hooks/product-api'
+import { getCategories } from '@/hooks/product-api'
 
 export default function Categories() {
     const [data, setData] = useState([]);
 
-    // useEffect(() => {
-    //     getProducts(setData);
-    // }, [])
+    useEffect(() => {
+        getCategories(setData);
+    }, [])
     
     return (
         <SidebarInset>
@@ -48,8 +48,8 @@ export default function Categories() {
             <Card className="mx-5">
                 <CardHeader>
                     <div className='flex'>
-                        <div className='font-bold text-2xl'>
-                            Danh sách Danh mục
+                        <div className='font-semibold text-3xl'>
+                            Danh sách danh mục
                         </div>
 
                         <div className='ml-auto'>

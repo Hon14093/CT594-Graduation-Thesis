@@ -5,7 +5,6 @@ import {
 	Boxes,
 	ClipboardList,
 	BriefcaseBusiness,
-
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -61,7 +60,7 @@ export function AppSidebar({
 	...props
 }) {
 	return (
-		(<Sidebar collapsible="icon" {...props}>
+		(<Sidebar collapsible="icon" {...props} className='raleway'>
 			<SidebarHeader className='bg-techBlue text-white'>
 				<Link className="flex items-center gap-2 px-4 pt-4" to="/">
 					<img src={logo} alt="" className="w-[100%]" />
