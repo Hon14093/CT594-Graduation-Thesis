@@ -15,7 +15,7 @@ import { Button } from '../ui/button'
 import { PackagePlus } from 'lucide-react'
 import CreateModal from '../modals/brand/CreateModal'
 import { DataTable } from '../data-table'
-import { productColumns } from '../columns'
+import { brandColumns } from '../columns'
 import { getBrands } from '@/hooks/product-api'
 
 export default function Brands() {
@@ -24,6 +24,10 @@ export default function Brands() {
     useEffect(() => {
         getBrands(setData);
     }, [])
+
+    const handleSubmitSuccess = () => {
+        getBrands(setData);
+    }
     
     return (
         <SidebarInset>
@@ -53,14 +57,14 @@ export default function Brands() {
                         </div>
 
                         <div className='ml-auto'>
-                            <CreateModal />
+                            <CreateModal onSubmitSuccess={handleSubmitSuccess} />
                         </div>
                     </div>                    
                 </CardHeader>
 
                 <CardContent>
                     <DataTable 
-                        columns={productColumns}
+                        columns={brandColumns}
                         data={data} 
                     />
 

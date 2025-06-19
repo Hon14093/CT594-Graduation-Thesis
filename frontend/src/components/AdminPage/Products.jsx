@@ -52,7 +52,7 @@ export default function Products() {
                 </div>
             </header>
 
-            <Card className="mx-5 mb-5">
+            {/* <Card className="mx-5 mb-5">
                 <CardHeader>
                     <div className='flex'>
                         <div className='font-semibold text-3xl'>
@@ -106,7 +106,7 @@ export default function Products() {
                         </Link>
                     </section>
                 </CardContent>
-            </Card>
+            </Card> */}
 
             <Card className="mx-5">
                 <CardHeader>

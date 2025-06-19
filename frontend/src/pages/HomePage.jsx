@@ -8,7 +8,7 @@ import BenefitsSection from '@/components/HomePage/BenefitsSection'
 export default function HomePage() {
     return (
         <div className='w-full'>
-            <Header />
+            <Header darkBG={false} />
 
             <HeroSection />
 

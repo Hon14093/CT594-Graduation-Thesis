@@ -8,39 +8,67 @@ datasource db {
 }
 
 model brand {
-  brand_id   Int       @id @default(autoincrement())
-  brand_name String    @db.VarChar(100)
-  product    product[]
+  brand_id     Int       @id @default(autoincrement())
+  brand_name   String    @unique(map: "unique_brand_name") @db.VarChar(100)
+  slug         String?
+  date_created DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  product      product[]
 }
 
 model category {
-  category_id    Int        @id @default(autoincrement())
-  category_name  String     @db.VarChar(100)
-  parent_id      Int?
-  category       category?  @relation("categoryTocategory", fields: [parent_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
-  other_category category[] @relation("categoryTocategory")
-  product        product[]
-
-  @@unique([category_name, parent_id])
+  category_id   Int       @id @default(autoincrement())
+  category_name String    @unique(map: "unique_category_name") @db.VarChar(100)
+  slug          String?
+  date_created  DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  product       product[]
 }
 
 model product {
-  product_id   String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  product_name String    @db.VarChar(200)
-  brand_id     Int?
-  category_id  Int?
+  product_id   String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_name String   @db.VarChar(200)
+  brand_id     Int
+  category_id  Int
   description  String?
-  image_url    String?   @db.VarChar(300)
-  brand        brand?    @relation(fields: [brand_id], references: [brand_id], onDelete: NoAction, onUpdate: NoAction)
-  category     category? @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
-  variant      variant[]
+  image_url    String[]
+  laptop       laptop[]
+  brand        brand    @relation(fields: [brand_id], references: [brand_id], onDelete: NoAction, onUpdate: NoAction)
+  category     category @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model variant {
-  id            String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  product_id    String  @db.Uuid
-  product_price Float   @db.Real
-  stock         Int
-  specs         Json?   @default("{}")
-  product       product @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
+model laptop {
+  laptop_id              String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_id             String   @db.Uuid
+  laptop_model           String
+  cpu                    String
+  gpu                    String
+  ram_installed          Int
+  ram_type               String
+  frequency_mhz          Int
+  ram_slots              Int
+  max_ram                Int
+  refresh_rate           Int
+  panel                  String
+  screen_size            Float
+  resolution             String
+  monitor_tech           String?
+  sound_tech             String?
+  os                     String
+  battery_wh             Int?
+  weight_kg              Float?
+  wifi_version           String?
+  bluetooth_version      String?
+  ports                  Json?
+  storage_installed_gbs  Int
+  storage_installed_type String
+  storage_slots          Int
+  storage_slots_type     String[]
+  max_storage            String?
+  price                  Float
+  qty_in_stock           Int?
+  product                product  @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tester {
+  id          Int      @id @default(autoincrement())
+  array_stuff String[]
 }

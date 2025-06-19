@@ -1,21 +1,43 @@
-
 export const productColumns = [
-    { accessorKey: "product_name", header: "Tên Sản Phẩm" },
-    { accessorKey: "category_id", header: "Danh mục" },
-    { accessorKey: "image_url", header: "Hương Vị" },
-    { accessorKey: "Product_Type.type_name", header: "Loại Sản Phẩm" },
-]
+    {
+        accessorKey: "image_url",
+        header: "Hình ảnh",
+        cell: ({ row }) => {
+            const imageArray = row.getValue("image_url"); // this should be an array
+            const imageUrl = Array.isArray(imageArray) ? imageArray[0] : null;
 
-export const brandColumns = [
-    { accessorKey: "product_name", header: "Tên thương hiệu" },
+            return imageUrl ? (
+                <img
+                    src={imageUrl}
+                    alt="Product"
+                    className="size-24 object-cover rounded mx-auto"
+                    onError={(e) => {
+                        e.currentTarget.src = "https://cdn-icons-png.flaticon.com/512/6659/6659895.png"; 
+                    }}
+                />
+            ) : (
+                <span>No image</span>
+            );
+        }
+    },
+    { accessorKey: "product_name", header: "Tên sản phẩm" },
     { accessorKey: "category_id", header: "Danh mục" },
-    { accessorKey: "image_url", header: "Hương Vị" },
-    { accessorKey: "Product_Type.type_name", header: "Loại Sản Phẩm" },
-]
+    { accessorKey: "brand_id", header: "Thương hiệu" },
+];
+
 
 export const categoryColumns = [
-    { accessorKey: "product_name", header: "Tên danh mục" },
-    { accessorKey: "category_id", header: "Danh mục" },
-    { accessorKey: "image_url", header: "Hương Vị" },
-    { accessorKey: "Product_Type.type_name", header: "Loại Sản Phẩm" },
-]
+    { accessorKey: "category_id", header: "ID danh mục" },
+    { accessorKey: "category_name", header: "Tên danh mục" },
+    { accessorKey: "product_count", header: "Số sản phẩm" },
+    { accessorKey: "date_created", header: "Ngày tạo" },
+    { accessorKey: "slug", header: "Slug" },
+];
+
+export const brandColumns = [
+    { accessorKey: "brand_id", header: "ID thương hiệu" },
+    { accessorKey: "brand_name", header: "Tên thương hiệu" },
+    { accessorKey: "product_count", header: "Số sản phẩm" },
+    { accessorKey: "date_created", header: "Ngày tạo" },
+    { accessorKey: "slug", header: "Slug" },
+];
