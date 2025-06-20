@@ -244,7 +244,7 @@ input[type='email'], input[type='password'], .input-primary {
 
 .button {
   background: #ede8e1;
-  border: 1px solid #ede8e1;
+  border: 1px solid white;
   border-radius: 8px;
   font-family: Courier Prime, Courier, monospace;
   font-size: 14px;
@@ -252,6 +252,12 @@ input[type='email'], input[type='password'], .input-primary {
   line-height: 50px;
   padding: 0 20px;
   @apply focus:outline-none focus:ring-white focus:border-white hover:bg-techBlue duration-300
+}
+
+.form-button {
+  font-family: Courier Prime, Courier, monospace;
+  font-size: 14px;
+  @apply border-2 border-techBlue !py-5 bg-techBlue hover:text-techBlue hover:bg-white
 }
 
 .big-action-button {

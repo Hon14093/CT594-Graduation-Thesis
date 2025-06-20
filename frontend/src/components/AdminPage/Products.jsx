@@ -5,6 +5,7 @@ import ramLogo from '@/assets/images/ram.png'
 import dockLogo from '@/assets/images/dock.png'
 import ssdLogo from '@/assets/images/ssd.png'   
 import adapterLogo from '@/assets/images/dongle.png'
+import BrandCombobox from '../combobox/BrandCombobox'
 
 import { Separator } from '../ui/separator'
 import { SidebarInset, SidebarTrigger } from '../ui/sidebar'
@@ -133,7 +134,6 @@ export default function Products() {
                         columns={productColumns}
                         data={data} 
                     />
-
                 </CardContent>
             </Card>
         </SidebarInset>

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import CreateForm from '@/components/forms/products/CreateForm';
 
 export default function CreateModal() {
@@ -23,7 +24,7 @@ export default function CreateModal() {
                 </Button>
             </DialogTrigger>
 
-            <DialogContent>
+            <DialogContent className='!max-w-none lg:w-1/2 md:w-3/4 max-h-[80vh] flex flex-col'>
                 <DialogHeader>
                     <DialogTitle>Thêm sản phẩm</DialogTitle>
                     <DialogDescription className='text-base text-black'>
@@ -31,9 +32,11 @@ export default function CreateModal() {
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className='text-base text-black'>
-                    <CreateForm />
-                </div>
+                <ScrollArea className="flex-1 overflow-y-auto pr-2">
+                    <div className="text-base text-black">
+                        <CreateForm />
+                    </div>
+                </ScrollArea>
             </DialogContent>
         </Dialog>
     )
