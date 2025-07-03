@@ -7,11 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import BrandCombobox from '@/components/combobox/BrandCombobox';
 import CategoryCombobox from '@/components/combobox/CategoryCombobox';
+import { createProduct } from '@/hooks/product-api';
 
-export default function CreateForm() {
+export default function CreateForm({ onSubmitSuccess }) {
     const placeholderImage = "https://beautyrepublicfdl.com/wp-content/uploads/2020/06/placeholder-image.jpg";
-    const [preview, setPreview] = useState(placeholderImage);
-    const [imageFile, setImageFile] = useState([]);
     const [imageFiles, setImageFiles] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -20,16 +19,6 @@ export default function CreateForm() {
     const [description, setDescription] = useState('');
     const [brandValue, setBrandValue] = useState('');
     const [catValue, setCatValue] = useState('');
-
-    const handleImageChange1 = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => setPreview(reader.result);
-            reader.readAsDataURL(file);
-        }
-    };
 
     const handleRemoveImage = (index) => {
         const updatedFiles = [...imageFiles];
@@ -63,13 +52,21 @@ export default function CreateForm() {
             console.log(imageUrls)
 
             const product = {
-                // product attributes
-                // attach image url to this variable
+                product_name: productName,
+                description: description,
+                category_id: catValue,
+                brand_id: brandValue,
+                image_url: imageUrls
             }
 
-            // call api to create product
+            const res = await createProduct(product);
+            console.log(res);
+
+            if (res.status === 201) {
+                onSubmitSuccess();
+            }
         } catch (error) {
-            
+            console.log(error)
         } finally {
             setLoading(false)
         }

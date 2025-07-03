@@ -1,0 +1,80 @@
+export const storage_data = [
+    {
+        "storage_id": "s1a2b3c4-d5e6-7890-1234-567890abcdef",
+        "storage_model": "Samsung 980 Pro 1TB",
+        "capacity_gb": 1000,
+        "interface": "PCIe 4.0 x4",
+        "form_factor": "M.2 2280",
+        "color": "Black",
+        "physical_profile": "80 x 22 x 2.3 mm",
+        "weight_g": 9,
+        "read_speed_mbps": 7000,
+        "write_speed_mbps": 5000,
+        "price": 3490000
+    },
+    {
+        "storage_id": "w2e3r4t5-y6u7-8901-2345-678901abcdef",
+        "storage_model": "WD Black SN850X 2TB",
+        "capacity_gb": 2000,
+        "interface": "PCIe 4.0 x4",
+        "form_factor": "M.2 2280",
+        "color": "Black",
+        "physical_profile": "80 x 22 x 2.4 mm",
+        "weight_g": 10,
+        "read_speed_mbps": 7300,
+        "write_speed_mbps": 6600,
+        "price": 5890000
+    },
+    {
+        "storage_id": "c3v4b5n6-m7k8-9012-3456-789012abcdef",
+        "storage_model": "Crucial P3 Plus 500GB",
+        "capacity_gb": 500,
+        "interface": "PCIe 4.0 x4",
+        "form_factor": "M.2 2280",
+        "color": "Black/Blue",
+        "physical_profile": "80 x 22 x 2.3 mm",
+        "weight_g": 8,
+        "read_speed_mbps": 5000,
+        "write_speed_mbps": 3600,
+        "price": 1590000
+    },
+    {
+        "storage_id": "x4d5c6v7-b8n9-0123-4567-890123abcdef",
+        "storage_model": "Samsung T7 Shield 1TB",
+        "capacity_gb": 1000,
+        "interface": "USB 3.2 Gen 2",
+        "form_factor": "Portable",
+        "color": "Black",
+        "physical_profile": "85 x 57 x 9.8 mm",
+        "weight_g": 98,
+        "read_speed_mbps": 1050,
+        "write_speed_mbps": 1000,
+        "price": 2790000
+    },
+    {
+        "storage_id": "z5x6c7v8-b9m0-1234-5678-901234abcdef",
+        "storage_model": "WD My Passport SSD 2TB",
+        "capacity_gb": 2000,
+        "interface": "USB 3.2 Gen 2",
+        "form_factor": "Portable",
+        "color": "Blue",
+        "physical_profile": "100 x 55 x 9 mm",
+        "weight_g": 120,
+        "read_speed_mbps": 1050,
+        "write_speed_mbps": 1000,
+        "price": 4890000
+    },
+    {
+        "storage_id": "v6b7n8m9-c1d2-2345-6789-012345abcdef",
+        "storage_model": "SanDisk Extreme Pro 1TB",
+        "capacity_gb": 1000,
+        "interface": "USB 3.2 Gen 2x2",
+        "form_factor": "Portable",
+        "color": "Gold",
+        "physical_profile": "110 x 57 x 10 mm",
+        "weight_g": 115,
+        "read_speed_mbps": 2000,
+        "write_speed_mbps": 2000,
+        "price": 3890000
+    }
+]

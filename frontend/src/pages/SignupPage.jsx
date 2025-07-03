@@ -1,20 +1,39 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Header from '../layout/Header';
+import Header from '@/components/layout/Header';
+import axios from 'axios';
+import { useAuth } from '@/context/AuthContext';
 
 export default function SignupPage() {
     const [username, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [phone, setPhone] = useState(null);
     const [password, setPassword] = useState(null);
+    const { login } = useAuth();
     const navigate = useNavigate();
+
+    const handleSubmitSignup = async (e) => {
+        e.preventDefault();
+        if (!account_name || !email || !phone || !password) {
+            alert('Vui lòng nhập đầy đủ thông tin!');
+            return;
+        }
+
+        axios.post('http://localhost:5000/api/auth/register', {username, email, phone, password})
+        .then(result => {
+            console.log(result);
+            login(result.data.token);
+            navigate('/');
+        })
+        .catch(result => console.log(result));
+    }
 
     return (
         <div>
             <Header />
 
             <section id='loginBG'>
-                <form className='mx-auto w-full lg:max-w-[600px] h-screen flex flex-col justify-center md:px-[40px] sm:px-[20px]'>
+                <form className='mx-auto w-full lg:max-w-[600px] h-screen flex flex-col justify-center md:px-[40px] sm:px-[20px]' onSubmit={handleSubmitSignup}>
                     <article className='p-4 bg-techBlue/10 backdrop-blur-md min-h-1/2 flex flex-col gap-5 rounded-2xl border-2 border-white text-white'>
                         <div>
                             <h1 className='text-[40px] lg:text-[60px] font-semibold font-ibm-plex'>Đăng Ký</h1>

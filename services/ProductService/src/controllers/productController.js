@@ -1,12 +1,17 @@
-import { getAllProducts } from "./model/Product.js";
+import { 
+    getAllProducts,
+    createProduct,
+    updateProduct,
+    deleteProduct
+} from "../model/Product.js";
 import { 
     createBrand,
     getAllBrands
-} from "./model/Brand.js";
+} from "../model/Brand.js";
 import { 
     createCategories,
     getAllCategories,
-} from "./model/Category.js";
+} from "../model/Category.js";
 
 export const returnAllProducts = async (req,res) => {
     try {
@@ -19,6 +24,65 @@ export const returnAllProducts = async (req,res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const createNewProduct = async (req,res) => {
+    try {
+        const data = req.body;
+        const newProduct = await createProduct(data);
+        
+        res.status(201).json({
+            success: true,
+            message: 'Product created successfully',
+            product: newProduct
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const editProduct = async (req,res) => {
+    try {
+        const { product_id } = req.params;
+        const data = req.body;
+
+        if (!product_id) {
+            return res.status(400).json({ message: 'Product ID is required' });
+        }
+
+        const updatedProduct = await updateProduct(product_id, data);
+
+        return res.status(200).json({ 
+            success: 1,
+            message: 'Product updated successfully',
+            updated_product: updatedProduct,
+        });
+    } catch (error) {
+        console.error("Error updating product:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export const removeProduct = async (req,res) => {
+    try {
+        const { product_id } = req.params;
+
+        if (!product_id) {
+            return res.status(400).json({ message: 'Product ID is required' });
+        }
+
+        const deletedProduct = await deleteProduct(product_id);
+
+        return res.status(200).json({
+            success: 1,
+            message: 'Product deleted successfully',
+            deleted_product: deletedProduct,
+        })
+    } catch (error) {
+        console.error("Error updating product:", error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 }
 

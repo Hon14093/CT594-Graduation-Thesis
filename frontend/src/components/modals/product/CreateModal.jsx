@@ -12,11 +12,16 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import CreateForm from '@/components/forms/products/CreateForm';
 
-export default function CreateModal() {
+export default function CreateModal({ onSubmitSuccess }) {
     const [open, setOpen] = useState(false);
 
+    const handleSubmitSuccess = () => {
+        onSubmitSuccess();
+        setOpen(false);
+    }
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant='outline' onClick={() => setOpen(true)}>
                     <Plus />
@@ -34,7 +39,7 @@ export default function CreateModal() {
 
                 <ScrollArea className="flex-1 overflow-y-auto pr-2">
                     <div className="text-base text-black">
-                        <CreateForm />
+                        <CreateForm onSubmitSuccess={handleSubmitSuccess} />
                     </div>
                 </ScrollArea>
             </DialogContent>

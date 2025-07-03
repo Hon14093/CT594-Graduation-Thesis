@@ -8,22 +8,31 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Search } from 'lucide-react'
 import logoWhite from '../../assets/Logo_white.png'
 import logoBlue from '../../assets/Logo.png'
 import { Button } from '../ui/button';
 import { ShoppingCart } from 'lucide-react';
-// import { useCart } from '../../context/CartContext';
+import { getCategories, getBrands } from '@/hooks/product-api'
 // import { useAuth } from '../../context/AuthContext';
 
 function Header({ darkBG=true }) {
     const [scrollDirection, setScrollDirection] = useState(null);
     const [lastScrollTop, setLastScrollTop] = useState(0);
     const [isTop, setIsTop] = useState(true);
-    const categories = [
+    const [categories, setCategories] = useState([]);
+    const [brands, setBrands] = useState([]);
+
+    const categories1 = [
         { "cat_name": "Laptop", "slug": "laptop" },
         { "cat_name": "USB dock", "slug": "usb-dock" },
         { "cat_name": "Bộ chuyển đổi", "slug": "bo-chuyen-doi" }
     ];
+
+    useEffect(() => {
+        getCategories(setCategories);
+        getBrands(setBrands);
+    }, [])
     
     useEffect(() => {
         const handleScroll = () => {
@@ -67,45 +76,54 @@ function Header({ darkBG=true }) {
                 <section >
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className="px-4 py-2 rounded">Danh mục</button>
+                            <button className="px-4 py-2 rounded hover:bg-white hover:text-techBlue">Danh mục</button>
                         </DropdownMenuTrigger>
 
                         <DropdownMenuContent className="z-[100]">
                             {categories.map((category) => (
                                 <DropdownMenuItem key={category.slug}>
-                                    <Link to={`/shop/${category.slug}`}>{category.cat_name}</Link>
+                                    <Link to={`/shop/${category.slug}`}>{category.category_name}</Link>
                                 </DropdownMenuItem>
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </section>
 
-                {/* navigation section */}
-                {/* <section className='absolute left-1/2 transform -translate-x-1/2 font-bold'>
-                    <ul className='flex gap-8'>
-                        <li className='navList group'>
-                            <Link to="/shop">
-                                <a className='navAnchor'>Laptop</a>
-                            </Link>
-                        </li>
-                        <li className='navList group'>
-                            <Link to="/about">
-                                <a className='navAnchor'>RAM</a>
-                            </Link>
-                        </li>
-                        <li className='navList group'>
-                            <Link to="/contact">
-                            <a className='navAnchor'>Liên Hệ</a>
-                            </Link>
-                        </li>
-                        <li className='navList group'>
-                            <a className='navAnchor' onClick={() => console.log(isLoggedIn)}>FAQ</a>
-                        </li>
-                    </ul>
-                </section> */}
+                <section >
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <button className="px-4 py-2 rounded hover:bg-white hover:text-techBlue">Thương hiệu</button>
+                        </DropdownMenuTrigger>
 
+                        <DropdownMenuContent className="z-[100]">
+                            {brands.map((brand) => (
+                                <DropdownMenuItem key={brand.slug}>
+                                    <Link to={`/shop/${brand.slug}`}>{brand.brand_name}</Link>
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </section>
+
+                <section>
+                    <Link to='/tool'>
+                        <button className="px-4 py-2 rounded hover:bg-white hover:text-techBlue">Công cụ</button>
+                    </Link>
+                </section>
+                
                 {/* account and cart section */}
                 <section className='flex items-center gap-4 ml-auto'>
+                    <article className='flex items-center ml-auto'>
+                        <button className='py-1  bg-white pl-3 rounded-l-3xl hover:cursor-pointer'>
+                            <Search className="text-techBlue" size={24} />
+                        </button>
+                        <input 
+                            type="text" 
+                            className='bg-white text-techBlue pl-4 py-1 rounded-r-3xl w-64 focus:outline-none' 
+                            placeholder='Tìm kiếm sản phẩm...'
+                        />
+                    </article>
+
                     <button className='hover:underline'>
                         <Link to='/login'>
                             Đăng nhập
@@ -114,15 +132,16 @@ function Header({ darkBG=true }) {
                     
                     <Button 
                         // onClick={toggleCart}
-                        className='group top-right-button p-2 bg-white rounded-full flex gap-1 items-center text-techBlue hover:bg-white/90'
+                        className='group top-right-button p-2 bg-white rounded-full text-techBlue hover:bg-white/90'
                     >
-                        <ShoppingCart className="mr-2 h-4 w-4" />
-                        <p className=" border-[1.5px] rounded-full size-6 border-darkOlive group-hover:border-ivory" id='cart-button'>
-                            0
-                        </p>
+                        <Link to='/shopping-cart' className='flex gap-1 items-center'>
+                            <ShoppingCart className="mr-2 h-4 w-4" />
+                            <p className=" border-[1.5px] rounded-full size-6 border-darkOlive group-hover:border-ivory" id='cart-button'>
+                                0
+                            </p>
+                        </Link>
                     </Button>
                 </section>   
-
             </div>
         </header>
             

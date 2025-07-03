@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-app.use('/admin/product', productRoutes);
+app.use('/manage/product', productRoutes);
 app.use('/image/', imageUpload);
 
 app.listen(PORT, () => {

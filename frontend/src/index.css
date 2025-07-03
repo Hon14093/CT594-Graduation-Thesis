@@ -263,15 +263,18 @@ input[type='email'], input[type='password'], .input-primary {
 .big-action-button {
   background: #780c17;
   border: 2px solid #780c17;
-  border-radius: 15px;
+  color: white;
+  /* border-radius: 15px; */
   font-family: Courier Prime, Courier, monospace;
   font-size: 14px;
-  height: 40px;
   line-height: 40px;
   padding: 0 20px;
-  @apply focus:outline-none hover:bg-white hover:text-crimson hover:border-crimson duration-300
+  @apply focus:outline-none hover:bg-white hover:text-crimson hover:border-crimson duration-300 rounded-2xl
 }
 
+button {
+  @apply hover:cursor-pointer
+}
 
 /* 
   --color-border: oklch(var(--border));

@@ -30,7 +30,7 @@ export function NavProjects({
                             <Link to={item.url} className="p-2 h-10">
                                 {/* <item.icon size={50}/>  */}
                                 <item.icon className="!size-5" />
-                                <span className="text-lg">{item.name}</span>
+                                <span className="text-md font-semibold">{item.name}</span>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

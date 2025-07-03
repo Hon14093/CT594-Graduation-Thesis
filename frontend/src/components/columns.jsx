@@ -21,8 +21,8 @@ export const productColumns = [
         }
     },
     { accessorKey: "product_name", header: "Tên sản phẩm" },
-    { accessorKey: "category_id", header: "Danh mục" },
-    { accessorKey: "brand_id", header: "Thương hiệu" },
+    { accessorKey: "category.category_name", header: "Danh mục" },
+    { accessorKey: "brand.brand_name", header: "Thương hiệu" },
 ];
 
 

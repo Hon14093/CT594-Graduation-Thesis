@@ -24,8 +24,6 @@ export const getAllBrands = async () => {
         product_count: Number(item.product_count), // Convert BigInt to Number
     }));
 
-    console.log(result)
-
     return result;
 }
 

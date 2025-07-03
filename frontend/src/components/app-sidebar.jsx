@@ -3,7 +3,9 @@ import {
 	ChartColumn,
 	TicketPercent,
 	Boxes,
+	List,
 	ClipboardList,
+	ClipboardCheck,
 	BriefcaseBusiness,
 } from "lucide-react"
 
@@ -41,7 +43,12 @@ const data = {
 		{
 			name: "Danh Mục",
 			url: "http://localhost:5173/admin/categories",
-			icon: ClipboardList,
+			icon: List,
+		},
+		{
+			name: "Thương Hiệu",
+			url: "http://localhost:5173/admin/brands",
+			icon: BriefcaseBusiness,
 		},
 		{
 			name: "Khuyến Mãi",
@@ -49,10 +56,15 @@ const data = {
 			icon: TicketPercent,
 		},
 		{
-			name: "Thương Hiệu",
-			url: "http://localhost:5173/admin/brands",
-			icon: BriefcaseBusiness,
-		}
+			name: "Duyệt Đơn Hàng",
+			url: "http://localhost:5173/admin/discounts",
+			icon: ClipboardCheck,
+		},
+		{
+			name: "Đơn Hàng",
+			url: "http://localhost:5173/admin/discounts",
+			icon: ClipboardList,
+		},
 	],
 }
 

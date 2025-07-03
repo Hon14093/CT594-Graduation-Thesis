@@ -10,3 +10,20 @@ export const getAllProducts = async () => {
         }
     })
 }
+
+export const createProduct = async (data) => {
+    return await prisma.product.create({ data });
+}
+
+export const updateProduct = async (product_id, data) => {
+    return await prisma.product.update({
+        where: { product_id },
+        data
+    })
+}
+
+export const deleteProduct = async (product_id) => {
+    return await prisma.product.delete({
+        where: { product_id }
+    })
+}

@@ -8,7 +8,7 @@ import { ShoppingCart } from 'lucide-react'
 
 const products = [
     {
-        name: "UltraBook Pro X1",
+        name: "Latop Acer Aspire 7",
         price: 1299,
         originalPrice: 1499,
         discount: 13,
@@ -16,7 +16,7 @@ const products = [
         reviews: 128,
     },
     {
-        name: "Gaming Laptop G7",
+        name: "Laptop Lenovo Loq 15",
         price: 1599,
         originalPrice: null,
         discount: null,
@@ -24,7 +24,7 @@ const products = [
         reviews: 89,
     },
     {
-        name: "Wireless Mouse M3",
+        name: "Laptop MSI Gaming G63",
         price: 49,
         originalPrice: 69,
         discount: 29,
@@ -46,8 +46,8 @@ export default function FeaturedProducts() {
         <section className="py-12 bg-white">
             <div className="container px-4 md:px-6 max-w-[1280px] mx-auto">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center">
-                    <h2 className="text-3xl font-bold tracking-tighter text-techBlue">Featured Products</h2>
-                    <p className="text-gray-600 md:text-lg">Our most popular tech picks this month</p>
+                    <h2 className="text-3xl font-bold tracking-tighter text-techBlue">Sản phẩm phổ biến</h2>
+                    <p className="text-gray-600 md:text-lg">Các sản phẩm bán chạy trong tháng</p>
                 </div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
                     {products.map((product) => (
@@ -61,14 +61,9 @@ export default function FeaturedProducts() {
                                     alt={product.name}
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
-                                {product.discount && (
-                                    <Badge className="absolute top-2 right-2 bg-red-500 hover:bg-red-500/90">
-                                        {product.discount}% OFF
-                                    </Badge>
-                                )}
                             </div>
 
-                            <CardContent className="p-4">
+                            <CardContent className="p-4 -mt-7">
                                 <h3 className="font-semibold group-hover:text-techBlue transition-colors">{product.name}</h3>
                                 <div className="flex items-center mt-1">
                                     {Array(5)
@@ -84,7 +79,9 @@ export default function FeaturedProducts() {
                                 <div className="flex items-center justify-between mt-3">
                                     <div>
                                         {product.originalPrice && (
-                                            <span className="text-sm text-gray-500 line-through mr-2">${product.originalPrice}</span>
+                                            <span className="text-sm text-gray-500 line-through mr-2">
+                                                ${product.originalPrice}
+                                            </span>
                                         )}
                                         <span className="font-bold text-techBlue">${product.price}</span>
                                     </div>
@@ -98,15 +95,6 @@ export default function FeaturedProducts() {
                             </CardContent>
                         </Card>
                     ))}
-                </div>
-                <div className="flex justify-center mt-8">
-                    <Button
-                        variant="outline"
-                        className="gap-2 border-techBlue text-techBlue hover:bg-techBlue/10 transition-colors"
-                    >
-                        View All Products
-                        <ArrowRight className="h-4 w-4" />
-                    </Button>
                 </div>
             </div>
         </section>

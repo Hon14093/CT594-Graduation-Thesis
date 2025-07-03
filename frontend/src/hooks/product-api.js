@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:5000';
 
 export const getProducts = async (setData) => {
     try {
-        const result = await axios.get(`${API_URL}/admin/product/all`);
+        const result = await axios.get(`${API_URL}/manage/product/all`);
         console.log(result.data);
         setData(result.data.products);
     } catch (error) {
@@ -12,11 +12,37 @@ export const getProducts = async (setData) => {
     }
 }
 
+export const createProduct = async (product) => {
+    try {
+        const result = await axios.post(`${API_URL}/manage/product/create`, product);
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const updateProduct = async (product_id, data) => {
+    try {
+        const result = await axios.put(`${API_URL}/manage/product/update/${product_id}`, data);
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const deleteProduct = async (product_id) => {
+    try {
+        const result = await axios.delete(`${API_URL}/manage/product/delete/${product_id}`);
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 //-----------------------------------------------------------
 export const getBrands = async (setData) => {
     try {
-        const result = await axios.get(`${API_URL}/admin/product/brands/all`);
+        const result = await axios.get(`${API_URL}/manage/product/brands/all`);
         console.log(result.data);
         setData(result.data.brands);
     } catch (error) {
@@ -26,7 +52,7 @@ export const getBrands = async (setData) => {
 
 export const createBrand = async (brand) => {
     try {
-        const result = await axios.post(`${API_URL}/admin/product/brands/create`, brand);
+        const result = await axios.post(`${API_URL}/manage/product/brands/create`, brand);
         return result;
     } catch (error) {
         console.log(error);
@@ -36,7 +62,7 @@ export const createBrand = async (brand) => {
 //-----------------------------------------------------------
 export const getCategories = async (setData) => {
     try {
-        const result = await axios.get(`${API_URL}/admin/product/categories/all`);
+        const result = await axios.get(`${API_URL}/manage/product/categories/all`);
         console.log(result.data);
         setData(result.data.categories);
     } catch (error) {
@@ -46,7 +72,7 @@ export const getCategories = async (setData) => {
 
 export const createCategories = async (category) => {
     try {
-        const result = await axios.post(`${API_URL}/admin/product/categories/create`, category);
+        const result = await axios.post(`${API_URL}/manage/product/categories/create`, category);
         return result;
     } catch (error) {
         console.log(error);
