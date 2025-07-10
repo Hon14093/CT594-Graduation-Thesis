@@ -1,15 +1,65 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model discount {
+  discount_id         String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  discount_code       String
+  discount_value      Float   @db.Real
+  max_discount_amount Float   @db.Real
+  min_order_total     Float   @db.Real
+  order               order[]
+}
+
+model order {
+  order_id        String          @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  order_total     Float           @db.Real
+  note            String?
+  order_date      DateTime        @default(now()) @db.Timestamp(6)
+  delivered_date  DateTime?       @db.Timestamp(6)
+  cancelled_date  DateTime?       @db.Timestamp(6)
+  account_id      String          @db.Uuid
+  status_id       Int             @default(1)
+  pm_id           Int
+  sm_id           Int
+  discount_id     String?         @db.Uuid
+  discount        discount?       @relation(fields: [discount_id], references: [discount_id], onDelete: Cascade, map: "fk_discount")
+  payment_method  payment_method  @relation(fields: [pm_id], references: [pm_id], onDelete: Cascade, map: "fk_payment")
+  shipping_method shipping_method @relation(fields: [sm_id], references: [sm_id], onDelete: Cascade, map: "fk_shipping")
+  order_status    order_status    @relation(fields: [status_id], references: [status_id], onDelete: Cascade, map: "fk_status")
+  order_details   order_details[]
+}
+
+model order_status {
+  status_id   Int     @id @default(autoincrement())
+  status_name String?
+  order       order[]
+}
+
+model payment_method {
+  pm_id   Int     @id @default(autoincrement())
+  pm_name String
+  order   order[]
+}
+
+model shipping_method {
+  sm_id    Int     @id @default(autoincrement())
+  sm_name  String
+  sm_price Float   @db.Real
+  order    order[]
+}
+
+model order_details {
+  od_id       String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  quantity    Int
+  subtotal    Float   @db.Real
+  item_ref_id String  @db.Uuid
+  order_id    String  @db.Uuid
+  item_type   String?
+  order       order   @relation(fields: [order_id], references: [order_id], onDelete: Cascade, map: "fk_order_details_1")
 }

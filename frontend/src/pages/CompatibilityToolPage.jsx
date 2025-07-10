@@ -4,6 +4,7 @@ import Footer from '@/components/layout/Footer'
 import Bread_Crumb from '@/components/layout/Bread_Crumb'
 import Laptop from '@/components/ToolPage/Laptop'
 import ComponentTable from '@/components/ToolPage/ComponentTable'
+import ResultsBox from '@/components/ToolPage/ResultsBox'
 
 const bread = [
     { link: '/', label: 'Trang chủ'},
@@ -12,10 +13,12 @@ const bread = [
 
 export default function CompatibilityToolPage() {
     const [laptop, setLaptop] = useState(null);
+    const [results, setResults] = useState([]);
 
     const handleSetLaptop = (laptop) => {
         setLaptop(laptop);
     }
+
     return (
         <div className='w-full'>
             <Header darkBG={false} />
@@ -25,7 +28,9 @@ export default function CompatibilityToolPage() {
             <Laptop onLaptopSelect={handleSetLaptop} />
 
             {/* This component is not done */}
-            <ComponentTable laptop={laptop} />
+            <ComponentTable laptop={laptop} onCheck={setResults} />
+
+            <ResultsBox laptop={laptop} results={results} />
 
             <Footer />
         </div>

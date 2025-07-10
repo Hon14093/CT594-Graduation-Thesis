@@ -29,7 +29,7 @@ export default function ProductCard({ product }) {
             className='border border-gray-300 p-4 mb-2 rounded-lg hover:cursor-pointer'
         >
             <CardContent>
-                <img src={product.product.image_url[0]} alt="" />
+                <img src={product.product.image_url[0]} className='object-contain size-52' alt="" />
                 <h2 className='text-xl font-semibold'>
                     {product.laptop_name}
                 </h2>

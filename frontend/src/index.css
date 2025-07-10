@@ -266,10 +266,10 @@ input[type='email'], input[type='password'], .input-primary {
   color: white;
   /* border-radius: 15px; */
   font-family: Courier Prime, Courier, monospace;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 40px;
   padding: 0 20px;
-  @apply focus:outline-none hover:bg-white hover:text-crimson hover:border-crimson duration-300 rounded-2xl
+  @apply focus:outline-none hover:bg-white hover:text-crimson hover:border-crimson duration-300 rounded-lg
 }
 
 button {

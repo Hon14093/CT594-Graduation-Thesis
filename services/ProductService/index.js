@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import productRoutes from './src/routes.js'
+import productRoutes from './src/routes/routes.js'
 import imageUpload from './src/imageUpload.js'
 
 dotenv.config();

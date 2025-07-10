@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SelectLaptop from '../modals/tool/SelectLaptop';
 import {
     Carousel,
@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from '../ui/card';
 import { ScrollArea } from '../ui/scroll-area';
+import { getLaptops } from '@/hooks/variation-api';
 
 export default function Laptop({ onLaptopSelect }) {
     const [laptop, setLaptop] = useState(null);
@@ -149,8 +150,8 @@ export default function Laptop({ onLaptopSelect }) {
                                             <CarouselItem key={index} className="flex justify-center">
                                                 <img
                                                     src={image}
-                                                    alt={image.alt}
-                                                    className="object-cover size-96 rounded-lg "
+                                                    // alt={image.alt}
+                                                    className="object-contain size-96 rounded-lg "
                                                 />
                                             </CarouselItem>
                                         ))}

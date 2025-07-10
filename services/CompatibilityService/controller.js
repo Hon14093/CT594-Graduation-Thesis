@@ -30,25 +30,48 @@ export const compatibilityCheck = async (req,res) => {
 // Checking RAM is done -----------------------------------------------------------------
 const checkRam = (ram_id, laptop) => {
     const ram = getRamById(ram_id)[0];
+    console.log("RAM: ", ram, laptop.ram_type)
 
-    if (laptop.ram_slots === 1) {
-        return "Không tương thích: Laptop không hỗ trợ nâng cấp RAM!";
+    if (laptop.ram_slots === 0) {
+        return {
+            status: 0,
+            message: "Không tương thích RAM: Laptop không hỗ trợ nâng cấp RAM!"
+        }
     }
 
     if (ram.ram_type !== laptop.ram_type) {
-        return "Không tương thích: Khác loại RAM!";
+        return {
+            status: 0,
+            message: "Không tương thích RAM: Khác loại RAM!"
+        }
     }
 
     const totalRam = ram.capacity_gb + laptop.ram_installed;
     if (totalRam > laptop.max_ram) {
-        return "Không tương thích: Vượt quá dung lượng RAM laptop hỗ trợ!";
+        return {
+            status: 0,
+            message: "Không tương thích RAM: Vượt quá dung lượng RAM laptop hỗ trợ!"
+        }
     }
 
     if (ram.frequency_mhz !== laptop.frequency_mhz) {
-        return "Cảnh báo: Tốc độ RAM không giống nhau! Laptop sẽ hoạt động với tốc độ thấp nhất trong 2 thanh RAM!";
+        return {
+            status: 2,
+            message: "Cảnh báo: Tốc độ RAM không giống nhau! Laptop sẽ hoạt động với tốc độ thấp nhất trong 2 thanh RAM!"
+        }
     }
 
-    return "Tương thích: RAM phù hợp với laptop!";
+    if (laptop.ram_slots === 1) {
+        return {
+            status: 2,
+            message: "Cảnh báo: Laptop chỉ có 1 khe RAM!"
+        }
+    }
+
+    return {
+        status: 1,
+        message: "Tương thích RAM: RAM phù hợp với laptop!"
+    }
 };
 
 const PORT_STANDARDS = {
@@ -77,46 +100,80 @@ const checkMonitor = (monitor_id, laptop) => {
     const compatiblePorts = [];
     const midCompatiblePorts = [];
 
-    if (laptop?.ports?.["Thunderbolt"]) {
-        const tbVersion = laptop.ports["Thunderbolt"];
+    if (laptop?.ports?.["Thunderbolt 4"] || laptop?.ports?.["Thunderbolt 5"]) {
+        // const tbVersion = laptop.ports["Thunderbolt 4"];
         
-        if (monitor?.ports?.DisplayPort) {
-            compatiblePorts.push(`Thunderbolt ${tbVersion} (DP 1.4)`);
+        if (monitor?.ports?.display_port) {
+            compatiblePorts.push(`Thunderbolt (DP 1.4)`);
         }
         
-        if (monitor?.ports?.HDMI && tbVersion >= 3) {
-            midCompatiblePorts.push(`Thunderbolt ${tbVersion} → HDMI 2.0 (via adapter)`);
-        }
+        // if (monitor?.ports?.hdmi && tbVersion >= 3) {
+        //     midCompatiblePorts.push(`Thunderbolt ${tbVersion} → HDMI 2.0 (via adapter)`);
+        // }
     }
 
-    if (monitor.ports.HDMI && laptop.ports.HDMI) {
+    if (monitor.ports.hdmi && laptop.ports.HDMI === true) {
         const laptopHdmiVer = parseFloat(laptop.ports.HDMI);
-        const monitorHdmiVer = parseFloat(monitor.ports.HDMI);
+        const monitorHdmiVer = parseFloat(monitor.ports.hdmi);
 
         if (laptopHdmiVer >= monitorHdmiVer) {
             compatiblePorts.push(`HDMI ${laptop.ports.HDMI}`);
         } else {
             const standard = PORT_STANDARDS.HDMI[laptop.ports.HDMI];
-            if (monitor.refresh_rate <= standard.maxRefresh) {
+            if (monitor.refresh_rate_hz <= standard.maxRefresh) {
                 midCompatiblePorts.push(`HDMI ${laptop.ports.HDMI}`);
             }
         }
     }
 
-    if (monitor.ports.DisplayPort && laptop.ports["USB-C"].includes("DP")) {
+    if (monitor.ports.display_port && laptop.ports["USB-C"].includes("DP")) {
         compatiblePorts.push("USB-C/DisplayPort 1.4");
     }
 
     if (compatiblePorts.length > 0) {
-        return `Tương thích hoàn toàn qua cổng: ${formatPortList(compatiblePorts)}`  
+        return {
+            status: 1,
+            message: `Màn hình tương thích qua cổng: ${formatPortList(compatiblePorts)}` 
+        } 
     } else if (midCompatiblePorts.length > 0) {
-        return `Cảnh báo: Không thể đạt tối đa hiệu năng khi dùng cổng ${formatPortList(midCompatiblePorts)}!` 
+        return {
+            status: 2,
+            message: `Cảnh báo: Không thể đạt tối đa hiệu năng khi dùng cổng ${formatPortList(midCompatiblePorts)}!`
+        } 
     } else {
-        return "Không tìm thấy cổng tương thích!"
+        return {
+            status: 0,
+            message: "Màn hình không tương thích: Không tìm thấy cổng tương thích!"
+        }
     }
 }
 
-// -----------------------------------------------------------------------------------
+// check storage -----------------------------------------------------------------------------------
+function isPortCompatible(laptop, storage) {
+    // Extract port type and version from storage.interface
+    const [storagePortType, ...storagePortDetails] = storage.interface.split(" ");
+    const storagePortVersion = storagePortDetails.join(" ").trim();
+    const portKey = storagePortType.toUpperCase();
+
+    const laptopPorts = laptop.ports?.[portKey];
+    if (!laptopPorts) {
+        return `Không tương thích: Laptop không có cổng ${storagePortType}!`
+    }
+
+    // Check for exact match
+    if (laptopPorts.includes(storagePortVersion)) {
+        return "Tương thích!"
+    }
+
+    // Check for same port type but different speed/standard (partial match)
+    return "Cảnh báo: Ổ cứng không sử dụng được tối đa công xuất do khác cổng giao tiếp!"
+    // return {
+    //     status: "warning",
+    //     message: "Storage will not be able to run at max potential due to port differences"
+    // };
+}
+
+
 const checkStorage = (storage_id, laptop) => {
     const storage = getStorageById(storage_id)[0];
 
@@ -126,16 +183,23 @@ const checkStorage = (storage_id, laptop) => {
             return "Không tương thích: Vượt quá dung lượng lưu trữ laptop hỗ trợ!"
         }
 
-        // if ()
-
         if (laptop.storage_slots === 1) {
             return "Cảnh báo: Laptop chỉ có 1 khe lưu trữ!"
         }
     }
 
-    
-
-    if (laptop.storage_slots === 1) {
-        return "Cảnh báo: Laptop chỉ có 1 khe lưu trữ!"
+    if (storage.form_factor === "Portable") {
+        const checkPort = isPortCompatible(laptop, storage);
+        return checkPort;
     }
+
 }
+
+// check dock ----------------------------------------------------------------------
+const checkDock = (dock_id, laptop) => {}
+
+// check cable ----------------------------------------------------------------------
+const checkCable = (cable_id, laptop) => {}
+
+// check adapter ----------------------------------------------------------------------
+const checkAdapter = (adapter_id, laptop) => {}

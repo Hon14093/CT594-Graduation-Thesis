@@ -10,11 +10,9 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const storedToken = localStorage.getItem("jwtToken");
-        console.log("Stored token:", storedToken);
         if (storedToken) {
             try {
                 const decodedToken = jwtDecode(storedToken);
-                console.log("Decoded token:", decodedToken);
                 setUser(decodedToken);
                 setIsLoggedIn(true);
             } catch (error) {
@@ -32,7 +30,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("jwtToken", token);
         try {
             const decodedToken = jwtDecode(token);
-            console.log("Decoded token in login:", decodedToken);
             setUser(decodedToken);
             setIsLoggedIn(true);
         } catch (error) {

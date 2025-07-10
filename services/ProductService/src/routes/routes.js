@@ -8,8 +8,13 @@ import {
     createNewProduct,
     editProduct,
     removeProduct,
-} from './controllers/productController.js';
-import { returnAllLaptops } from './controllers/componentController.js';
+} from '../controllers/productController.js';
+import { 
+    returnAllLaptops, 
+    returnAllLaptopVariations, 
+    returnAllRams, 
+    returnAllMonitors
+} from '../controllers/componentController.js';
 
 const router = express.Router();
 
@@ -25,5 +30,9 @@ router.get('/categories/all', returnAllCategories);
 router.post('/categories/create', createNewCategory);
 
 router.get('/laptops/all', returnAllLaptops);
+router.get('/laptops/variations/:product_id', returnAllLaptopVariations);
+
+router.get('/rams/all', returnAllRams);
+router.get('/monitors/all', returnAllMonitors);
 
 export default router;

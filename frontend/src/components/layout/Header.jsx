@@ -8,13 +8,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Search } from 'lucide-react'
+import { Search, CircleUserRound } from 'lucide-react'
 import logoWhite from '../../assets/Logo_white.png'
 import logoBlue from '../../assets/Logo.png'
 import { Button } from '../ui/button';
 import { ShoppingCart } from 'lucide-react';
 import { getCategories, getBrands } from '@/hooks/product-api'
-// import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '@/context/AuthContext'
+import { useCart } from '@/context/CartContext'
 
 function Header({ darkBG=true }) {
     const [scrollDirection, setScrollDirection] = useState(null);
@@ -22,12 +23,9 @@ function Header({ darkBG=true }) {
     const [isTop, setIsTop] = useState(true);
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
-
-    const categories1 = [
-        { "cat_name": "Laptop", "slug": "laptop" },
-        { "cat_name": "USB dock", "slug": "usb-dock" },
-        { "cat_name": "Bộ chuyển đổi", "slug": "bo-chuyen-doi" }
-    ];
+    const { isLoggedIn } = useAuth();
+    const { getTotalQuantity } = useCart();
+    const itemCounts = getTotalQuantity();
 
     useEffect(() => {
         getCategories(setCategories);
@@ -124,11 +122,19 @@ function Header({ darkBG=true }) {
                         />
                     </article>
 
-                    <button className='hover:underline'>
-                        <Link to='/login'>
-                            Đăng nhập
-                        </Link>
-                    </button>
+                    {isLoggedIn ? (
+                        <button className='hover:underline'>
+                            <Link to='/personal'>
+                                <CircleUserRound size={30} />
+                            </Link>
+                        </button>
+                    ) : (
+                        <button className='hover:underline'>
+                            <Link to='/login'>
+                                Đăng nhập
+                            </Link>
+                        </button>
+                    )}
                     
                     <Button 
                         // onClick={toggleCart}
@@ -137,7 +143,7 @@ function Header({ darkBG=true }) {
                         <Link to='/shopping-cart' className='flex gap-1 items-center'>
                             <ShoppingCart className="mr-2 h-4 w-4" />
                             <p className=" border-[1.5px] rounded-full size-6 border-darkOlive group-hover:border-ivory" id='cart-button'>
-                                0
+                                {itemCounts}
                             </p>
                         </Link>
                     </Button>

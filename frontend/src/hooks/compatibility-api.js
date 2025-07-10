@@ -12,10 +12,10 @@ export const checkCompatibility = async (laptop_id, components) => {
         if (components.monitor_id) params.append('monitor_id', components.monitor_id);
         if (components.cable_id) params.append('cable_id', components.cable_id);
 
-        console.log('Sending params:', params.toString());
+        // console.log('Sending params:', params.toString());
         const result = await axios.get(`${API_URL}/tool/check/${laptop_id}?${params.toString()}`);
-        console.log('Response data:', result.data);
-        return result.data;
+        console.log('Response data:', result.data.response);
+        return result.data.response;
     } catch (error) {
         console.error('Error:', error.response ? error.response.data : error.message);
         throw error;
@@ -23,8 +23,10 @@ export const checkCompatibility = async (laptop_id, components) => {
 };
 
 const tempComponents = {
-    ram_id: 'a1b2c3d4-e5f6-7890-1234-567890abcdef',
-    // monitor_id: 'm1n2t3r4-a5b6-7890-1234-567890abcdef'
+    ram_id: 'ccfddd0f-5387-4500-bfaf-02199ef8678c',
+    monitor_id: 'eeddec2f-abed-4a91-84c4-d4ae08701eed'
 };
 
 // checkCompatibility('abfb0c54-21ab-450d-93f9-f683075ebff8', tempComponents)
+// checkCompatibility('39816cb1-158b-4a21-aad9-69385233585e', tempComponents) 
+// dell xps

@@ -24,15 +24,17 @@ model category {
 }
 
 model product {
-  product_id   String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  product_name String   @db.VarChar(200)
+  product_id   String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_name String    @db.VarChar(200)
   brand_id     Int
   category_id  Int
   description  String?
   image_url    String[]
   laptop       laptop[]
-  brand        brand    @relation(fields: [brand_id], references: [brand_id], onDelete: NoAction, onUpdate: NoAction)
-  category     category @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
+  monitor      monitor[]
+  brand        brand     @relation(fields: [brand_id], references: [brand_id], onDelete: NoAction, onUpdate: NoAction)
+  category     category  @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
+  ram          ram[]
 }
 
 model laptop {
@@ -71,4 +73,40 @@ model laptop {
 model tester {
   id          Int      @id @default(autoincrement())
   array_stuff String[]
+}
+
+model monitor {
+  monitor_id         String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  monitor_name       String  @db.VarChar(255)
+  monitor_model      String  @db.VarChar(100)
+  panel              String  @db.VarChar(50)
+  brightness_nits    Int
+  response_time_ms   Float   @db.Real
+  bit_depth          String  @db.VarChar(50)
+  color_range        String  @db.VarChar(100)
+  resolution         String  @db.VarChar(50)
+  screen_size_inches Float   @db.Real
+  refresh_rate_hz    Int
+  ports              Json
+  vesa_mount         String  @db.VarChar(50)
+  monitor_tech       String  @db.VarChar(100)
+  in_box_component   String
+  voltage            String  @db.VarChar(50)
+  weight_kg          Float   @db.Real
+  product_id         String  @db.Uuid
+  product            product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_monitor")
+}
+
+model ram {
+  ram_id        String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  ram_model     String
+  ram_type      String
+  capacity_gb   Int
+  frequency_mhz Int
+  voltage       Float   @db.Real
+  latency       String
+  price         Float   @db.Real
+  product_id    String  @db.Uuid
+  ram_name      String
+  product       product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_ram")
 }

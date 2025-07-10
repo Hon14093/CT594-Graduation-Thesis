@@ -75,7 +75,7 @@ export default function DetailsModal({ product, open, onClose }) {
                                             <img
                                                 src={image}
                                                 alt={image.alt}
-                                                className="object-cover w-80 h-80 rounded-lg "
+                                                className="object-contain w-80 h-80 rounded-lg"
                                             />
                                         </CarouselItem>
                                     ))}

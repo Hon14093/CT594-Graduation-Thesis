@@ -5,7 +5,6 @@ const API_URL = 'http://localhost:5000';
 export const getProducts = async (setData) => {
     try {
         const result = await axios.get(`${API_URL}/manage/product/all`);
-        console.log(result.data);
         setData(result.data.products);
     } catch (error) {
         console.error("Error fetching data:", error); 
@@ -43,7 +42,6 @@ export const deleteProduct = async (product_id) => {
 export const getBrands = async (setData) => {
     try {
         const result = await axios.get(`${API_URL}/manage/product/brands/all`);
-        console.log(result.data);
         setData(result.data.brands);
     } catch (error) {
         console.error("Error fetching data:", error); 
@@ -63,7 +61,6 @@ export const createBrand = async (brand) => {
 export const getCategories = async (setData) => {
     try {
         const result = await axios.get(`${API_URL}/manage/product/categories/all`);
-        console.log(result.data);
         setData(result.data.categories);
     } catch (error) {
         console.error("Error fetching data:", error); 

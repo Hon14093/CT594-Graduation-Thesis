@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { 
     Dialog,
     DialogTrigger,
@@ -11,38 +11,88 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { ram } from '@/test/ram-data';
+import { monitor } from '@/test/monitor-data';
+import { storage } from '@/test/storage-data';
+import { dock } from '@/test/dock-data';
+import { cable } from '@/test/cable-data';
+import { adapter } from '@/test/adapter-data';
 
 export default function SelectComponent({ onSelectItem, category }) {
     const [open, setOpen] = useState(false);
-    let chosenCategory = '';
+    const [items, setItems] = useState([]);
+    const [chosenCategory, setChosenCategory] = useState();
+    let modifiedItems = [];
+    let model = '';
+    // let chosenCategory = translateCategory(category);
 
-    const items = []
+    useEffect(() => {
+        const getItems = (category) => {
+            switch (category.toLowerCase()) {
+                case ('ram'):
+                    // getRAMs(setItems);
+                    setItems(ram);
+                    break;
+                case ('màn hình'):
+                    // getMonitors(setItems);
+                    setItems(monitor)
+                    return 'monitor';
+                case ('lưu trữ'):
+                    // getStorages(setItems);
+                    setItems(storage)
+                    return 'storage';
+                case ('bộ chuyển đổi'):
+                    // getAdapters(setItems);
+                    setItems(adapter)
+                    return 'adapter';
+                case ('dây cáp'):
+                    // getCables(setItems);
+                    setItems(cable)
+                    return 'cable';
+                case ('usb dock'):
+                    // getDocks(setItems);
+                    setItems(dock)
+                    return 'usb_dock';
+            }
+        }
+
+        // model = translateCategory(category);
+        getItems(category);
+        
+    }, [])
+
+    const modifyItem = (selectedItem) => {
+        // this returns "dock_name", "monitor_name", etc.
+        const name = Object.keys(selectedItem).find(
+            key => key.endsWith('_name')
+        ) || null;
+
+        return {
+            ...selectedItem,
+            name: selectedItem[name] // this returns the VALUE of the name field
+        }
+    }
     
     const handleSelect = (selectedItem) => {
-        onSelectItem(selectedItem)
+        const newItem = modifyItem(selectedItem);
+        onSelectItem(category, newItem);
         setOpen(false);
     }
 
     const translateCategory = (category) => {
         switch (category.toLowerCase()) {
             case ('ram'):
-                chosenCategory = 'ram';
-                break;
+                return 'ram';
             case ('màn hình'):
-                chosenCategory = 'monitor';
-                break;
+                return 'monitor';
             case ('lưu trữ'):
-                chosenCategory = 'storage';
-                break;
+                return 'storage';
             case ('bộ chuyển đổi'):
-                chosenCategory = 'adapter';
-                break;
+                return 'adapter';
             case ('dây cáp'):
-                chosenCategory = 'cable';
-                break;
+                return 'cable';
             case ('usb dock'):
-                chosenCategory = 'usb_dock';
-                break;
+                return 'usb_dock';
         }
     }
 
@@ -64,7 +114,6 @@ export default function SelectComponent({ onSelectItem, category }) {
                 </DialogHeader>
 
                 <input type="text" className='border-2 py-1 px-3' placeholder='Tìm kiếm...' />
-                <div>{category}</div>
 
                 <ScrollArea className="flex-1 overflow-y-auto pr-2">
                     {items.map((item, index) => (
@@ -76,9 +125,9 @@ export default function SelectComponent({ onSelectItem, category }) {
                             <div className='flex gap-10'>
                                 <img src={item.product.image_url[0]} alt="" className='size-32' />
                                 <div className='text-left'>
-                                    {item.laptop_name} <br />
-                                    <b>Model:</b> {item.laptop_model} <br />
-                                    <b>Giá bán:</b> {item.price.toLocaleString()}đ
+                                    {item.name} <br />
+                                    <b>Model:</b> {item.model} <br />
+                                    <b>Giá bán:</b> {item.price.toLocaleString()}đ <br />
                                     <b>Số lượng trong kho:</b> {item.qty_in_stock} <br />
                                 </div>
                             </div>

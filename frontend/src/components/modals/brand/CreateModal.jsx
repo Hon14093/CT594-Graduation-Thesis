@@ -45,7 +45,6 @@ export default function CreateModal({ onSubmitSuccess }) {
             console.log(res);
             
             if (res.status === 201) {
-                console.log('hello')
                 setOpen(false);
                 onSubmitSuccess();
             }

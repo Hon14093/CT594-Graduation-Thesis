@@ -14,12 +14,12 @@ export default function SignupPage() {
 
     const handleSubmitSignup = async (e) => {
         e.preventDefault();
-        if (!account_name || !email || !phone || !password) {
+        if (!username || !email || !phone || !password) {
             alert('Vui lòng nhập đầy đủ thông tin!');
             return;
         }
 
-        axios.post('http://localhost:5000/api/auth/register', {username, email, phone, password})
+        axios.post('http://localhost:5002/auth/register', {username, email, phone, password})
         .then(result => {
             console.log(result);
             login(result.data.token);

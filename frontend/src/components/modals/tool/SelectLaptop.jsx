@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { 
     Dialog,
     DialogTrigger,
@@ -11,10 +11,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { laptop } from '@/test/laptop-data';
+import { getLaptops } from '@/hooks/variation-api';
 
 export default function SelectLaptop({ onSelectingLaptop }) {
     const [open, setOpen] = useState(false);
+    const [laptops, setLaptops] = useState([]);
+
+    useEffect(() => {
+        getLaptops(setLaptops);
+    }, [])
 
     const handleLaptopSelect = (laptop) => {
         onSelectingLaptop(laptop);
@@ -45,14 +50,14 @@ export default function SelectLaptop({ onSelectingLaptop }) {
                 <input type="text" className='border-2 py-1 px-3' placeholder='Tìm kiếm...' />
 
                 <ScrollArea className="flex-1 overflow-y-auto pr-2">
-                    {laptop.map((item, index) => (
+                    {laptops.map((item, index) => (
                         <button 
                             key={index} 
                             className='hover:cursor-pointer hover:bg-gray-200 grid px-2 rounded-lg w-full' 
                             onClick={() => handleLaptopSelect(item)}
                         >
                             <div className='flex gap-10'>
-                                <img src={item.product.image_url[0]} alt="" className='size-32' />
+                                <img src={item.product.image_url[0]} alt="" className='size-32 object-contain' />
                                 <div className='text-left'>
                                     {item.laptop_name} <br />
                                     <b>Model:</b> {item.laptop_model} <br />

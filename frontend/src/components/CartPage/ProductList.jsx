@@ -1,24 +1,11 @@
 import React from 'react'
 import { Trash2 } from 'lucide-react'
+import { Link } from 'react-router-dom';
+import { useCart } from '@/context/CartContext'
 
 export default function ProductList() {
-    const cartItems = [
-        { 
-            item_ref_id: 1,
-            item_name: 'Sản phẩm 1 skjdflksjlfkjsdlkjflksdjlf', 
-            image_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoFRQjM-wM_nXMA03AGDXgJK3VeX7vtD3ctA&s', 
-            price: 100000, 
-            quantity: 2 
-        },
-        { 
-            item_ref_id: 2,
-            item_name: 'Sản phẩm 2 skjdflksjlfkjsdlkjflksdjlf', 
-            image_url: 'https://e7.pngegg.com/pngimages/625/647/png-clipart-usb-flash-drives-computer-data-storage-sandisk-usb-3-flash-memory-usb-pendrive-electronics-computer-thumbnail.png', 
-            price: 100000, 
-            quantity: 2 
-        },
-    ]
-
+    const { cart, removeItem } = useCart();
+    const cartItems = cart.items;
 
     return (
         <section className='max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh]'>
@@ -76,7 +63,7 @@ export default function ProductList() {
                         </div>
 
                         <div className='ml-auto'>
-                            money
+                            {cart.total_price.toLocaleString()} vnđ
                         </div>
                         
                     </div>
@@ -84,7 +71,9 @@ export default function ProductList() {
 
                 <article className='flex pt-2'>
                     <button className='big-action-button !ml-auto w-1/4'>
-                        Thanh toán
+                        <Link to='/checkout'>
+                            Thanh toán
+                        </Link>
                     </button>
                 </article>
 

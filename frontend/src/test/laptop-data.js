@@ -163,5 +163,59 @@ export const laptop = [
             ]
         },
         "laptop_name": "Laptop Lenovo Loq 15 Intel Core i7-13620H NVIDIA GeForce RTX 4060 8GB"
+    },
+    {
+        "laptop_id": "39816cb1-158b-4a21-aad9-69385233585e",
+        "product_id": "af0ff3a3-31a7-49ea-8301-61583023d156",
+        "laptop_model": "HXRGT2",
+        "cpu": "Intel Core Ultra 7 155H",
+        "gpu": "Intel Arc Graphics",
+        "ram_installed": 16,
+        "ram_type": "LPDDR5x",
+        "frequency_mhz": 6400,
+        "ram_slots": 0,
+        "max_ram": 32,
+        "refresh_rate": 60,
+        "panel": "OLED",
+        "screen_size": 13.4,
+        "resolution": "2880x1800",
+        "monitor_tech": "Touch, Anti-Reflective",
+        "sound_tech": "Stereo speakers with Waves MaxxAudio Pro",
+        "os": "Windows 11 Pro",
+        "battery_wh": 55,
+        "weight_kg": 1.17,
+        "wifi_version": "Wi-Fi 6E",
+        "bluetooth_version": "Bluetooth 5.3",
+        "ports": {
+            "USB-C": [
+                "3.2 Gen 2"
+            ],
+            "MicroSD": "card reader",
+            "Headphone": "3.5mm combo jack",
+            "Thunderbolt 4": [
+                "USB4",
+                "PD",
+                "DP"
+            ]
+        },
+        "storage_installed_gbs": 512,
+        "storage_installed_type": "M.2 NVMe SSD",
+        "storage_slots": 1,
+        "storage_slots_type": [
+            "M.2 NVMe"
+        ],
+        "max_storage": "Up to 2TB SSD",
+        "price": 42990000,
+        "qty_in_stock": 50,
+        "product": {
+            "product_name": "Laptop Dell XPS 13 9340 Ultra 7",
+            "image_url": [
+                "https://res.cloudinary.com/dwuszt3qn/image/upload/v1752134546/avnbplf6uqr1814efhxj.png",
+                "https://res.cloudinary.com/dwuszt3qn/image/upload/v1752134545/kduwequ9swu1cdfn4j5y.png",
+                "https://res.cloudinary.com/dwuszt3qn/image/upload/v1752134545/kplkvydeuqoyddbzw3ll.png",
+                "https://res.cloudinary.com/dwuszt3qn/image/upload/v1752134545/jdpn3w3kji0mp55lhpg1.png"
+            ]
+        },
+        "laptop_name": "Laptop Dell XPS 13 9340 Ultra 7 Intel Core Ultra 7 155H Intel Arc Graphics"
     }
 ]

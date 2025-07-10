@@ -12,25 +12,43 @@ import {
     TableRow,
 } from '../ui/table';
 import SelectComponent from '../modals/tool/SelectComponent';
+import SpecsTable from '../modals/tool/SpecsTable';
 
 const categories = ['RAM', 'Lưu trữ', 'USB dock', 'Bộ chuyển đổi', 'Màn hình', 'Dây cáp'];
 
-export default function ComponentTable({ laptop }) {
+export default function ComponentTable({ laptop, onCheck }) {
     const [items, setItems] = useState({});
+    const [selectedItems, setSelectedItems] = useState({
+        ram_id: null,
+        monitor_id: null,
+        storage_id: null,
+        dock_id: null,
+        cable_id: null,
+        adapter_id: null
+    });
 
-    const handleAdd = (category) => {
+    const handleAdd = (category, item) => {
         setItems((prev) => {
             if (prev[category]) return prev;
             return {
                 ...prev,
                 [category]: {
-                    name: `SP mẫu`,
-                    price: Math.floor(Math.random() * 1000000),
-                    quantity: Math.floor(Math.random() * 100),
+                    ...item,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.qty_in_stock,
                 },
             };
         });
-        console.log(items)
+
+        const component_id = Object.keys(item).find(
+            key => key.endsWith('_id')
+        ) || null;
+
+        setSelectedItems(prevItems => ({
+            ...prevItems, // Copy all existing properties from the previous state
+            [component_id]: item[component_id], // Update the specific id field
+        }));
     };
 
     const handleRemove = (category) => {
@@ -40,6 +58,12 @@ export default function ComponentTable({ laptop }) {
             return updated;
         });
     };
+
+    const handleCheck = async (laptopId, items) => {
+        const results = await checkCompatibility(laptopId, items);
+        console.log(results);
+        onCheck(results);
+    }
 
     if (!laptop) {
         return (
@@ -154,6 +178,9 @@ export default function ComponentTable({ laptop }) {
                                                 <TableCell>{item.name}</TableCell>
                                                 <TableCell className="text-right">{item.price.toLocaleString()}₫</TableCell>
                                                 <TableCell className="text-center">{item.quantity}</TableCell>
+                                                <TableCell className='text-center'>
+                                                    <SpecsTable product={item} />
+                                                </TableCell>
                                                 <TableCell>
                                                     <button
                                                         className="text-red-600 hover:text-red-800 font-bold"
@@ -166,18 +193,11 @@ export default function ComponentTable({ laptop }) {
                                             ) : (
                                                 <>
                                                 <TableCell>
-
-                                                    <Button
-                                                        variant="secondary"
-                                                        className="border p-1 rounded"
-                                                        onClick={() => handleAdd(category)}
-                                                    >
-                                                        <Plus size={12} />
-                                                    </Button>
-                                                    {/* <SelectComponent category={category}/> */}
+                                                    <SelectComponent onSelectItem={handleAdd} category={category}/>
                                                 </TableCell>
-                                                <TableCell className="text-right italic text-muted-foreground">—</TableCell>
                                                 <TableCell className="text-center italic text-muted-foreground">—</TableCell>
+                                                <TableCell className="text-center italic text-muted-foreground">—</TableCell>
+                                                <TableCell />
                                                 <TableCell />
                                                 </>
                                             )}
@@ -192,6 +212,8 @@ export default function ComponentTable({ laptop }) {
                         <Button variant='outline' className='py-5 text-md'>Xóa hết</Button>
                         <Button 
                             className="bg-techBlue py-5 px-6 text-white border border-techBlue text-md hover:text-techBlue hover:bg-white"
+                            onClick = {() => handleCheck(laptop.laptop_id, selectedItems)}
+                            // onClick = {() => console.log(selectedItems)}
                         >
                             Kiểm tra
                         </Button>
