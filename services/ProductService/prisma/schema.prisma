@@ -9,7 +9,7 @@ datasource db {
 
 model brand {
   brand_id     Int       @id @default(autoincrement())
-  brand_name   String    @unique(map: "unique_brand_name") @db.VarChar(100)
+  brand_name   String?   @unique @db.VarChar(100)
   slug         String?
   date_created DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
   product      product[]
@@ -17,7 +17,7 @@ model brand {
 
 model category {
   category_id   Int       @id @default(autoincrement())
-  category_name String    @unique(map: "unique_category_name") @db.VarChar(100)
+  category_name String?   @unique @db.VarChar(100)
   slug          String?
   date_created  DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
   product       product[]
@@ -30,11 +30,15 @@ model product {
   category_id  Int
   description  String?
   image_url    String[]
+  adapter      adapter[]
+  cable        cable[]
+  dock         dock[]
   laptop       laptop[]
   monitor      monitor[]
-  brand        brand     @relation(fields: [brand_id], references: [brand_id], onDelete: NoAction, onUpdate: NoAction)
-  category     category  @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
+  brand        brand     @relation(fields: [brand_id], references: [brand_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_product_brand")
+  category     category  @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_product_category")
   ram          ram[]
+  storage      storage[]
 }
 
 model laptop {
@@ -50,29 +54,24 @@ model laptop {
   max_ram                Int
   refresh_rate           Int
   panel                  String
-  screen_size            Float
+  screen_size            Float    @db.Real
   resolution             String
   monitor_tech           String?
   sound_tech             String?
   os                     String
   battery_wh             Int?
-  weight_kg              Float?
+  weight_kg              Float?   @db.Real
   wifi_version           String?
   bluetooth_version      String?
-  ports                  Json?
+  ports                  Json?    @db.Json
   storage_installed_gbs  Int
   storage_installed_type String
   storage_slots          Int
   storage_slots_type     String[]
   max_storage            String?
-  price                  Float
+  price                  Float    @db.Real
   qty_in_stock           Int?
-  product                product  @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model tester {
-  id          Int      @id @default(autoincrement())
-  array_stuff String[]
+  product                product  @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_laptop_product")
 }
 
 model monitor {
@@ -87,14 +86,16 @@ model monitor {
   resolution         String  @db.VarChar(50)
   screen_size_inches Float   @db.Real
   refresh_rate_hz    Int
-  ports              Json
+  ports              Json    @db.Json
   vesa_mount         String  @db.VarChar(50)
   monitor_tech       String  @db.VarChar(100)
   in_box_component   String
   voltage            String  @db.VarChar(50)
   weight_kg          Float   @db.Real
   product_id         String  @db.Uuid
-  product            product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_monitor")
+  price              Float?  @db.Real
+  qty_in_stock       Int?
+  product            product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_monitor")
 }
 
 model ram {
@@ -108,5 +109,86 @@ model ram {
   price         Float   @db.Real
   product_id    String  @db.Uuid
   ram_name      String
-  product       product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_ram")
+  qty_in_stock  Int?
+  product       product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_ram")
+}
+
+model dock {
+  dock_id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_id            String  @db.Uuid
+  dock_model            String  @db.VarChar(100)
+  connection_port       String  @db.VarChar(50)
+  max_data_rate_gbps    Float   @db.Real
+  max_output_voltage    Float   @db.Real
+  cable_length_cm       Int
+  material              String  @db.VarChar(100)
+  dimensions_mm         String  @db.VarChar(100)
+  max_external_monitors Int     @default(0)
+  max_resolution        String  @default("0") @db.VarChar(50)
+  display_output_ports  Json    @default("{}")
+  usb_a_ports           Json    @default("{}")
+  usb_c_ports           Json    @default("{}")
+  ethernet_port_speed   String  @db.VarChar(50)
+  sd_card_slot          Boolean @default(false)
+  microsd_card_slot     Boolean @default(false)
+  audio_jack_type       String  @default(dbgenerated("false")) @db.VarChar(50)
+  price                 Float   @db.Real
+  qty_in_stock          Int
+  dock_name             String?
+  product               product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_dock_product")
+}
+
+model adapter {
+  adapter_id          String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_id          String  @db.Uuid
+  adapter_model       String  @db.VarChar(255)
+  adapter_name        String
+  input_port          String  @db.VarChar(50)
+  output_port         String  @db.VarChar(50)
+  hdmi_version        String? @db.VarChar(20)
+  dp_version          String? @db.VarChar(20)
+  max_resolution      String? @db.VarChar(50)
+  ethernet_speed_mbps Int?
+  max_data_rate_gbps  Float?  @db.Real
+  max_output_voltage  Float?  @db.Real
+  price               Float   @db.Real
+  qty_in_stock        Int     @default(0)
+  product             product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_dock_product")
+}
+
+model cable {
+  cable_id            String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_id          String  @db.Uuid
+  cable_model         String  @db.VarChar(255)
+  cable_name          String  @db.VarChar(255)
+  connector_a         String  @db.VarChar(50)
+  connector_b         String  @db.VarChar(50)
+  cable_length_cm     Decimal @db.Decimal(5, 2)
+  material            String  @db.VarChar(100)
+  weight_g            Int?
+  hdmi_version        String? @db.VarChar(20)
+  dp_version          String? @db.VarChar(20)
+  max_resolution      String? @db.VarChar(50)
+  ethernet_speed_mbps Int?
+  max_data_rate_gbps  Float?  @db.Real
+  max_output_voltage  Float?  @db.Real
+  price               Float   @db.Real
+  qty_in_stock        Int     @default(0)
+  product             product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_dock_product")
+}
+
+model storage {
+  storage_id       String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  storage_model    String  @db.VarChar(255)
+  capacity_gb      Int
+  interface        String  @db.VarChar(50)
+  form_factor      String  @db.VarChar(50)
+  physical_profile String? @db.VarChar(50)
+  weight_g         Int?
+  read_speed_mbps  Int
+  write_speed_mbps Int
+  price            Decimal @db.Decimal(10, 2)
+  qty_in_stock     Int     @default(0)
+  product_id       String  @db.Uuid
+  product          product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_monitor")
 }

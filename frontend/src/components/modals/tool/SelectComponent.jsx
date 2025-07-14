@@ -17,29 +17,26 @@ import { storage } from '@/test/storage-data';
 import { dock } from '@/test/dock-data';
 import { cable } from '@/test/cable-data';
 import { adapter } from '@/test/adapter-data';
+import { getRAMs, getMonitors, getDocks } from '@/hooks/variation-api';
 
 export default function SelectComponent({ onSelectItem, category }) {
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState([]);
-    const [chosenCategory, setChosenCategory] = useState();
-    let modifiedItems = [];
-    let model = '';
-    // let chosenCategory = translateCategory(category);
 
     useEffect(() => {
-        const getItems = (category) => {
+        const getItems = async (category) => {
             switch (category.toLowerCase()) {
                 case ('ram'):
-                    // getRAMs(setItems);
-                    setItems(ram);
+                    await getRAMs(setItems);
+                    // setItems(ram);
                     break;
                 case ('màn hình'):
-                    // getMonitors(setItems);
-                    setItems(monitor)
+                    await getMonitors(setItems);
+                    // setItems(monitor)
                     return 'monitor';
                 case ('lưu trữ'):
                     // getStorages(setItems);
-                    setItems(storage)
+                    // setItems(storage)
                     return 'storage';
                 case ('bộ chuyển đổi'):
                     // getAdapters(setItems);
@@ -50,13 +47,12 @@ export default function SelectComponent({ onSelectItem, category }) {
                     setItems(cable)
                     return 'cable';
                 case ('usb dock'):
-                    // getDocks(setItems);
-                    setItems(dock)
+                    await getDocks(setItems);
+                    // setItems(dock)
                     return 'usb_dock';
             }
         }
 
-        // model = translateCategory(category);
         getItems(category);
         
     }, [])
@@ -127,7 +123,7 @@ export default function SelectComponent({ onSelectItem, category }) {
                                 <div className='text-left'>
                                     {item.name} <br />
                                     <b>Model:</b> {item.model} <br />
-                                    <b>Giá bán:</b> {item.price.toLocaleString()}đ <br />
+                                    <b>Giá bán:</b> {item.price ? item.price.toLocaleString() : '0đ'}đ <br />
                                     <b>Số lượng trong kho:</b> {item.qty_in_stock} <br />
                                 </div>
                             </div>

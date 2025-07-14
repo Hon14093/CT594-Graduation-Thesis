@@ -13,7 +13,18 @@ import {
     returnAllLaptops, 
     returnAllLaptopVariations, 
     returnAllRams, 
-    returnAllMonitors
+    returnAllMonitors,
+    returnAllDocks,
+    returnAllStorages,
+    returnAllCables,
+    returnAllAdapters,
+    createLaptopController, updateLaptopController, deleteLaptopController,
+    createRamController, updateRamController, deleteRamController,
+    createStorageController, updateStorageController, deleteStorageController,
+    createCableController, updateCableController, deleteCableController,
+    createMonitorController, updateMonitorController, deleteMonitorController,
+    createAdapterController, updateAdapterController, deleteAdapterController,
+    createDockController, updateDockController, deleteDockController
 } from '../controllers/componentController.js';
 
 const router = express.Router();
@@ -31,8 +42,38 @@ router.post('/categories/create', createNewCategory);
 
 router.get('/laptops/all', returnAllLaptops);
 router.get('/laptops/variations/:product_id', returnAllLaptopVariations);
+router.post('/laptops/create', createLaptopController);
+router.put('/laptops/update/:id', updateLaptopController);
+router.delete('/laptops/delete/:id', deleteLaptopController);
 
 router.get('/rams/all', returnAllRams);
+router.post('/rams/create', createRamController);
+router.put('/rams/update/:id', updateRamController);
+router.delete('/rams/delete/:id', deleteRamController);
+
 router.get('/monitors/all', returnAllMonitors);
+router.post('/monitors/create', createMonitorController);
+router.put('/monitors/update/:id', updateMonitorController);
+router.delete('/monitors/delete/:id', deleteMonitorController);
+
+router.get('/docks/all', returnAllDocks);
+router.post('/docks/create', createDockController);
+router.put('/docks/update/:id', updateDockController);
+router.delete('/docks/delete/:id', deleteDockController);
+
+router.get('/storages/all', returnAllStorages);
+router.post('/storages/create', createStorageController);
+router.put('/storages/update/:id', updateStorageController);
+router.delete('/storages/delete/:id', deleteStorageController);
+
+router.get('/cables/all', returnAllCables);
+router.post('/cables/create', createCableController);
+router.put('/cables/update/:id', updateCableController);
+router.delete('/cables/delete/:id', deleteCableController);
+
+router.get('/adapters/all', returnAllAdapters);
+router.post('/adapters/create', createAdapterController);
+router.put('/adapters/update/:id', updateAdapterController);
+router.delete('/adapters/delete/:id', deleteAdapterController);
 
 export default router;

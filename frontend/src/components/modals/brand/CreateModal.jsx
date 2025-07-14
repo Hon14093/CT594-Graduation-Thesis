@@ -50,6 +50,8 @@ export default function CreateModal({ onSubmitSuccess }) {
             }
         } catch (error) {
             console.log('Internal Server Error', error);
+        } finally {
+            setLoading(false);
         }
     }
 

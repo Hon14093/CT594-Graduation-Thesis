@@ -13,11 +13,11 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
-import { cableColumns } from '@/components/columns';
-import { getCables } from '@/hooks/variation-api';
-// import { DetailsModal } from '@/components/modals/laptop/DetailsModal';
+import { monitorColumns } from '@/components/columns';
+import { getMonitors } from '@/hooks/variation-api';
+import { DetailsModal } from '@/components/modals/monitor/DetailsModal';
 
-export default function Cable() {
+export default function Monitor() {
     const [data, setData] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
@@ -25,11 +25,11 @@ export default function Cable() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
 
     useEffect(() => {
-        getCables(setData);
+        getMonitors(setData);
     }, [])
 
     const handleSubmitSuccess = () => {
-        getCables(setData);
+        getMonitors(setData);
     }
 
     const handleViewDetails = (product) => {
@@ -38,7 +38,7 @@ export default function Cable() {
     }
     
     const actionColumns = [
-        ...cableColumns,
+        ...monitorColumns,
         {
             id: 'actions',
             cell: ({ row }) => (
@@ -80,7 +80,7 @@ export default function Cable() {
                             </BreadcrumbItem>
                             <BreadcrumbSeparator className="hidden md:block" />
                             <BreadcrumbItem>
-                                <BreadcrumbPage>Dây cáp</BreadcrumbPage>
+                                <BreadcrumbPage>Màn hình</BreadcrumbPage>
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
@@ -91,7 +91,7 @@ export default function Cable() {
                 <CardHeader>
                     <div className='flex'>
                         <div className='font-semibold text-3xl'>
-                            Danh sách dây cáp
+                            Danh sách màn hình
                         </div>
 
                         <div className='ml-auto'>
@@ -106,11 +106,11 @@ export default function Cable() {
                         data={data} 
                     />
 
-                    {/* <DetailsModal
-                        laptop={selectedProduct}
+                    <DetailsModal
+                        monitor={selectedProduct}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
-                    /> */}
+                    />
 
                 </CardContent>
             </Card>

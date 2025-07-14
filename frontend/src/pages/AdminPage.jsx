@@ -7,6 +7,13 @@ import Brands from '@/components/AdminPage/Brands'
 import Categories from '@/components/AdminPage/Categories'
 import Discounts from '@/components/AdminPage/Discounts'
 import Products from '@/components/AdminPage/Products'
+import Laptop from '@/components/AdminPage/product-categories/Laptop'
+import Ram from '@/components/AdminPage/product-categories/Ram'
+import Monitor from '@/components/AdminPage/product-categories/Monitor'
+import Dock from '@/components/AdminPage/product-categories/Dock'
+import Cable from '@/components/AdminPage/product-categories/Cable'
+import Storage from '@/components/AdminPage/product-categories/Storage'
+import Adapter from '@/components/AdminPage/product-categories/Adapter'
 
 export default function AdminPage() {
     return (
@@ -19,7 +26,14 @@ export default function AdminPage() {
                 <Route path="/brands" element={<Brands />} />
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/discounts" element={<Discounts />} />
-                <Route path="/products" element={<Products />} />    
+                <Route path="/products" element={<Products />} />
+                <Route path="/products/laptops" element={<Laptop />} />
+                <Route path="/products/rams" element={<Ram />} />
+                <Route path="/products/monitors" element={<Monitor />} />
+                <Route path="/products/docks" element={<Dock />} />
+                <Route path="/products/cables" element={<Cable />} />
+                <Route path="/products/storages" element={<Storage />} />
+                <Route path="/products/adapters" element={<Adapter />} />
                 
                 {/* <Route path="/products/variations" element={<Variations />} /> */}
                 {/* <Route path="/orders" element={<Orders />} /> */}

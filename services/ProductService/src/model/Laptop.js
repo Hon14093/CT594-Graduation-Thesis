@@ -7,7 +7,8 @@ export const getAllLaptops = async () => {
             product: {
                 select: { 
                     product_name: true, 
-                    image_url: true
+                    image_url: true,
+                    brand: true
                 }
             }
         }
@@ -21,7 +22,8 @@ export const getAllProductVariations = async (product_id) => {
             product: {
                 select: { 
                     product_name: true, 
-                    image_url: true
+                    image_url: true,
+                    brand: true
                 }
             }
         },
@@ -30,3 +32,22 @@ export const getAllProductVariations = async (product_id) => {
         }
     })
 }
+
+export const createLaptop = async (laptopData) => {
+    return await prisma.laptop.create({
+        data: laptopData
+    });
+};
+
+export const updateLaptop = async (laptopId, updateData) => {
+    return await prisma.laptop.update({
+        where: { id: laptopId },
+        data: updateData
+    });
+};
+
+export const deleteLaptop = async (laptopId) => {
+    return await prisma.laptop.delete({
+        where: { id: laptopId }
+    });
+};

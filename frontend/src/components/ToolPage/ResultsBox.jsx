@@ -21,20 +21,13 @@ export default function ResultsBox({ laptop, results }) {
                     </div>
 
                     <div className='px-3 mt-2 text-lg bg-gray-100 min-h-40 border-2 rounded-xl'>
-                        <div className='py-3'>
-                            {/* {Object.keys(results).map === 0 ? (
-                                <div>Waiting for result...</div>
-                            ) : (
-                                results.map((result) => (
-                                    <div>{result}</div>
-                                ))
-                            )} */}
-
+                        <div className='py-3 grid gap-1'>
                             {results.map((item, index) => (
                                 <div key={index} className={`p-3 rounded-md text-left ${
-                                    item.status === 0 ? 'bg-red-100 text-red-800' : 
-                                    item.status === 1 ? 'bg-green-100 text-green-800' :
-                                    item.status === 2 ? 'bg-amber-100 text-amber-900' :
+                                    item.status === 0 ? 'bg-red-100 text-red-900 border border-red-900' : 
+                                    item.status === 1 ? 'bg-green-100 text-green-900 border border-green-900' :
+                                    item.status === 2 ? 'bg-amber-100 text-amber-900 border border-amber-900' :
+                                    item.status === 3 ? 'bg-amber-100 text-amber-900 border border-amber-900' :
                                     'bg-gray-100'
                                 }`}>
                                     {item.message}
@@ -43,9 +36,9 @@ export default function ResultsBox({ laptop, results }) {
                         </div>
                     </div>
 
-                    <button onClick={() => console.log(results)}>
+                    {/* <button onClick={() => console.log(results)}>
                         Console log
-                    </button>
+                    </button> */}
                 </CardContent>
             </Card>
         </section>

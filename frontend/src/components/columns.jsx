@@ -62,3 +62,121 @@ export const checkOrdersColumns = [
     { accessorKey: "order_total", header: "Tổng Tiền" },
     { accessorKey: "Account.account_name", header: "Tài Khoản" },
 ]
+
+const renderImageCell = (imageArray) => {
+    const imageUrl = Array.isArray(imageArray) ? imageArray[0] : null;
+
+    return imageUrl ? (
+        <img
+            src={imageUrl}
+            className="size-24 object-contain rounded mx-auto"
+            onError={(e) => {
+                e.currentTarget.src = "https://cdn-icons-png.flaticon.com/512/6659/6659895.png"; 
+            }}
+        />
+    ) : (
+        <span>No image</span>
+    );
+}
+
+export const laptopColumns = [
+    {
+        accessorKey: "image_url",
+        header: "Hình ảnh",
+        cell: ({ row }) => renderImageCell(row.getValue("image_url"))
+    },
+    { accessorKey: "laptop_name", header: "Tên laptop" },
+    { accessorKey: "brand", header: "Thương hiệu" },
+    { accessorKey: "laptop_price", header: "Giá bán" },
+    { accessorKey: "qty_in_stock", header: "Số lượng " },
+]
+
+export const ramColumns = [
+    {
+        accessorKey: "image_url",
+        header: "Hình ảnh",
+        cell: ({ row }) => renderImageCell(row.getValue("image_url"))
+    },
+    { accessorKey: "ram_name", header: "Tên ram" },
+    { accessorKey: "brand", header: "Thương hiệu" },
+    { 
+        accessorKey: "price", header: "Giá bán",
+        cell: ({ row }) => <div>{row.original.price.toLocaleString()} vnđ</div>
+    },
+    { accessorKey: "qty_in_stock", header: "Số lượng " },
+]
+
+export const monitorColumns = [
+    {
+        accessorKey: "image_url",
+        header: "Hình ảnh",
+        cell: ({ row }) => renderImageCell(row.getValue("image_url"))
+    },
+    { accessorKey: "monitor_name", header: "Tên màn hình" },
+    { accessorKey: "brand", header: "Thương hiệu" },
+    { 
+        accessorKey: "price", header: "Giá bán",
+        cell: ({ row }) => <div>{row.original.price.toLocaleString()} vnđ</div>
+    },
+    { accessorKey: "qty_in_stock", header: "Số lượng " },
+]
+
+export const dockColumns = [
+    {
+        accessorKey: "image_url",
+        header: "Hình ảnh",
+        cell: ({ row }) => renderImageCell(row.getValue("image_url"))
+    },
+    { accessorKey: "dock_name", header: "Tên bộ dock" },
+    { accessorKey: "brand", header: "Thương hiệu" },
+    { 
+        accessorKey: "price", header: "Giá bán",
+        cell: ({ row }) => <div>{row.original.price.toLocaleString()} vnđ</div>
+    },
+    { accessorKey: "qty_in_stock", header: "Số lượng " },
+]
+
+export const cableColumns = [
+    {
+        accessorKey: "image_url",
+        header: "Hình ảnh",
+        cell: ({ row }) => renderImageCell(row.getValue("image_url"))
+    },
+    { accessorKey: "cable_name", header: "Tên dây cáp" },
+    { accessorKey: "brand", header: "Thương hiệu" },
+    { 
+        accessorKey: "price", header: "Giá bán",
+        cell: ({ row }) => <div>{row.original.price.toLocaleString()} vnđ</div>
+    },
+    { accessorKey: "qty_in_stock", header: "Số lượng " },
+]
+
+export const storageColumns = [
+    {
+        accessorKey: "image_url",
+        header: "Hình ảnh",
+        cell: ({ row }) => renderImageCell(row.getValue("image_url"))
+    },
+    { accessorKey: "storage_name", header: "Tên ổ cứng" },
+    { accessorKey: "brand", header: "Thương hiệu" },
+    { 
+        accessorKey: "price", header: "Giá bán",
+        cell: ({ row }) => <div>{row.original.price.toLocaleString()} vnđ</div>
+    },
+    { accessorKey: "qty_in_stock", header: "Số lượng " },
+]
+
+export const adapterColumns = [
+    {
+        accessorKey: "image_url",
+        header: "Hình ảnh",
+        cell: ({ row }) => renderImageCell(row.getValue("image_url"))
+    },
+    { accessorKey: "adapter_name", header: "Tên bộ chuyển đổi" },
+    { accessorKey: "brand", header: "Thương hiệu" },
+    { 
+        accessorKey: "price", header: "Giá bán",
+        cell: ({ row }) => <div>{row.original.price.toLocaleString()} vnđ</div>
+    },
+    { accessorKey: "qty_in_stock", header: "Số lượng " },
+]

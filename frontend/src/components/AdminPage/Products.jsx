@@ -5,7 +5,7 @@ import ramLogo from '@/assets/images/ram.png'
 import dockLogo from '@/assets/images/dock.png'
 import ssdLogo from '@/assets/images/ssd.png'   
 import adapterLogo from '@/assets/images/dongle.png'
-import BrandCombobox from '../combobox/BrandCombobox'
+import monitorLogo from '@/assets/images/monitor.png'
 
 import { Eye, PenBox, Trash2 } from 'lucide-react'
 import { Separator } from '../ui/separator'
@@ -29,6 +29,16 @@ import CreateModal from '../modals/product/CreateModal'
 import DetailsModal from '../modals/product/DetailsModal'
 import EditModal from '../modals/product/EditModal'
 import DeleteModal from '../modals/product/DeleteModal'
+
+const categoryItems = [
+    { name: "Laptop", path: "/admin/products/laptops", logo: laptopLogo, label: "Laptop" },
+    { name: "Cable", path: "/admin/products/cables", logo: cableLogo, label: "Dây cáp" },
+    { name: "RAM", path: "/admin/products/rams", logo: ramLogo, label: "RAM" },
+    { name: "Dock", path: "/admin/products/docks", logo: dockLogo, label: "Bộ dock" },
+    { name: "SSD", path: "/admin/products/storages", logo: ssdLogo, label: "Ổ cứng" },
+    { name: "Adapter", path: "/admin/products/adapters", logo: adapterLogo, label: "Bộ chuyển đổi" },
+    { name: "Monitor", path: "/admin/products/monitors", logo: monitorLogo, label: "Màn hình" }
+];
 
 export default function Products() {
     const [data, setData] = useState([]);
@@ -88,7 +98,7 @@ export default function Products() {
     ]
 
     return (
-        <SidebarInset>
+        <SidebarInset className='bg-mistGray'>
             <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
                 <div className="flex items-center gap-2 px-4">
                     <SidebarTrigger className="-ml-1" />
@@ -106,6 +116,33 @@ export default function Products() {
                     </Breadcrumb>
                 </div>
             </header>
+
+            <Card className="mx-5 mb-5">
+                <CardHeader>
+                    <div className='flex'>
+                        <div className='font-semibold text-3xl'>
+                            Các danh mục sản phẩm
+                        </div>
+                    </div>
+                </CardHeader>
+
+                <CardContent>
+                    <section className='flex gap-5'>
+                        {categoryItems.map((item) => (
+                            <Link
+                                key={item.name}
+                                to={item.path}
+                                className='px-4 pb-4 pt-3 border rounded-2xl hover:bg-gray-200 duration-200'
+                            >
+                                <div className='text-2xl'>
+                                <img src={item.logo} alt={item.name} className='size-20 mx-auto' />
+                                {item.label}
+                                </div>
+                            </Link>
+                        ))}
+                    </section>
+                </CardContent>
+            </Card>
 
             <Card className="mx-5">
                 <CardHeader>
@@ -152,6 +189,10 @@ export default function Products() {
                         onClose={() => setIsDeleteModalOpen(false)}
                         onSubmitSuccess={handleSubmitSuccess}
                     />
+
+                    <button onClick={() => console.log(data[0].image_url)}>
+                        Check
+                    </button>
                 </CardContent>
             </Card>
         </SidebarInset>

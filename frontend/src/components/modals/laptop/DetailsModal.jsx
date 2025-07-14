@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import SelectLaptop from '../modals/tool/SelectLaptop';
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Card, CardContent } from '../ui/card';
-import { ScrollArea } from '../ui/scroll-area';
-import { getLaptops } from '@/hooks/variation-api';
+import { 
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle
+} from "@/components/ui/dialog";
+import { 
+    Carousel, 
+    CarouselContent, 
+    CarouselItem, 
+    CarouselPrevious, 
+    CarouselNext
+} from '@/components/ui/carousel';
+import { Table, TableBody, TableRow, TableCell } from '@/components/ui/table';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
-export default function Laptop({ onLaptopSelect }) {
-    const [laptop, setLaptop] = useState(null);
+export function DetailsModal({ laptop, open, onClose }) {
+    if (!laptop) return null;
 
-    const handleSelectLaptop = (selectedLaptop) => {
-        setLaptop(selectedLaptop);
-        onLaptopSelect(selectedLaptop);
-    }
-    
     const VIETNAMESE_SPECS = {
         // Core specs
         "laptop_id": "ID Laptop",
@@ -28,9 +27,9 @@ export default function Laptop({ onLaptopSelect }) {
         "gpu": "Card đồ họa",
         
         // RAM specs
-        "ram_installed": "RAM tích hợp",
+        "ram_installed": "Dung lượng RAM",
         "ram_type": "Loại RAM", 
-        "frequency_mhz": "Tần số RAM (MHz)",
+        "frequency_mhz": "Tốc độ RAM (MHz)",
         "ram_slots": "Khe cắm RAM",
         "max_ram": "RAM tối đa",
         
@@ -105,7 +104,8 @@ export default function Laptop({ onLaptopSelect }) {
             'image_url',
             'price',
             'laptop_name',
-            'qty_in_stock'
+            'qty_in_stock',
+            'brand', 'laptop_price'
         ];
 
         return (
@@ -139,59 +139,59 @@ export default function Laptop({ onLaptopSelect }) {
     };
 
     return (
-        <section className='max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh]'>
-            <div className='grid grid-cols-2 gap-4'>
-                <article className='h-[55vh]'>
-                    {laptop === null ? <SelectLaptop onSelectingLaptop={handleSelectLaptop} /> :
-                        <Card className='h-full'>
-                            <CardContent>
-                                <Carousel className="w-full" opts={{ loop: true, align: "center" }}>
-                                    <CarouselContent>
-                                        {laptop.product.image_url.map((image, index) => (
-                                            <CarouselItem key={index} className="flex justify-center">
-                                                <img
-                                                    src={image}
-                                                    // alt={image.alt}
-                                                    className="object-contain size-96 rounded-lg "
-                                                />
-                                            </CarouselItem>
-                                        ))}
-                                    </CarouselContent>
-                                    <CarouselPrevious className="left-4" />
-                                    <CarouselNext className="right-4" />
-                                </Carousel>
+        <Dialog open={open} onOpenChange={onClose}>
+            <DialogContent className='w-[1000px] !max-w-none'>
+                <DialogHeader>
+                    <DialogTitle>Thông tin laptop</DialogTitle>
+                </DialogHeader>
+                
+                <section className='grid md:grid-cols-2 sm:grid-cols-1 gap-5 items-start text-lg'>
+                    <ScrollArea className='grid gap-2 h-[25rem] overflow-hidden'>
+                        <div className='flex'>
+                            <h3 className='font-semibold pr-2'>ID laptop: </h3>
+                            <p>{laptop.laptop_id}</p>
+                        </div>
 
-                                <button 
-                                    className='py-2 px-5 bg-red-600 text-white rounded-lg hover:bg-red-700'
-                                    onClick={() => handleSelectLaptop(null)}
-                                >
-                                    Xóa
-                                </button>
-                                <p className='pt-2'><i>*Nhấn xóa để chọn laptop khác</i></p>
-                            </CardContent>
-                        </Card>
-                    }
-                </article>
+                        <div className="flex">
+                            <h3 className="font-semibold pr-2 shrink-0">Tên laptop:</h3>
+                            <p className="whitespace-normal break-words">{laptop.laptop_name}</p>
+                        </div>
 
-                <article className='max-h-[55vh] overflow-hidden'>
-                    {laptop ? 
-                        <Card className='h-[55vh]'>
-                            <ScrollArea className='h-full'>
-                                <CardContent className=''>
-                                    <h2 className="text-2xl font-bold pb-2">{laptop.laptop_name}</h2>
-                                    {renderSpecsTable()}
-                                </CardContent>
-                            </ScrollArea>
-                        </Card> 
-                        :
-                        <Card className='h-[55vh]'>
-                            <CardContent className='flex justify-center items-center h-full'>
-                                <p>Hãy chọn laptop để xem thông số.</p>
-                            </CardContent>
-                        </Card>
-                    }
-                </article>
-            </div>
-        </section>
+                        <div className='flex'>
+                            <h3 className='font-semibold pr-2'>Thương hiệu: </h3>
+                            <p>{laptop.brand}</p>
+                        </div>
+
+                        <div className='flex pb-2'>
+                            <h3 className='font-semibold pr-2'>Giá bán: </h3>
+                            <p>{laptop.price.toLocaleString()} vnđ</p>
+                        </div>
+
+                        {renderSpecsTable()}
+
+                    </ScrollArea>
+
+                    <article>
+                        <h3 className='font-semibold pb-2'>Hình ảnh sản phẩm: </h3>
+                        <Carousel className="w-full" opts={{ loop: true, align: "center" }}>
+                            <CarouselContent>
+                                {laptop.image_url.map((image, index) => (
+                                    <CarouselItem key={index} className="flex justify-center">
+                                        <img
+                                            src={image}
+                                            alt={image.alt}
+                                            className="object-contain w-80 h-80 rounded-lg"
+                                        />
+                                    </CarouselItem>
+                                ))}
+                            </CarouselContent>
+                            <CarouselPrevious className="left-4" />
+                            <CarouselNext className="right-4" />
+                        </Carousel>
+
+                    </article>
+                </section>
+            </DialogContent>
+        </Dialog>
     )
 }

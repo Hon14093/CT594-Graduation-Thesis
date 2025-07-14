@@ -57,11 +57,29 @@ export default function ComponentTable({ laptop, onCheck }) {
             delete updated[category];
             return updated;
         });
+
+        setSelectedItems((prev) => {
+            const updated = { ...prev };
+
+            // Find the ID key (e.g., 'ram_id', 'monitor_id') from the selected item
+            const item = items[category];
+            if (item) {
+                const component_id_key = Object.keys(item).find(key => key.endsWith('_id'));
+                if (component_id_key) {
+                    updated[component_id_key] = null;
+                }
+            }
+
+            return updated;
+        });
     };
 
-    const handleCheck = async (laptopId, items) => {
-        const results = await checkCompatibility(laptopId, items);
-        console.log(results);
+    const handleCheck = async (laptopId, selectedItems) => {
+        if (Object.keys(items).length === 0) {
+            alert('Không có sản phẩm để kiểm tra!');
+            return;
+        }
+        const results = await checkCompatibility(laptopId, selectedItems);
         onCheck(results);
     }
 
