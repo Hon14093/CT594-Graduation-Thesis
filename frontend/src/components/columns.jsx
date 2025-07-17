@@ -49,9 +49,17 @@ export const orderColumns = [
 ]
 
 export const orderDetailsColumns = [
-    { accessorKey: "Product_Weight.Product.product_name", header: "Tên Sản Phẩm" },
-    { accessorKey: "Product_Weight.Weight_Option.weight_name", header: "Cân Nặng" },
-    { accessorKey: "Product_Weight.product_price", header: "Giá" },
+    { 
+        accessorKey: "name", header: "Tên Sản Phẩm",
+        cell: ({ row }) => (
+            // <div className="max-w-[200px] break-words">
+            <div className="text-wrap">
+                {row.getValue("name")}
+            </div>
+        )
+    },
+    { accessorKey: "product.product.brand.brand_name", header: "Thương hiệu" },
+    { accessorKey: "price", header: "Giá" },
     { accessorKey: "quantity", header: "Số Lượng" },
     { accessorKey: "subtotal", header: "Thành Tiền" },
 ]
@@ -60,7 +68,7 @@ export const checkOrdersColumns = [
     { accessorKey: "order_id", header: "ID Đơn Hàng" },
     { accessorKey: "order_date", header: "Ngày Đặt" },
     { accessorKey: "order_total", header: "Tổng Tiền" },
-    { accessorKey: "Account.account_name", header: "Tài Khoản" },
+    { accessorKey: "account.username", header: "Tài Khoản" },
 ]
 
 const renderImageCell = (imageArray) => {

@@ -148,9 +148,9 @@ export default function CreateModal({ account, onSubmitSuccess }) {
                                 </article>
                             </div>
 
-                            <Button type='submit' disabled={loading} className='w-full'>
+                            <button type='submit' disabled={loading} className='w-full big-action-button !py-1 !text-lg'>
                                 {loading ? 'Đang xử lý...' : 'Thêm địa chỉ'}
-                            </Button>
+                            </button>
                         </section>
                         
                     </form>

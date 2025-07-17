@@ -12,6 +12,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "../ui/scroll-area";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -38,32 +39,35 @@ export function GeneralCombobox({
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
+            
             <PopoverContent className="w-96 p-0">
-                <Command>
-                    <CommandInput placeholder={placeholder} />
-                    <CommandEmpty>No items found.</CommandEmpty>
-                    <CommandGroup>
-                        {data.map((item) => (
-                            <CommandItem
-                                key={item.id}
-                                value={item.id}
-                                className='!text-lg'
-                                onSelect={() => {
-                                    onChange(item.id); // Pass ID back to parent
-                                    setOpen(false);
-                                }}
-                            >
-                                <Check
-                                    className={cn(
-                                        "mr-2 h-4 w-4",
-                                        value === item.id ? "opacity-100" : "opacity-0"
-                                    )}
-                                />
-                                {item.label}
-                            </CommandItem>
-                        ))}
-                    </CommandGroup>
-                </Command>
+                <ScrollArea className='h-52'>
+                    <Command>
+                        <CommandInput placeholder={placeholder} />
+                        <CommandEmpty>No items found.</CommandEmpty>
+                        <CommandGroup>
+                            {data.map((item) => (
+                                <CommandItem
+                                    key={item.id}
+                                    value={item.id}
+                                    className='!text-lg'
+                                    onSelect={() => {
+                                        onChange(item.id); // Pass ID back to parent
+                                        setOpen(false);
+                                    }}
+                                >
+                                    <Check
+                                        className={cn(
+                                            "mr-2 h-4 w-4",
+                                            value === item.id ? "opacity-100" : "opacity-0"
+                                        )}
+                                    />
+                                    {item.label}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </Command>
+                </ScrollArea>
             </PopoverContent>
         </Popover>
     );

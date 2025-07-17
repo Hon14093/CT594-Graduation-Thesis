@@ -1,4 +1,4 @@
-import { createAddress, getAddressesByAccountId } from "../model/Address.js";
+import { createAddress, getAddressById, getAddressesByAccountId, getAllAddresses } from "../model/Address.js";
 
 export const returnAddressesByAccountId = async (req,res) => {
     try {
@@ -8,6 +8,35 @@ export const returnAddressesByAccountId = async (req,res) => {
             success: true,
             message: 'Get all addresses',
             addresses: addresses
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const returnAllAddresses = async (req,res) => {
+    try {
+        const addresses = await getAllAddresses();
+        res.status(200).json({
+            success: true,
+            message: 'Get all addresses',
+            addresses: addresses
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const returnAddressById = async (req,res) => {
+    try {
+        const { address_id } = req.params;
+        const address = await getAddressById(address_id);
+        res.status(200).json({
+            success: true,
+            message: 'Found address!',
+            address: address
         })
     } catch (error) {
         console.log(error);

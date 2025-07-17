@@ -16,6 +16,7 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { ramColumns } from '@/components/columns';
 import { getRAMs } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/ram/DetailsModal';
+import CreateModal from '@/components/modals/ram/CreateModal';
 
 export default function Ram() {
     const [data, setData] = useState([]);
@@ -95,7 +96,7 @@ export default function Ram() {
                         </div>
 
                         <div className='ml-auto'>
-                            {/* <CreateModal onSubmitSuccess={handleSubmitSuccess} /> */}
+                            <CreateModal onSubmitSuccess={handleSubmitSuccess} />
                         </div>
                     </div>                    
                 </CardHeader>

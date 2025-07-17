@@ -49,3 +49,24 @@ export const getAccountInfo = async (account_id) => {
 
     return formattedData;
 }
+
+export const getAllAccounts = async () => {
+    const accounts = await prisma.account.findMany({
+        select: {
+            account_id: true,
+            username: true,
+            email: true,
+            phone: true,
+            date_created: true,
+            password: false,
+            role: true
+        },
+    });
+
+    const formattedData = accounts.map(account => ({
+        ...account,
+        date_created: account.date_created.toISOString().slice(0, 10)
+    }));
+
+    return formattedData;
+}

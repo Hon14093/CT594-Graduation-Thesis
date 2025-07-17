@@ -15,9 +15,22 @@ export const getAllDocks = async () => {
     });
 }
 
+export const getDockById = async (id) => {
+    return await prisma.dock.findUnique({
+        where: { dock_id: id }
+    })
+}
+
 export const createDock = async (dockData) => {
+    const { product_id, ...rest } = dockData;
+
     return await prisma.dock.create({
-        data: dockData
+        data: {
+            ...rest,
+            product: {
+                connect: { product_id },
+            },
+        },
     });
 };
 

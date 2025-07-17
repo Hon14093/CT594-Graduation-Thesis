@@ -14,6 +14,7 @@ import Dock from '@/components/AdminPage/product-categories/Dock'
 import Cable from '@/components/AdminPage/product-categories/Cable'
 import Storage from '@/components/AdminPage/product-categories/Storage'
 import Adapter from '@/components/AdminPage/product-categories/Adapter'
+import CheckOrders from '@/components/AdminPage/CheckOrders'
 
 export default function AdminPage() {
     return (
@@ -34,6 +35,8 @@ export default function AdminPage() {
                 <Route path="/products/cables" element={<Cable />} />
                 <Route path="/products/storages" element={<Storage />} />
                 <Route path="/products/adapters" element={<Adapter />} />
+
+                <Route path="/orders/check" element={<CheckOrders />} />
                 
                 {/* <Route path="/products/variations" element={<Variations />} /> */}
                 {/* <Route path="/orders" element={<Orders />} /> */}

@@ -15,9 +15,22 @@ export const getAllStorages = async () => {
     })
 }
 
+export const getStorageById = async (id) => {
+    return await prisma.storage.findUnique({
+        where: { storage_id: id }
+    })
+}
+
 export const createStorage = async (storageData) => {
+    const { product_id, ...rest } = storageData;
+    
     return await prisma.storage.create({
-        data: storageData
+        data: {
+            ...rest,
+            product: {
+                connect: { product_id },
+            },
+        },
     });
 };
 

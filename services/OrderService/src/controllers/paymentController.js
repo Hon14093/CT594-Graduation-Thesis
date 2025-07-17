@@ -5,10 +5,11 @@ const prisma = new PrismaClient();
 
 export const createCheckoutSession = async (req,res) => {
     try {
-        const { items, account_id, order_total, note, pm_id, sm_id, discount_id } = req.body;
+        const { items, account_id, address_id, order_total, note, pm_id, sm_id, discount_id } = req.body;
 
         const order = await createOrderWithDetails({
             account_id,
+            address_id,
             items,
             order_total,
             note,

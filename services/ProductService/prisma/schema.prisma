@@ -71,6 +71,7 @@ model laptop {
   max_storage            String?
   price                  Float    @db.Real
   qty_in_stock           Int?
+  laptop_name            String
   product                product  @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_laptop_product")
 }
 
@@ -90,7 +91,7 @@ model monitor {
   vesa_mount         String  @db.VarChar(50)
   monitor_tech       String  @db.VarChar(100)
   in_box_component   String
-  voltage            String  @db.VarChar(50)
+  power_w            Float   @db.Real
   weight_kg          Float   @db.Real
   product_id         String  @db.Uuid
   price              Float?  @db.Real
@@ -119,22 +120,23 @@ model dock {
   dock_model            String  @db.VarChar(100)
   connection_port       String  @db.VarChar(50)
   max_data_rate_gbps    Float   @db.Real
-  max_output_voltage    Float   @db.Real
+  max_output_watt       Float   @db.Real
   cable_length_cm       Int
   material              String  @db.VarChar(100)
   dimensions_mm         String  @db.VarChar(100)
   max_external_monitors Int     @default(0)
   max_resolution        String  @default("0") @db.VarChar(50)
-  display_output_ports  Json    @default("{}")
+  hdmi                  Json    @default("{}")
   usb_a_ports           Json    @default("{}")
   usb_c_ports           Json    @default("{}")
-  ethernet_port_speed   String  @db.VarChar(50)
   sd_card_slot          Boolean @default(false)
   microsd_card_slot     Boolean @default(false)
   audio_jack_type       String  @default(dbgenerated("false")) @db.VarChar(50)
   price                 Float   @db.Real
   qty_in_stock          Int
   dock_name             String?
+  display_port          Json?
+  ethernet_speed_gbps   Float?  @db.Real
   product               product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_dock_product")
 }
 
@@ -150,7 +152,7 @@ model adapter {
   max_resolution      String? @db.VarChar(50)
   ethernet_speed_mbps Int?
   max_data_rate_gbps  Float?  @db.Real
-  max_output_voltage  Float?  @db.Real
+  max_output_watt     Float?  @db.Real
   price               Float   @db.Real
   qty_in_stock        Int     @default(0)
   product             product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_dock_product")
@@ -171,7 +173,7 @@ model cable {
   max_resolution      String? @db.VarChar(50)
   ethernet_speed_mbps Int?
   max_data_rate_gbps  Float?  @db.Real
-  max_output_voltage  Float?  @db.Real
+  max_output_watt     Float?  @db.Real
   price               Float   @db.Real
   qty_in_stock        Int     @default(0)
   product             product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_dock_product")
@@ -190,5 +192,6 @@ model storage {
   price            Decimal @db.Decimal(10, 2)
   qty_in_stock     Int     @default(0)
   product_id       String  @db.Uuid
+  storage_name     String
   product          product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_monitor")
 }

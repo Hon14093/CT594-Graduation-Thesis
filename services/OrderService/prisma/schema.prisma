@@ -28,11 +28,22 @@ model order {
   pm_id           Int
   sm_id           Int
   discount_id     String?         @db.Uuid
+  address_id      String          @db.Uuid
   discount        discount?       @relation(fields: [discount_id], references: [discount_id], onDelete: Cascade, map: "fk_discount")
   payment_method  payment_method  @relation(fields: [pm_id], references: [pm_id], onDelete: Cascade, map: "fk_payment")
   shipping_method shipping_method @relation(fields: [sm_id], references: [sm_id], onDelete: Cascade, map: "fk_shipping")
   order_status    order_status    @relation(fields: [status_id], references: [status_id], onDelete: Cascade, map: "fk_status")
   order_details   order_details[]
+}
+
+model order_details {
+  od_id       String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  quantity    Int
+  subtotal    Float   @db.Real
+  item_ref_id String  @db.Uuid
+  order_id    String  @db.Uuid
+  item_type   String?
+  order       order   @relation(fields: [order_id], references: [order_id], onDelete: Cascade, map: "fk_order_details_1")
 }
 
 model order_status {
@@ -52,14 +63,4 @@ model shipping_method {
   sm_name  String
   sm_price Float   @db.Real
   order    order[]
-}
-
-model order_details {
-  od_id       String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  quantity    Int
-  subtotal    Float   @db.Real
-  item_ref_id String  @db.Uuid
-  order_id    String  @db.Uuid
-  item_type   String?
-  order       order   @relation(fields: [order_id], references: [order_id], onDelete: Cascade, map: "fk_order_details_1")
 }

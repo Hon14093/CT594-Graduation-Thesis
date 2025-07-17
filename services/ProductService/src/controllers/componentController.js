@@ -1,3 +1,5 @@
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 import { 
     getAllLaptops, 
     getAllProductVariations,
@@ -11,42 +13,73 @@ import { getAllRams, createRam, updateRam, deleteRam } from "../model/Ram.js";
 import { getAllStorages, createStorage, updateStorage, deleteStorage } from "../model/Storage.js";
 
 export const getComponentNameAndId = async (req, res) => {
-  const { id, type } = req.params; // Or req.query if you prefer
+    const { id, type } = req.params;
 
     if (!id || !type) {
         return res.status(400).json({ message: 'Component ID and Type are required.' });
     }
 
     let component = null;
+    const includeObject = {
+        product: {
+            select: {
+                product_name: true,
+                image_url: true,
+                brand: true
+            }
+        }
+    }
+
     try {
         switch (type) {
-        case 'CPU':
-            component = await productPrisma.cpu.findUnique({ where: { id }, select: { name: true, id: true } });
-            break;
-        case 'GPU':
-            component = await productPrisma.gpu.findUnique({ where: { id }, select: { name: true, id: true } });
-            break;
-        case 'RAM':
-            component = await productPrisma.ram.findUnique({ where: { id }, select: { name: true, id: true } });
-            break;
-        case 'Storage':
-            component = await productPrisma.storage.findUnique({ where: { id }, select: { name: true, id: true } });
-            break;
-        case 'Screen':
-            component = await productPrisma.screen.findUnique({ where: { id }, select: { name: true, id: true } });
-            break;
-        case 'Keyboard':
-            component = await productPrisma.keyboard.findUnique({ where: { id }, select: { name: true, id: true } });
-            break;
-        case 'Chassis':
-            component = await productPrisma.chassis.findUnique({ where: { id }, select: { name: true, id: true } });
-            break;
-        default:
-            return res.status(404).json({ message: 'Invalid component type.' });
+            case 'laptop':
+                component = await prisma.laptop.findUnique({ 
+                    where: { laptop_id: id }, 
+                    include: includeObject
+                });
+                break;
+            case 'ram':
+                component = await prisma.ram.findUnique({ 
+                    where: { ram_id: id }, 
+                    include: includeObject
+                });
+                break;
+            case 'cable':
+                component = await prisma.cable.findUnique({ 
+                    where: { cable_id: id }, 
+                    include: includeObject
+                });
+                break;
+            case 'storage':
+                component = await prisma.storage.findUnique({ 
+                    where: { storage_id: id }, 
+                    include: includeObject
+                });
+                break;
+            case 'monitor':
+                component = await prisma.monitor.findUnique({ 
+                    where: { monitor_id: id }, 
+                    include: includeObject
+                });
+                break;
+            case 'dock':
+                component = await prisma.dock.findUnique({ 
+                    where: { dock_id: id }, 
+                    include: includeObject
+                });
+                break;
+            case 'adapter':
+                component = await prisma.adapter.findUnique({ 
+                    where: { adapter_id: id }, 
+                    include: includeObject
+                });
+                break;
+            default:
+                return res.status(404).json({ message: 'Invalid component type.' });
         }
 
         if (!component) {
-        return res.status(404).json({ message: 'Component not found.' });
+            return res.status(404).json({ message: 'Component not found.' });
         }
 
         res.status(200).json({ success: true, component });
@@ -273,6 +306,7 @@ export const returnAllDocks = async (req,res) => {
 
 export const createDockController = async (req, res) => {
     try {
+        console.log(req.body)
         const dock = await createDock(req.body);
         res.status(201).json({ success: true, dock });
     } catch (error) {

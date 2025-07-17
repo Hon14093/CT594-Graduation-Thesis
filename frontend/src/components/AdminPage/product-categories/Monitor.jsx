@@ -16,6 +16,7 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { monitorColumns } from '@/components/columns';
 import { getMonitors } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/monitor/DetailsModal';
+import CreateModal from '@/components/modals/monitor/CreateModal';
 
 export default function Monitor() {
     const [data, setData] = useState([]);
@@ -95,7 +96,7 @@ export default function Monitor() {
                         </div>
 
                         <div className='ml-auto'>
-                            {/* <CreateModal onSubmitSuccess={handleSubmitSuccess} /> */}
+                            <CreateModal onSubmitSuccess={handleSubmitSuccess} />
                         </div>
                     </div>                    
                 </CardHeader>

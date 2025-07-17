@@ -11,6 +11,16 @@ export const getAllProducts = async () => {
     })
 }
 
+export const getAllProductsByCategoryId = async (category_id) => {
+    return await prisma.product.findMany({
+        where: {
+            category: {
+                category_id: parseInt(category_id),
+            }
+        }
+    })
+}
+
 export const createProduct = async (data) => {
     return await prisma.product.create({ data });
 }

@@ -77,7 +77,7 @@ export const dock = [
         "ethernet_port_speed": "",
         "sd_card_slot": false,
         "microsd_card_slot": false,
-        "audio_jack_type": "",
+        "audio_jack_type": "", 
         "price": 320000,
         "qty_in_stock": 60,
         "dock_name": "USB dock Ugreen USB-C 5 IN 1 CM478 15495",

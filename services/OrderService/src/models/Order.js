@@ -8,21 +8,16 @@ export const createOrder = async (data) => {
 }
 
 const includeObject = {
-    Account: {
-        include: {
-            password: false,
-            is_admin: false,
-            date_created: false
-        }
-    },
-    Order_Status: true,
-    Address: {
-        include: {
-            City: true
-        }
-    },
-    Discount: true,
-    Shipping_Method: true
+    // Account: {
+    //     include: {
+    //         password: false,
+    //         is_admin: false,
+    //         date_created: false
+    //     }
+    // },
+    order_status: true,
+    discount: true,
+    shipping_method: true
 }
 
 export const getAllOrders = async () => {
@@ -42,14 +37,13 @@ export const getAllOrders = async () => {
 export const getUnprocessedOrders = async () => {
     const result = await prisma.order.findMany({
         include: includeObject,
-        where: {
-            status_id: 1
-        },
+        where: { status_id: 1 },
         orderBy: { order_date: 'desc' }
     })
 
     return result.map(res => ({
         ...res,
+        order_total: res.order_total.toLocaleString() + ' vnđ',
         order_date: res.order_date.toISOString().slice(0, 10) // Extract YYYY-MM-DD
     }));
 }

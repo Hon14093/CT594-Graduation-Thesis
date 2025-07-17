@@ -15,9 +15,22 @@ export const getAllCables = async () => {
     });
 }
 
+export const getCableById = async (id) => {
+    return await prisma.cable.findUnique({
+        where: { cable_id: id }
+    })
+}
+
 export const createCable = async (cableData) => {
+    const { product_id, ...rest } = cableData;
+
     return await prisma.cable.create({
-        data: cableData
+        data: {
+            ...rest,
+            product: {
+                connect: { product_id },
+            },
+        },
     });
 };
 

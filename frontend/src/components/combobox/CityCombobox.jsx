@@ -23,7 +23,7 @@ export default function CityCombobox({ value, onChange }) {
             <Label htmlFor="city">Thành phố</Label>
             <Popover open={open} onOpenChange={setOpen} modal={true}>
                 <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-[200px] justify-between">
+                    <Button variant="outline" className="w-[200px] text-lg justify-between">
                         {cities.find((city) => city.city_name === value)?.city_name || "Chọn thành phố"}
                     </Button>
                 </PopoverTrigger>
@@ -35,12 +35,15 @@ export default function CityCombobox({ value, onChange }) {
                             {cities.map((city) => (
                                 <CommandItem
                                     key={city.city_id}
+                                    className={`text-lg`}
                                     onSelect={() => {
                                         onChange(city.city_name);
                                         setOpen(false);
                                     }}
                                 >
-                                    <Check className={`mr-2 h-4 w-4 ${value === city.city_id ? "opacity-100" : "opacity-0"}`} />
+                                    <Check 
+                                        className={`mr-2 h-4 w-4 ${value === city.city_id ? "opacity-100" : "opacity-0"}`} 
+                                    />
                                     {city.city_name}
                                 </CommandItem>
                             ))}

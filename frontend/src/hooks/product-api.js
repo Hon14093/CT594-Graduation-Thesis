@@ -12,6 +12,16 @@ export const getProducts = async (setData) => {
     }
 }
 
+export const getProductsByCategoryId = async (setData, category_id) => {
+    try {
+        const result = await axios.get(`${API_URL}/manage/product/category-id/${category_id}`);
+        console.log(result.data.products)
+        setData(result.data.products);
+    } catch (error) {
+        console.error("Error fetching data:", error); 
+    }
+}
+
 export const createProduct = async (product) => {
     try {
         const result = await axios.post(`${API_URL}/manage/product/create`, product);

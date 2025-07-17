@@ -33,9 +33,22 @@ export const getAllProductVariations = async (product_id) => {
     })
 }
 
+export const getLaptopById = async (id) => {
+    return await prisma.laptop.findUnique({
+        where: { laptop_id: id }
+    })
+}
+
 export const createLaptop = async (laptopData) => {
+    const { product_id, ...rest } = laptopData;
+
     return await prisma.laptop.create({
-        data: laptopData
+        data: {
+            ...rest,
+            product: {
+                connect: { product_id },
+            },
+        },
     });
 };
 

@@ -2,7 +2,8 @@ import {
     getAllProducts,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getAllProductsByCategoryId
 } from "../model/Product.js";
 import { 
     createBrand,
@@ -22,8 +23,23 @@ export const returnAllProducts = async (req,res) => {
             products: products
         })
     } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: 'Internal Server Error' });
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const returnAllProductByCategory = async (req,res) => {
+    try {
+        const { category_id } = req.params;
+        const products = await getAllProductsByCategoryId(category_id);
+        res.status(200).json({
+            success: true,
+            message: 'Get all products by category',
+            products: products
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 }
 

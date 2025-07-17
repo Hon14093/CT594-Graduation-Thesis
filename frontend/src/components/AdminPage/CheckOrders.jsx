@@ -17,25 +17,28 @@ import {
     CardContent,
     CardHeader,
 } from "@/components/ui/card"
+import { Eye, Check } from 'lucide-react'
 import { Button } from '../ui/button.jsx'
 import { DataTable } from '../data-table.jsx'
 import { checkOrdersColumns } from '../columns.jsx'
 import { 
+    getOrderData,
     getUnprocessedOrders, 
     getRejectedOrders,
-    updateOrderStatus
-} from '@/hooks/orderAPI.jsx'
-import { DetailsModal } from '../modals/order/OrderModals.jsx'
+    // updateOrderStatus
+} from '@/hooks/order-api.js'
+import { DetailsModal } from '../modals/order/DetailsModal.jsx'
 
 export default function CheckOrders() {
-    const [data, setData] = useState([]);
+    // const [data, setUnprocessedOrders] = useState([]);
+    const [unprocessedOrders, setUnprocessedOrders] = useState([]);
     const [rejectedOrders, setRejectedOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
     useEffect(() => {
-        getUnprocessedOrders(setData);
-        getRejectedOrders(setRejectedOrders);
+        getUnprocessedOrders(setUnprocessedOrders);
+        // getRejectedOrders(setRejectedOrders);
     }, []);
 
     const handleViewDetails = (order) => {
@@ -45,16 +48,16 @@ export default function CheckOrders() {
 
     const handlePassOrder = async (order) => {
         const res = await updateOrderStatus(order.order_id, 2);
-        if (res.success) {
-            getUnprocessedOrders(setData);
+        if (res.status === 200) {
+            getUnprocessedOrders(setUnprocessedOrders);
             getRejectedOrders(setRejectedOrders);
         }
     }
 
     const handleRejectOrder = async (order) => {
         const res = await updateOrderStatus(order.order_id, 6);
-        if (res.success) {
-            getUnprocessedOrders(setData);
+        if (res.status === 200) {
+            getUnprocessedOrders(setUnprocessedOrders);
             getRejectedOrders(setRejectedOrders);
         }
     }
@@ -62,19 +65,18 @@ export default function CheckOrders() {
     const columnsWithActions = [
         ...checkOrdersColumns,
         {
-            header: "Hành Động",
             id: "actions",
             cell: ({ row }) => (
-                <div className='flex gap-2'>
+                <div className='flex gap-2 justify-center'>
                     <Button size="sm" className='bg-blue-500 border border-blue-500 hover:bg-white hover:text-blue-500' 
                         onClick={() => handleViewDetails(row.original)}
                     >
-                        Chi Tiết
+                        <Eye />
                     </Button>
                     <Button size="sm" className="bg-green-500 border border-green-500 hover:bg-white hover:text-green-500" 
                         onClick={() => handlePassOrder(row.original)}
                     >
-                        Duyệt
+                        <Check />
                     </Button>
                 </div>
             )
@@ -82,7 +84,7 @@ export default function CheckOrders() {
     ];
 
     return (
-        <SidebarInset>
+        <SidebarInset className='bg-mistGray'>
             <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
                 <div className="flex items-center gap-2 px-4">
                     <SidebarTrigger className="-ml-1" />
@@ -101,7 +103,7 @@ export default function CheckOrders() {
                 </div>
             </header>
             
-            <Card className="mx-5">
+            <Card className="mx-5 mb-5">
                 <CardHeader>
                     <div className='flex'>
                         <div className='font-bold text-2xl'>
@@ -113,7 +115,7 @@ export default function CheckOrders() {
                 <CardContent>
                     <DataTable 
                         columns={columnsWithActions} 
-                        data={data} 
+                        data={unprocessedOrders} 
                     />
                 </CardContent>
             </Card>
@@ -137,7 +139,10 @@ export default function CheckOrders() {
                 <DetailsModal 
                     order={selectedOrder}
                     open={isDetailsModalOpen}
-                    onClose={() => setIsDetailsModalOpen(false)}
+                    onClose={() => {
+                        setSelectedOrder(null)
+                        setIsDetailsModalOpen(false)
+                    }}
                 />
             </Card>
         </SidebarInset>

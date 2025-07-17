@@ -1,13 +1,8 @@
 import express from 'express';
 import { 
-    returnAllProducts,
-    returnAllBrands,
-    returnAllCategories,
-    createNewBrand,
-    createNewCategory,
-    createNewProduct,
-    editProduct,
-    removeProduct,
+    returnAllProducts, returnAllBrands, returnAllCategories, createNewBrand,
+    createNewCategory, createNewProduct, editProduct, removeProduct,
+    returnAllProductByCategory,
 } from '../controllers/productController.js';
 import { 
     returnAllLaptops, 
@@ -24,12 +19,14 @@ import {
     createCableController, updateCableController, deleteCableController,
     createMonitorController, updateMonitorController, deleteMonitorController,
     createAdapterController, updateAdapterController, deleteAdapterController,
-    createDockController, updateDockController, deleteDockController
+    createDockController, updateDockController, deleteDockController,
+    getComponentNameAndId
 } from '../controllers/componentController.js';
 
 const router = express.Router();
 
 router.get('/all', returnAllProducts);
+router.get('/category-id/:category_id', returnAllProductByCategory);
 router.post('/create', createNewProduct);
 router.put('/update/:product_id', editProduct);
 router.delete('/delete/:product_id', removeProduct);
@@ -75,5 +72,7 @@ router.get('/adapters/all', returnAllAdapters);
 router.post('/adapters/create', createAdapterController);
 router.put('/adapters/update/:id', updateAdapterController);
 router.delete('/adapters/delete/:id', deleteAdapterController);
+
+router.get('/find-type/:type/:id', getComponentNameAndId);
 
 export default router;

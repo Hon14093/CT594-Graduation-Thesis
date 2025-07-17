@@ -19,7 +19,7 @@ import { cable } from '@/test/cable-data';
 import { adapter } from '@/test/adapter-data';
 import { getRAMs, getMonitors, getDocks } from '@/hooks/variation-api';
 
-export default function SelectComponent({ onSelectItem, category }) {
+export default function SelectComponent({ onSelectItem, category, admin=false }) {
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState([]);
 
@@ -120,12 +120,18 @@ export default function SelectComponent({ onSelectItem, category }) {
                         >
                             <div className='flex gap-10'>
                                 <img src={item.product.image_url[0]} alt="" className='size-32' />
-                                <div className='text-left'>
-                                    {item.name} <br />
-                                    <b>Model:</b> {item.model} <br />
-                                    <b>Giá bán:</b> {item.price ? item.price.toLocaleString() : '0đ'}đ <br />
-                                    <b>Số lượng trong kho:</b> {item.qty_in_stock} <br />
-                                </div>
+                                {admin ? (
+                                    <div className='text-left py-2 text-lg my-auto'>
+                                        {item.name}
+                                    </div>
+                                ) : (
+                                    <div className='text-left py-2'>
+                                        {item.name} <br />
+                                        <b>Model:</b> {item.model} <br />
+                                        <b>Giá bán:</b> {item.price ? item.price.toLocaleString() : '0đ'}đ <br />
+                                        <b>Số lượng trong kho:</b> {item.qty_in_stock} <br />
+                                    </div>
+                                )}
                             </div>
                         </button>
                     ))}

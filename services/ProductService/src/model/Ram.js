@@ -15,9 +15,22 @@ export const getAllRams = async () => {
     });
 }
 
+export const getRamById = async (id) => {
+    return await prisma.ram.findUnique({
+        where: { ram_id: id }
+    })
+}
+
 export const createRam = async (ramData) => {
+    const { product_id, ...rest } = ramData;
+    
     return await prisma.ram.create({
-        data: ramData
+        data: {
+            ...rest,
+            product: {
+                connect: { product_id },
+            },
+        },
     });
 };
 

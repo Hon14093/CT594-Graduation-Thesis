@@ -15,9 +15,22 @@ export const getAllMonitors = async () => {
     });
 }
 
+export const getMonitorById = async (id) => {
+    return await prisma.monitor.findUnique({
+        where: { monitor_id: id }
+    })
+}
+
 export const createMonitor = async (monitorData) => {
+    const { product_id, ...rest } = monitorData;
+    
     return await prisma.monitor.create({
-        data: monitorData
+        data: {
+            ...rest,
+            product: {
+                connect: { product_id },
+            },
+        },
     });
 };
 

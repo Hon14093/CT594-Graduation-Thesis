@@ -58,6 +58,8 @@ export default function VariationSelection({ product }) {
             quantity: qty,
             image_url: product.product.image_url[0]
         })
+
+        console.log(itemRefModel.replace("_model", ""))
     }
 
     return (

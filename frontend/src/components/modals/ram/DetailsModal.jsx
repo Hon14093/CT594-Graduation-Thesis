@@ -121,7 +121,6 @@ export function DetailsModal({ ram, open, onClose }) {
                             <CarouselPrevious className="left-4" />
                             <CarouselNext className="right-4" />
                         </Carousel>
-
                     </article>
                 </section>
             </DialogContent>

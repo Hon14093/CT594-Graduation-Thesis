@@ -15,7 +15,7 @@ import { Separator } from '@/components/ui/separator';
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { cableColumns } from '@/components/columns';
 import { getCables } from '@/hooks/variation-api';
-// import { DetailsModal } from '@/components/modals/laptop/DetailsModal';
+import CreateModal from '@/components/modals/cable/CreateModal';
 
 export default function Cable() {
     const [data, setData] = useState([]);
@@ -95,7 +95,7 @@ export default function Cable() {
                         </div>
 
                         <div className='ml-auto'>
-                            {/* <CreateModal onSubmitSuccess={handleSubmitSuccess} /> */}
+                            <CreateModal onSubmitSuccess={handleSubmitSuccess} />
                         </div>
                     </div>                    
                 </CardHeader>

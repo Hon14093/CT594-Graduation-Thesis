@@ -16,6 +16,7 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { adapterColumns } from '@/components/columns';
 import { getAdapters } from '@/hooks/variation-api';
 // import { DetailsModal } from '@/components/modals/laptop/DetailsModal';
+import CreateModal from '@/components/modals/adapter/CreateModal';
 
 export default function Adapter() {
     const [data, setData] = useState([]);
@@ -95,7 +96,7 @@ export default function Adapter() {
                         </div>
 
                         <div className='ml-auto'>
-                            {/* <CreateModal onSubmitSuccess={handleSubmitSuccess} /> */}
+                            <CreateModal onSubmitSuccess={handleSubmitSuccess} />
                         </div>
                     </div>                    
                 </CardHeader>

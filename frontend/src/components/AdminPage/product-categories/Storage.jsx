@@ -16,6 +16,7 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { storageColumns } from '@/components/columns';
 import { getStorages } from '@/hooks/variation-api';
 // import { DetailsModal } from '@/components/modals/laptop/DetailsModal';
+import CreateModal from '@/components/modals/storage/CreateModal';
 
 export default function Storage() {
     const [data, setData] = useState([]);
@@ -95,7 +96,7 @@ export default function Storage() {
                         </div>
 
                         <div className='ml-auto'>
-                            {/* <CreateModal onSubmitSuccess={handleSubmitSuccess} /> */}
+                            <CreateModal onSubmitSuccess={handleSubmitSuccess} />
                         </div>
                     </div>                    
                 </CardHeader>

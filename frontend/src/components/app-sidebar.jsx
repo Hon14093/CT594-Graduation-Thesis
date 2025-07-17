@@ -57,7 +57,7 @@ const data = {
 		},
 		{
 			name: "Duyệt Đơn Hàng",
-			url: "http://localhost:5173/admin/discounts",
+			url: "http://localhost:5173/admin/orders/check",
 			icon: ClipboardCheck,
 		},
 		{

@@ -128,7 +128,7 @@ export default function EditForm({ product, onClose, onSubmitSuccess }) {
                                 <img
                                     src={placeholderImage}
                                     alt="placeholder"
-                                    className="w-32 h-32 object-cover border rounded"
+                                    className="w-32 h-32 object-contain border rounded"
                                 />
                             )}
                             {imagePreviews.map((src, idx) => (
@@ -136,7 +136,7 @@ export default function EditForm({ product, onClose, onSubmitSuccess }) {
                                     <img 
                                         src={src} 
                                         alt={`Ảnh ${idx + 1}`} 
-                                        className="w-32 h-32 object-cover border rounded"
+                                        className="w-32 h-32 object-contain border rounded"
                                     />
                                     <button
                                         type="button"

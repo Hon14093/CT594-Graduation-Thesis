@@ -5,8 +5,6 @@ import { Banknote } from 'lucide-react'
 import { loadStripe } from '@stripe/stripe-js'
 import axios from 'axios'
 
-// const stripePromise = loadStripe('pk_test_51RC0uAP2tCpSt8NrqLBhlp1RYdeEEetUWHrtYCjH8vAkOT3h4ZPZ1wr6lk79d4vFYzHqOhAmq727SxPHCziITbZo00ofyPJrwg');
-
 export default function CartReview({ cartItems, currentData }) {
     const [note, setNote] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -19,7 +17,6 @@ export default function CartReview({ cartItems, currentData }) {
     const handlePayment = async () => {
         setLoading(true)
         try { 
-            // const stripePromise = loadStripe('......')
             const stripe = await loadStripe('pk_test_51RC0uAP2tCpSt8NrqLBhlp1RYdeEEetUWHrtYCjH8vAkOT3h4ZPZ1wr6lk79d4vFYzHqOhAmq727SxPHCziITbZo00ofyPJrwg');
             console.log('Processing payment...');
             console.log(stripe)
@@ -110,14 +107,18 @@ export default function CartReview({ cartItems, currentData }) {
                 <div className='flex'>
                     <b>Phí vận chuyển:</b>
                     <div className='ml-auto'>
-                        money
+                        {currentData.sm_id === 1 ? (
+                            <p>20,000 vnđ</p>
+                        ) : (
+                            <p>40,000 vnđ</p>
+                        )}
                     </div>
                 </div>
 
                 <div className='flex'>
                     <b>Khuyến mãi:</b>
                     <div className='ml-auto'>
-                        money
+                        -0 vnđ
                     </div>
                 </div>
 
@@ -132,6 +133,10 @@ export default function CartReview({ cartItems, currentData }) {
             <div className=' px-5'>
                 <Separator className='my-3' />
             </div>
+
+            <button onClick={() => console.log(orderData)}>
+                Check
+            </button>
             
             <article className='mt-4'>
                 <button 

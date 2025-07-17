@@ -15,9 +15,22 @@ export const getAllAdapters = async () => {
     });
 }
 
+export const getAdapterById = async (id) => {
+    return await prisma.adapter.findUnique({
+        where: { adapter_id: id }
+    })
+}
+
 export const createAdapter = async (adapterData) => {
+    const { product_id, ...rest } = adapterData;
+
     return await prisma.adapter.create({
-        data: adapterData
+        data: {
+            ...rest,
+            product: {
+                connect: { product_id },
+            },
+        },
     });
 };
 

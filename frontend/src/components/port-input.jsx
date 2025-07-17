@@ -4,6 +4,7 @@ import { Combobox } from "./combobox/Combobox";
 import { Input } from "./ui/input";
 import { Trash2 } from "lucide-react";
 import { Switch } from "./ui/switch";
+import { Asterisk } from "lucide-react";
 
 export function PortInput({ 
     ports, 
@@ -23,66 +24,75 @@ export function PortInput({
         setPorts([
             ...ports, 
             isUSBC 
-                ? { version: "", quantity: 1, supportsDP: false, supportsPD: false }
-                : { version: "", quantity: 1 }
+                ? { version: "3.0", quantity: 1, supportsDP: false, supportsPD: false }
+                : { version: versionOptions[0], quantity: 1 }
         ]);
     };
 
     return (
-        <div className="space-y-3 border p-4 rounded-lg">
-            <h3 className="font-medium">{portTypeLabel}</h3>
-            {ports.map((port, index) => (
-                <div key={index} className="flex flex-col gap-3">
-                    <div className="flex gap-2 items-center">
-                        <Combobox
-                            options={versionOptions}
-                            value={port.version}
-                            onChange={(value) => handlePortChange(index, 'version', value)}
-                            placeholder={`Chọn phiên bản ${portTypeLabel}...`}
-                        />
-                        <Input
-                            type="number"
-                            value={port.quantity}
-                            onChange={(e) => handlePortChange(index, 'quantity', e.target.value)}
-                            min="0"
-                            className="w-20"
-                        />
-                        <Button
-                            variant="ghost"
-                            onClick={() => setPorts(ports.filter((_, i) => i !== index))}
-                        >
-                            <Trash2 color="red" size={20} />
-                        </Button>
-                    </div>
-
-                    {isUSBC && (
-                        <div className="flex gap-4 items-center pl-2">
-                            <div className="flex items-center gap-2">
-                                <Switch
-                                    checked={port.supportsDP || false}
-                                    onCheckedChange={(checked) => 
-                                        handlePortChange(index, 'supportsDP', checked)
-                                    }
-                                />
-                                <span>DisplayPort</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Switch
-                                    checked={port.supportsPD || false}
-                                    onCheckedChange={(checked) => 
-                                        handlePortChange(index, 'supportsPD', checked)
-                                    }
-                                />
-                                <span>Hỗ trợ sạc</span>
-                            </div>
+        <div className="flex items-center ">
+            <div className="space-y-3 border p-4 rounded-lg w-full">
+                <h3 className="font-medium">{portTypeLabel}</h3>
+                {ports.map((port, index) => (
+                    <div key={index} className="flex flex-col gap-3">
+                        <div className="flex gap-2 items-center">
+                            <Combobox
+                                options={versionOptions}
+                                value={port.version}
+                                onChange={(value) => handlePortChange(index, 'version', value)}
+                                placeholder={`Chọn phiên bản...`}
+                                className='!text-lg'
+                            />
+                            <Input
+                                type="number"
+                                value={port.quantity}
+                                onChange={(e) => handlePortChange(index, 'quantity', e.target.value)}
+                                min="0"
+                                className="w-20"
+                            />
+                            <Button
+                                variant="ghost"
+                                onClick={() => setPorts(ports.filter((_, i) => i !== index))}
+                            >
+                                <Trash2 color="red" size={20} />
+                            </Button>
                         </div>
-                    )}
-                </div>
-            ))}
 
-            <Button variant="outline" onClick={addNewPort}>
-                + Thêm {portTypeLabel}
-            </Button>
+                        {isUSBC && (
+                            <div className="flex gap-4 items-center pl-2">
+                                <div className="flex items-center gap-2">
+                                    <Switch
+                                        checked={port.supportsDP || false}
+                                        onCheckedChange={(checked) => 
+                                            handlePortChange(index, 'supportsDP', checked)
+                                        }
+                                    />
+                                    <span>DisplayPort</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Switch
+                                        checked={port.supportsPD || false}
+                                        onCheckedChange={(checked) => 
+                                            handlePortChange(index, 'supportsPD', checked)
+                                        }
+                                    />
+                                    <span>Hỗ trợ sạc</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ))}
+
+                <Button variant="outline" onClick={addNewPort}>
+                    + Thêm {portTypeLabel}
+                </Button>
+            </div>
+
+            {portTypeLabel.includes('USB-A') ? (
+                <Asterisk color="red" size={20} />
+            ) : (
+                <Asterisk color="white" size={20} />
+            )}
         </div>
     );
 

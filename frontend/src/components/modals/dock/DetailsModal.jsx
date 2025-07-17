@@ -29,10 +29,12 @@ export function DetailsModal({ dock, open, onClose }) {
         dimensions_mm: "Kích thước (mm)",
         max_external_monitors: "Số màn hình ngoài tối đa",
         max_resolution: "Độ phân giải tối đa",
-        display_output_ports: "Cổng xuất hình ảnh",
+        // display_output_ports: "Cổng xuất hình ảnh",
+        hdmi: "Cổng HDMI",
+        display_port: "Cổng DisplayPort",
         usb_a_ports: "Cổng USB-A",
         usb_c_ports: "Cổng USB-C",
-        ethernet_port_speed: "Tốc độ cổng Ethernet",
+        ethernet_speed_gbps: "Tốc độ cổng Ethernet",
         sd_card_slot: "Khe đọc thẻ SD",
         microsd_card_slot: "Khe đọc thẻ microSD",
         audio_jack_type: "Cổng âm thanh",
@@ -47,7 +49,6 @@ export function DetailsModal({ dock, open, onClose }) {
         if (key === "max_output_voltage") return `${value} V`;
         return value || "—";
     };
-
 
     const renderSpecsTable = () => {
         if (!dock) return null;
@@ -64,50 +65,50 @@ export function DetailsModal({ dock, open, onClose }) {
                             if (excludedKeys.includes(key)) return null;
 
                             // Handle grouped port arrays
-                            if ((key === "usb_a_ports" || key === "usb_c_ports") && Array.isArray(value)) {
-                            if (value.length === 0) return null;
-                                return (
-                                    <tr key={key} className="border-b border-gray-200">
-                                    <td className="py-3 px-4 font-medium w-1/3">
-                                        {VIETNAMESE_DOCK_SPECS[key]}
-                                    </td>
-                                    <td className="py-2 px-4 space-y-1">
-                                        {value.map((port, i) => (
-                                        <div key={`${key}-${i}`}>
-                                            Phiên bản {port.version}, số lượng {port.quantity}
-                                        </div>
-                                        ))}
-                                    </td>
-                                    </tr>
-                                );
+                            if ((key === "usb_a_ports" || key === "usb_c_ports" || key === "hdmi" || key === "display_port") && Array.isArray(value)) {
+                                if (value.length === 0) return null;
+                                    return (
+                                        <tr key={key} className="border-b border-gray-200">
+                                            <td className="py-3 px-4 font-medium w-1/3">
+                                                {VIETNAMESE_DOCK_SPECS[key]}
+                                            </td>
+                                            <td className="py-2 px-4 space-y-1">
+                                                {value.map((port, i) => (
+                                                    <div key={`${key}-${i}`}>
+                                                        Phiên bản {port.version}, số lượng {port.quantity}
+                                                    </div>
+                                                ))}
+                                            </td>
+                                        </tr>
+                                    );
                             }
 
                             // Handle display_output_ports
-                            if (key === "display_output_ports" && Array.isArray(value)) {
-                            if (value.length === 0) return null;
-                                return (
-                                    <tr key={key} className="border-b border-gray-200">
-                                    <td className="py-3 px-4 font-medium w-1/3">
-                                        {VIETNAMESE_DOCK_SPECS[key]}
-                                    </td>
-                                    <td className="py-2 px-4 space-y-1">
-                                        {value.map((port, i) => (
-                                        <div key={`display-${i}`}>
-                                            {port.type ? `${port.type} — version ${port.version}, số lượng ${port.quantity}` : JSON.stringify(port)}
-                                        </div>
-                                        ))}
-                                    </td>
-                                    </tr>
-                                );
-                            }
+                            // if (key === "display_output_ports" && Array.isArray(value)) {
+                            // if (value.length === 0) return null;
+                            //     return (
+                            //         <tr key={key} className="border-b border-gray-200">
+                            //         <td className="py-3 px-4 font-medium w-1/3">
+                            //             {VIETNAMESE_DOCK_SPECS[key]}
+                            //         </td>
+                            //         <td className="py-2 px-4 space-y-1">
+                            //             {value.map((port, i) => (
+                            //             <div key={`display-${i}`}>
+                            //                 {port.type ? `${port.type} — version ${port.version}, số lượng ${port.quantity}` : JSON.stringify(port)}
+                            //             </div>
+                            //             ))}
+                            //         </td>
+                            //         </tr>
+                            //     );
+                            // }
 
                             return (
                                 <tr key={key} className="border-b border-gray-200">
                                     <td className="py-3 px-4 font-medium w-1/3">
-                                    {VIETNAMESE_DOCK_SPECS[key] || key.replace(/_/g, " ")}
+                                        {VIETNAMESE_DOCK_SPECS[key] || key.replace(/_/g, " ")}
                                     </td>
                                     <td className="py-2 px-4">
-                                    {formatDockValue(key, value)}
+                                        {formatDockValue(key, value)}
                                     </td>
                                 </tr>
                             );
