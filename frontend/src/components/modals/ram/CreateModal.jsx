@@ -17,33 +17,33 @@ import { Input } from '@/components/ui/input';
 import { createRam } from '@/hooks/variation-api';
 
 const capacities = [
-    { id: "4gb", label: "4 GB" },
-    { id: "8gb", label: "8 GB" },
-    { id: "12gb", label: "12 GB" },
-    { id: "16gb", label: "16 GB" },
-    { id: "32gb", label: "32 GB" },
-    { id: "64gb", label: "64 GB" },
+    { id: "4gb", label: "4GB" },
+    { id: "8gb", label: "8GB" },
+    { id: "12gb", label: "12GB" },
+    { id: "16gb", label: "16GB" },
+    { id: "32gb", label: "32GB" },
+    { id: "64gb", label: "64GB" },
 ]
 
 const types = [
-    { id: "ddr3", label: "DDR 3" }, { id: "ddr4", label: "DDR 4" }, { id: "ddr5", label: "DDR 5" },
+    { id: "ddr3", label: "DDR3" }, { id: "ddr4", label: "DDR4" }, { id: "ddr5", label: "DDR5" },
 ]
 
 const ramSpeeds = [
-    { id: "1066mhz", label: "1066 MHz" },  // DDR3
-    { id: "1333mhz", label: "1333 MHz" },
-    { id: "1600mhz", label: "1600 MHz" },
+    { id: "1066mhz", label: "1066MHz" },  // DDR3
+    { id: "1333mhz", label: "1333MHz" },
+    { id: "1600mhz", label: "1600MHz" },
 
-    { id: "2133mhz", label: "2133 MHz" },  // DDR4
-    { id: "2400mhz", label: "2400 MHz" },
-    { id: "2666mhz", label: "2666 MHz" },
-    { id: "2933mhz", label: "2933 MHz" },
-    { id: "3200mhz", label: "3200 MHz" },
+    { id: "2133mhz", label: "2133MHz" },  // DDR4
+    { id: "2400mhz", label: "2400MHz" },
+    { id: "2666mhz", label: "2666MHz" },
+    { id: "2933mhz", label: "2933MHz" },
+    { id: "3200mhz", label: "3200MHz" },
 
-    { id: "4800mhz", label: "4800 MHz" },  // DDR5
-    { id: "5200mhz", label: "5200 MHz" },
-    { id: "5600mhz", label: "5600 MHz" },
-    { id: "6000mhz", label: "6000 MHz" }
+    { id: "4800mhz", label: "4800MHz" },  // DDR5
+    { id: "5200mhz", label: "5200MHz" },
+    { id: "5600mhz", label: "5600MHz" },
+    { id: "6000mhz", label: "6000MHz" }
 ];
 
 export default function CreateModal({ onSubmitSuccess }) {
@@ -73,17 +73,17 @@ export default function CreateModal({ onSubmitSuccess }) {
             const ram = {
                 product_id: product.product_id,
                 ram_model: model,
-                ram_name: product.product_name + model + 
-                    types.find((type) => type.id === typeId)?.label +  
-                    capacities.find((cap) => cap.id === capacityId)?.label +
+                ram_name: product.product_name + " " + model + " " + 
+                    types.find((type) => type.id === typeId)?.label + " " +
+                    capacities.find((cap) => cap.id === capacityId)?.label + " " +
                     ramSpeeds.find((speed) => speed.id === speedId)?.label,
-                capacity_gb: capacities.find((cap) => cap.id === capacityId)?.label,
+                capacity_gb: parseInt(capacities.find((cap) => cap.id === capacityId)?.label.replace("GB", "")),
                 ram_type: types.find((type) => type.id === typeId)?.label,
-                frequency_mhz: ramSpeeds.find((speed) => speed.id === speedId)?.label,
-                voltage: voltage,
+                frequency_mhz: parseInt(ramSpeeds.find((speed) => speed.id === speedId)?.label.replace("MHz", "")),
+                voltage: parseFloat(voltage),
                 latency: latency,
-                price: price,
-                qty_in_stock: stock
+                price: parseFloat(price),
+                qty_in_stock: parseInt(stock)
             }
 
             console.log(ram);

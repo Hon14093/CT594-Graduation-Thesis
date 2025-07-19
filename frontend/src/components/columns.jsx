@@ -52,7 +52,6 @@ export const orderDetailsColumns = [
     { 
         accessorKey: "name", header: "Tên Sản Phẩm",
         cell: ({ row }) => (
-            // <div className="max-w-[200px] break-words">
             <div className="text-wrap">
                 {row.getValue("name")}
             </div>

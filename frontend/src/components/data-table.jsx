@@ -61,7 +61,7 @@ export function DataTable({ columns, data }) {
                                 return (
                                     <TableHead 
                                         key={header.id} 
-                                        className='text-center font-semibold'
+                                        className='!text-center font-semibold'
                                         style={{
                                             minWidth: header.column.columnDef.size,
                                             maxWidth: header.column.columnDef.size,
@@ -86,7 +86,7 @@ export function DataTable({ columns, data }) {
                             data-state={row.getIsSelected() && "selected"}
                         >
                             {row.getVisibleCells().map(cell => (
-                                <TableCell key={cell.id} className='!text-lg text-center'>
+                                <TableCell key={cell.id} className='!text-lg !text-center font-mono'>
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </TableCell>
                             ))}

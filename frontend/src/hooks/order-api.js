@@ -48,12 +48,11 @@ export const getOrderDetailsData = async (order_id, setData) => {
     }
 };
 
-
-
 export const getRejectedOrders = async (setData) => {
     try {
         const result = await axios.get(`${API_URL}/manage/order/rejected`);
-        setData(result.data.rejected);
+        console.log(result.data.orders)
+        setData(result.data.orders);
     } catch (error) {
         console.log(error);
     }
@@ -61,10 +60,21 @@ export const getRejectedOrders = async (setData) => {
 
 export const getProcessedOrders = async (setData) => {
     try {
-        const result = await axios.get(`${API_URL}/api/order/processed`);
-        console.log("API getProcessedOrders:", result.data.remaining);
-        setData(result.data.remaining); // Gọi setData để cập nhật state
+        const result = await axios.get(`${API_URL}/manage/order/processed`);
+        console.log("API getProcessedOrders:", result.data.orders);
+        setData(result.data.orders); // Gọi setData để cập nhật state
     } catch (error) {
         console.log("Lỗi khi lấy đơn hàng đã xử lý:", error);
+    }
+};
+
+export const updateOrderStatus = async (order_id, statusId) => {
+    try {
+        const result = await axios.put(`${API_URL}/manage/order/check/${order_id}`, { status_id: statusId });
+        console.log("API updateOrderStatus:", result.data);
+        return result.data; // Trả về dữ liệu đơn hàng đã cập nhật
+    } catch (error) {
+        console.log("Lỗi khi cập nhật trạng thái đơn hàng:", error);
+        return null;
     }
 };

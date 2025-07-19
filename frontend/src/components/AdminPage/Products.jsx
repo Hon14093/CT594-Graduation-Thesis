@@ -152,13 +152,6 @@ export default function Products() {
                         </div>
 
                         <div className='ml-auto'>
-                            <Link to='/admin/products/variations'>
-                                <Button variant='outline' className='mr-3'>
-                                    <PackagePlus />
-                                    Biến thể
-                                </Button>
-                            </Link>
-
                             <CreateModal onSubmitSuccess={handleSubmitSuccess} />
                         </div>
                     </div>                    

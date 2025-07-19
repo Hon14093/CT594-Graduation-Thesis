@@ -71,21 +71,21 @@ export default function CreateModal({ onSubmitSuccess }) {
             const storage = {
                 product_id: product.product_id,
                 storage_model: model,
-                storage_name: product.product_name + model + capacityGb,
-                capacity_gb: capacityGb,
+                storage_name: product.product_name + " " + model + " " + capacityGb + "GB",
+                capacity_gb: parseInt(capacityGb),
                 interface: ssdInterfaces.find((con) => con.id === connectionPortId).label,
                 form_factor: ssdFormFactors.find((factor) => factor.id === ffId).label,
                 physical_profile: length + 'x' + width + 'x' + height,
-                weight_g: weightG,
-                read_speed_mbps: readSpeed,
-                write_speed_mbps: writeSpeed,
-                price: price,
-                qty_in_stock: stock
+                weight_g: parseInt(weightG),
+                read_speed_mbps: parseInt(readSpeed),
+                write_speed_mbps:parseInt( writeSpeed),
+                price: parseInt(price),
+                qty_in_stock: parseInt(stock)
             }
 
             console.log(storage);
-            // const res = await createStorage(monitor);
-            // if (res.status === 201) handleSubmitSuccess();
+            const res = await createStorage(storage);
+            if (res.status === 201) handleSubmitSuccess();
         } catch (error) {
             console.log(error)
         }

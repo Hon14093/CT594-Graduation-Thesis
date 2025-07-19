@@ -87,7 +87,12 @@ export function DetailsModal({ order, open, onClose }) {
 
                                     <span className=''>
                                         <p className='font-bold'>Ghi chú:</p> 
-                                        <Textarea defaultValue={order.note} placeholder='Không có ghi chú' disabled />
+                                        <Textarea 
+                                            defaultValue={order.note} 
+                                            placeholder='Không có ghi chú' 
+                                            className='!text-lg'
+                                            disabled 
+                                        />
                                     </span>
                                 </article>
                             </section>

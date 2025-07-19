@@ -3,11 +3,9 @@ import {
     Dialog,
     DialogTrigger,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle
 } from "@/components/ui/dialog";
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -17,7 +15,14 @@ import { storage } from '@/test/storage-data';
 import { dock } from '@/test/dock-data';
 import { cable } from '@/test/cable-data';
 import { adapter } from '@/test/adapter-data';
-import { getRAMs, getMonitors, getDocks } from '@/hooks/variation-api';
+import { 
+    getRAMs,
+    getMonitors, 
+    getDocks, 
+    getStorages, 
+    getAdapters, 
+    getCables 
+} from '@/hooks/variation-api';
 
 export default function SelectComponent({ onSelectItem, category, admin=false }) {
     const [open, setOpen] = useState(false);
@@ -35,16 +40,16 @@ export default function SelectComponent({ onSelectItem, category, admin=false })
                     // setItems(monitor)
                     return 'monitor';
                 case ('lưu trữ'):
-                    // getStorages(setItems);
+                    getStorages(setItems);
                     // setItems(storage)
                     return 'storage';
                 case ('bộ chuyển đổi'):
-                    // getAdapters(setItems);
-                    setItems(adapter)
+                    getAdapters(setItems);
+                    // setItems(adapter)
                     return 'adapter';
                 case ('dây cáp'):
-                    // getCables(setItems);
-                    setItems(cable)
+                    getCables(setItems);
+                    // setItems(cable)
                     return 'cable';
                 case ('usb dock'):
                     await getDocks(setItems);

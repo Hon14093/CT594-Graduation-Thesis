@@ -17,7 +17,7 @@ import {
     CardContent,
     CardHeader,
 } from "@/components/ui/card"
-import { Eye, Check } from 'lucide-react'
+import { Eye, Check, X } from 'lucide-react'
 import { Button } from '../ui/button.jsx'
 import { DataTable } from '../data-table.jsx'
 import { checkOrdersColumns } from '../columns.jsx'
@@ -25,7 +25,7 @@ import {
     getOrderData,
     getUnprocessedOrders, 
     getRejectedOrders,
-    // updateOrderStatus
+    updateOrderStatus
 } from '@/hooks/order-api.js'
 import { DetailsModal } from '../modals/order/DetailsModal.jsx'
 
@@ -38,7 +38,7 @@ export default function CheckOrders() {
 
     useEffect(() => {
         getUnprocessedOrders(setUnprocessedOrders);
-        // getRejectedOrders(setRejectedOrders);
+        getRejectedOrders(setRejectedOrders);
     }, []);
 
     const handleViewDetails = (order) => {
@@ -48,7 +48,8 @@ export default function CheckOrders() {
 
     const handlePassOrder = async (order) => {
         const res = await updateOrderStatus(order.order_id, 2);
-        if (res.status === 200) {
+        if (res.success) {
+            console.log('success')
             getUnprocessedOrders(setUnprocessedOrders);
             getRejectedOrders(setRejectedOrders);
         }
@@ -56,13 +57,40 @@ export default function CheckOrders() {
 
     const handleRejectOrder = async (order) => {
         const res = await updateOrderStatus(order.order_id, 6);
-        if (res.status === 200) {
+        if (res.success) {
+            console.log('reject')
             getUnprocessedOrders(setUnprocessedOrders);
             getRejectedOrders(setRejectedOrders);
         }
     }
 
     const columnsWithActions = [
+        ...checkOrdersColumns,
+        {
+            id: "actions",
+            cell: ({ row }) => (
+                <div className='flex gap-2 justify-center'>
+                    <Button size="sm" className='bg-blue-500 border border-blue-500 hover:bg-white hover:text-blue-500' 
+                        onClick={() => handleViewDetails(row.original)}
+                    >
+                        <Eye />
+                    </Button>
+                    <Button size="sm" className="bg-green-500 border border-green-500 hover:bg-white hover:text-green-500" 
+                        onClick={() => handlePassOrder(row.original)}
+                    >
+                        <Check />
+                    </Button>
+                    <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
+                        onClick={() => handleRejectOrder(row.original)}
+                    >
+                        <X />
+                    </Button>
+                </div>
+            )
+        }
+    ];
+
+    const rejectedActions = [
         ...checkOrdersColumns,
         {
             id: "actions",
@@ -131,7 +159,7 @@ export default function CheckOrders() {
 
                 <CardContent>
                     <DataTable 
-                        columns={columnsWithActions} 
+                        columns={rejectedActions} 
                         data={rejectedOrders} 
                     />
                 </CardContent>

@@ -6,7 +6,7 @@ export const checkCompatibility = async (laptop_id, components) => {
     try {
         const params = new URLSearchParams();
         if (components.ram_id) params.append('ram_id', components.ram_id);
-        if (components.storage_id) params.append('ssd_id', components.storage_id);
+        if (components.storage_id) params.append('storage_id', components.storage_id);
         if (components.dock_id) params.append('dock_id', components.dock_id);
         if (components.adapter_id) params.append('adapter_id', components.adapter_id);
         if (components.monitor_id) params.append('monitor_id', components.monitor_id);

@@ -62,7 +62,7 @@ const data = {
 		},
 		{
 			name: "Đơn Hàng",
-			url: "http://localhost:5173/admin/discounts",
+			url: "http://localhost:5173/admin/orders/processed",
 			icon: ClipboardList,
 		},
 	],

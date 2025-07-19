@@ -188,12 +188,12 @@ export default function ComponentTable({ laptop, onCheck }) {
                                     const item = items[category];
 
                                     return (
-                                        <TableRow key={category} className='h-14'>
+                                        <TableRow key={category} className='h-14 font-mono text-lg'>
                                             <TableCell className="font-medium">{category}</TableCell>
 
                                             {item ? (
                                                 <>
-                                                <TableCell>{item.name}</TableCell>
+                                                <TableCell className={`!text-wrap`}>{item.name}</TableCell>
                                                 <TableCell className="text-right">{item.price.toLocaleString()}₫</TableCell>
                                                 <TableCell className="text-center">{item.quantity}</TableCell>
                                                 <TableCell className='text-center'>

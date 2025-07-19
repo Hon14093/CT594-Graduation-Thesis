@@ -105,7 +105,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                 hdmi_version: hdmiVersions.find((ver) => ver.id === hdmiVerId)?.label,
                 dp_version: dpVersions.find((ver) => ver.id === dpVerId)?.label,
                 max_resolution: resolutions.find((res) => res.id === maxResId)?.label || null,
-                ethernet_speed_gbps: parseFloat(ethernetSpeedGbps),
+                ethernet_speed_mbps: parseFloat(ethernetSpeedGbps),
                 max_data_rate_gbps: parseFloat(maxDataRateGbps),
                 max_output_watt: parseFloat(maxOutputWatt),
                 price: parseFloat(price),
@@ -233,7 +233,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                         </article>
 
                         <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Tốc độ Ethernet (Gbps):</p>
+                            <p className='font-semibold'>Tốc độ Ethernet (Mbps):</p>
                             <Input 
                                 className="max-w-96 ml-auto"
                                 placeholder="Tốc độ của cổng Ethernet" 
@@ -293,7 +293,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                         </article>
 
                         <button type='submit' className='big-action-button mb-2'>
-                            Thêm dây cáp
+                            Thêm bộ chuyển đổi
                         </button>
                     </form>
                 </ScrollArea>

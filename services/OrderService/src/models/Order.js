@@ -59,6 +59,7 @@ export const getRejectedOrders = async () => {
 
     return result.map(res => ({
         ...res,
+        order_total: res.order_total.toLocaleString() + ' vnđ',
         order_date: res.order_date.toISOString().slice(0, 10) // Extract YYYY-MM-DD
     }));
 }
@@ -77,6 +78,7 @@ export const getRemainingOrders = async () => {
 
     return orders.map(order => ({
         ...order,
+        order_total: order.order_total.toLocaleString() + ' vnđ',
         order_date: order.order_date.toISOString().slice(0, 10) // Extract YYYY-MM-DD
     }));
 }

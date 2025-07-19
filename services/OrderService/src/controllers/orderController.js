@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createOrder, getAllOrders, getUnprocessedOrders } from "../models/Order.js";
+import { createOrder, getAllOrders, getRejectedOrders, getRemainingOrders, getUnprocessedOrders, updateOrderStatus } from "../models/Order.js";
 import { PrismaClient } from "@prisma/client";
 import { getOrderDetailsByOrderId } from "../models/Order_Details.js";
 const prisma = new PrismaClient();
@@ -61,7 +61,13 @@ export const createOrderWithDetails = async (data) => {
 };
 
 // merge account data with orders
-function mergeData(orders, accounts, addresses) {
+async function mergeData(orders) {
+    const accountRes = await axios.get('http://localhost:5002/account/all');
+    const accounts = accountRes.data.accounts;
+
+    const addressRes = await axios.get('http://localhost:5002/address/all');
+    const addresses = addressRes.data.addresses;
+
     const accountMap = new Map();
     accounts.forEach(acc => {
         accountMap.set(acc.account_id, acc);
@@ -83,13 +89,7 @@ export const returnAllOrders = async (req,res) => {
     try {
         const orders = await getAllOrders();
 
-        const accountRes = await axios.get('http://localhost:5002/account/all');
-        const accounts = accountRes.data.accounts;
-
-        const addressRes = await axios.get('http://localhost:5002/address/all');
-        const addresses = addressRes.data.addresses;
-
-        const combinedData = mergeData(orders, accounts, addresses);
+        const combinedData = await mergeData(orders, accounts, addresses);
 
         res.status(200).json({
             success: true,
@@ -105,14 +105,8 @@ export const returnAllOrders = async (req,res) => {
 export const returnUnprocessedOrders = async (req,res) => {
     try {
         const orders = await getUnprocessedOrders();
-
-        const accountRes = await axios.get('http://localhost:5002/account/all');
-        const accounts = accountRes.data.accounts;
-
-        const addressRes = await axios.get('http://localhost:5002/address/all');
-        const addresses = addressRes.data.addresses;
-
-        const combinedData = mergeData(orders, accounts, addresses);
+        
+        const combinedData = await mergeData(orders);
 
         res.status(200).json({
             success: true,
@@ -125,7 +119,39 @@ export const returnUnprocessedOrders = async (req,res) => {
     }
 }
 
+export const returnRejectedOrders = async (req,res) => {
+    try {
+        const orders = await getRejectedOrders();
+        
+        const combinedData = await mergeData(orders);
 
+        res.status(200).json({
+            success: true,
+            message: 'Get all rejected orders',
+            orders: combinedData
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const returnProcessedOrders = async (req,res) => {
+    try {
+        const orders = await getRemainingOrders();
+        
+        const combinedData = await mergeData(orders);
+
+        res.status(200).json({
+            success: true,
+            message: 'Get all processed orders',
+            orders: combinedData
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
 
 export const returnOrderDetailsByOrderId = async (req,res) => {
     try {
@@ -160,6 +186,23 @@ export const returnOrderDetailsByOrderId = async (req,res) => {
             order_id,
             details: combinedData,
         });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const updateStatus = async (req,res) => {
+    try {
+        const { order_id } = req.params;
+        const { status_id } = req.body;
+        
+        const editedStatus = await updateOrderStatus(order_id, parseInt(status_id));
+
+        res.status(200).json({
+            success: true,
+            editedStatus
+        })
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });

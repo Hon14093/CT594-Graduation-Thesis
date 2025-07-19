@@ -99,7 +99,7 @@ export default function CreateModal({ onSubmitSuccess }) {
             const cable = {
                 product_id: product.product_id,
                 cable_model: model,
-                cable_name: product.product.product_name + model,
+                cable_name: product.product_name + " " + model,
                 connector_a: connectionPorts.find((port) => port.id === connectionPortAId)?.label || null,
                 connector_b: connectionPorts.find((port) => port.id === connectionPortBId)?.label || null,
                 cable_length_cm: parseInt(cableLengthCm),
@@ -108,7 +108,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                 hdmi_version: hdmiVersions.find((ver) => ver.id === hdmiVerId)?.label,
                 dp_version: dpVersions.find((ver) => ver.id === dpVerId)?.label,
                 max_resolution: resolutions.find((res) => res.id === maxResId)?.label || null,
-                ethernet_speed_gbps: parseFloat(ethernetSpeedGbps),
+                ethernet_speed_mbps: parseFloat(ethernetSpeedGbps),
                 max_data_rate_gbps: parseFloat(maxDataRateGbps),
                 max_output_watt: parseFloat(maxOutputWatt),
                 price: parseFloat(price),
@@ -149,7 +149,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 <SelectProduct onSelectItem={handleSelectProduct} category='dây cáp' />
                             ) : (
                                 <>
-                                    <div className='mr-2 ml-auto'>{product.name}</div>
+                                    <div className='mr-2 ml-auto'>{product.product_name}</div>
                                     <Button variant='ghost' className='border'
                                         onClick={() => setProduct('')}
                                     >
@@ -178,19 +178,6 @@ export default function CreateModal({ onSubmitSuccess }) {
                                     placeholder="Chọn loại cổng kết nối..."
                                     value={connectionPortAId}
                                     onChange={setConnectionPortAId}
-                                />
-                            </div>
-                            <Asterisk color='red' size={20}/>
-                        </article>
-
-                        <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Đầu kết nối B:</p>
-                            <div className='ml-auto'>
-                                <GeneralCombobox
-                                    data={connectionPorts}
-                                    placeholder="Chọn loại cổng kết nối..."
-                                    value={connectionPortBId}
-                                    onChange={setConnectionPortBId}
                                 />
                             </div>
                             <Asterisk color='red' size={20}/>
@@ -243,7 +230,8 @@ export default function CreateModal({ onSubmitSuccess }) {
                             <Asterisk color='red' size={20}/>
                         </article>
 
-                        <article className="flex items-center gap-1.5">
+                        {/* These feels too extra */}
+                        {/* <article className="flex items-center gap-1.5">
                             <p className='font-semibold'>Phiên bản HDMI (nếu có):</p>
                             <div className='ml-auto'>
                                 <GeneralCombobox
@@ -267,7 +255,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 />
                             </div>
                             <Asterisk color='white' size={20}/>
-                        </article>
+                        </article> */}
 
                         <article className="flex items-center gap-1.5">
                             <p className='font-semibold'>Độ phân giải tối đa:</p>
@@ -283,7 +271,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                         </article>
 
                         <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Tốc độ Ethernet (Gbps):</p>
+                            <p className='font-semibold'>Tốc độ Ethernet (Mbps):</p>
                             <Input 
                                 className="max-w-96 ml-auto"
                                 placeholder="Tốc độ của cổng Ethernet" 
@@ -303,7 +291,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 type='number'
                                 
                             />
-                            <Asterisk color='red' size={20}/>
+                            <Asterisk color='white' size={20}/>
                         </article>
 
                         <article className="flex items-center gap-1.5">
@@ -315,7 +303,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 type='number'
                                 
                             />
-                            <Asterisk color='red' size={20}/>
+                            <Asterisk color='white' size={20}/>
                         </article>
 
                         <article className="flex items-center gap-1.5">

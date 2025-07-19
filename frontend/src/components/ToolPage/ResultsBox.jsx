@@ -20,7 +20,7 @@ export default function ResultsBox({ laptop, results }) {
                         Kết quả kiểm tra:
                     </div>
 
-                    <div className='px-3 mt-2 text-lg bg-gray-100 min-h-40 border-2 rounded-xl'>
+                    <div className='px-3 mt-2 text-lg bg-gray-100 min-h-64 border-2 rounded-xl font-mono'>
                         <div className='py-3 grid gap-1'>
                             {results.map((item, index) => (
                                 <div key={index} className={`p-3 rounded-md text-left ${
