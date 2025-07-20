@@ -28,11 +28,13 @@ function App() {
 						<Route path='/checkout-cancel' element={<CheckoutCancel />} />
 						<Route path='/login' element={<LoginPage />} />
 						<Route path='/signup' element={<SignupPage />} />
-						<Route path='/personal' element={<PersonalPage />} />
 						<Route path='/shopping-cart' element={<Cartpage />} />
 						<Route path='/shop/:slug?' element={<ShopPage />} />
 						<Route path='/product/:slug/:product_id' element={<ProductDetailsPage />} />
 						<Route path='/tool' element={<CompatibilityToolPage />} />
+						<Route path='/personal/:tab' element={<PersonalPage />} />
+						<Route path="/personal" element={<Navigate to="/personal/info" />} />
+						{/* <Route path="/account/:tab" element={<PersonalPage />} /> */}
 
 						<Route path='/admin/*' element={<AdminPage />} />
 					</Routes>
