@@ -23,6 +23,8 @@ export default function VariationSelection({ product }) {
         getLaptopVariations(product.product_id, setVariations);
     }, []);
 
+    // const 
+
     const handleQtyChange = (e) => {
         let value = parseInt(e.target.value, 10);
 

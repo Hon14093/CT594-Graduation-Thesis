@@ -21,6 +21,28 @@ export const getCableById = async (id) => {
     })
 }
 
+export const getCableVariations = async (product_id) => {
+    const cables = await prisma.cable.findMany({
+        include: {
+            product: {
+                select: { 
+                    product_name: true, 
+                    image_url: true,
+                    brand: true
+                }
+            }
+        },
+        where: {
+            product_id: product_id
+        }
+    })
+
+    return cables.map((item) => ({
+        ...item,
+        varDisplay: item.cable_model
+    }))
+}
+
 export const createCable = async (cableData) => {
     const { product_id, ...rest } = cableData;
 

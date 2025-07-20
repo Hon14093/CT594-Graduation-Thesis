@@ -21,6 +21,28 @@ export const getRamById = async (id) => {
     })
 }
 
+export const getRamVariations = async (product_id) => {
+    const rams = await prisma.ram.findMany({
+        include: {
+            product: {
+                select: { 
+                    product_name: true, 
+                    image_url: true,
+                    brand: true
+                }
+            }
+        },
+        where: {
+            product_id: product_id
+        }
+    })
+
+    return rams.map((ram) => ({
+        ...ram,
+        varDisplay: ram.capacity_gb
+    }))
+}
+
 export const createRam = async (ramData) => {
     const { product_id, ...rest } = ramData;
     

@@ -19,8 +19,8 @@ export default function CityCombobox({ value, onChange }) {
     }, []);
 
     return (
-        <article className="grid w-full items-center gap-1.5">
-            <Label htmlFor="city">Thành phố</Label>
+        <article className="grid w-full items-center">
+            <p htmlFor="city">Thành phố</p>
             <Popover open={open} onOpenChange={setOpen} modal={true}>
                 <PopoverTrigger asChild>
                     <Button variant="outline" className="w-[200px] text-lg justify-between">

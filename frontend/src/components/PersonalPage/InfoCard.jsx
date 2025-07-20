@@ -6,7 +6,7 @@ export default function InfoCard({ label, value }) {
         <Card className="w-full sm:w-60">
             <CardContent className="pt-4">
                 <div className="text-sm text-muted-foreground">{label}</div>
-                <div className="mt-1 font-medium text-foreground">{value}</div>
+                <div className="mt-1 font-medium text-foreground font-sans">{value}</div>
             </CardContent>
         </Card>
     );

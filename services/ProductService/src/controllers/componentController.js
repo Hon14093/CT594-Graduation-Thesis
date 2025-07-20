@@ -3,14 +3,15 @@ const prisma = new PrismaClient();
 import { 
     getAllLaptops, 
     getAllProductVariations,
-    createLaptop, updateLaptop, deleteLaptop
+    createLaptop, updateLaptop, deleteLaptop,
+    getLaptopVariations
 } from "../model/Laptop.js"
-import { getAllAdapters, createAdapter, updateAdapter, deleteAdapter } from "../model/Adatper.js";
-import { getAllCables, createCable, updateCable, deleteCable } from "../model/Cable.js";
-import { getAllDocks,createDock, updateDock, deleteDock } from "../model/Dock.js";
-import { getAllMonitors, createMonitor, updateMonitor, deleteMonitor } from "../model/Monitor.js";
-import { getAllRams, createRam, updateRam, deleteRam } from "../model/Ram.js";
-import { getAllStorages, createStorage, updateStorage, deleteStorage } from "../model/Storage.js";
+import { getAllAdapters, createAdapter, updateAdapter, deleteAdapter, getAdapterVariations } from "../model/Adatper.js";
+import { getAllCables, createCable, updateCable, deleteCable, getCableVariations } from "../model/Cable.js";
+import { getAllDocks,createDock, updateDock, deleteDock, getDockVariations } from "../model/Dock.js";
+import { getAllMonitors, createMonitor, updateMonitor, deleteMonitor, getMonitorVariations } from "../model/Monitor.js";
+import { getAllRams, createRam, updateRam, deleteRam, getRamVariations } from "../model/Ram.js";
+import { getAllStorages, createStorage, updateStorage, deleteStorage, getStorageVariations } from "../model/Storage.js";
 
 export const getComponentNameAndId = async (req, res) => {
     const { id, type } = req.params;
@@ -88,6 +89,59 @@ export const getComponentNameAndId = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error.' });
     }
 };
+
+export const returnVariations = async (req,res) => {
+    const { type, id } = req.params;
+
+    let component = null;
+    const includeObject = {
+        product: {
+            select: {
+                product_name: true,
+                image_url: true,
+                brand: true
+            }
+        }
+    }
+
+    try {
+        switch (type) {
+            case 'laptop':
+                component = await getLaptopVariations(id)
+                break;
+            case 'ram':
+                component = await getRamVariations(id)
+                break;
+            case 'cable':
+                component = await getCableVariations(id)
+                break;
+            case 'storage':
+                component = await getStorageVariations(id)
+                break;
+            case 'monitor':
+                component = await getMonitorVariations(id)
+                break;
+            case 'dock':
+                component = await getDockVariations(id)
+                break;
+            case 'adapter':
+                component = await getAdapterVariations(id)
+                break;
+            default:
+                return res.status(404).json({ message: 'Invalid component type.' });
+        }
+
+        if (!component) {
+            return res.status(404).json({ message: 'Component not found.' });
+        }
+
+        res.status(200).json({ success: true, component });
+    } catch (error) {
+        console.error(`Error fetching component ${type} with ID ${id}:`, error);
+        res.status(500).json({ message: 'Internal Server Error.' });
+    }
+
+}
 
 // Laptop ----------------------------------------------------------
 export const returnAllLaptops = async (req,res) => {

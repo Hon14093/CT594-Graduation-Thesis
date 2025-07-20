@@ -34,6 +34,28 @@ export const createDock = async (dockData) => {
     });
 };
 
+export const getDockVariations = async (product_id) => {
+    const docks = await prisma.dock.findMany({
+        include: {
+            product: {
+                select: { 
+                    product_name: true, 
+                    image_url: true,
+                    brand: true
+                }
+            }
+        },
+        where: {
+            product_id: product_id
+        }
+    })
+
+    return docks.map((item) => ({
+        ...item,
+        varDisplay: item.dock_model
+    }))
+}
+
 export const updateDock = async (dockId, updateData) => {
     return await prisma.dock.update({
         where: { id: dockId },

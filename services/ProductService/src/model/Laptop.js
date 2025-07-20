@@ -33,6 +33,28 @@ export const getAllProductVariations = async (product_id) => {
     })
 }
 
+export const getLaptopVariations = async (product_id) => {
+    const laptops = await prisma.laptop.findMany({
+        include: {
+            product: {
+                select: { 
+                    product_name: true, 
+                    image_url: true,
+                    brand: true
+                }
+            }
+        },
+        where: {
+            product_id: product_id
+        }
+    })
+
+    return laptops.map((item) => ({
+        ...item,
+        varDisplay: item.cpu + ' ' + item.gpu
+    }))
+}
+
 export const getLaptopById = async (id) => {
     return await prisma.laptop.findUnique({
         where: { laptop_id: id }

@@ -5,6 +5,10 @@ import { useNavigate, Link } from 'react-router-dom'
 export default function ProductCard({ product }) {
     const navigate = useNavigate();
 
+    const name = Object.keys(product).find(
+        key => key.endsWith('_name')
+    ) || null;
+
     const navigation = () => {
         if (product.laptop_id) {
             navigate(`/laptop/${product.laptop_id}`, { state: { product } })
@@ -26,14 +30,14 @@ export default function ProductCard({ product }) {
     return (
         <Card 
             onClick={() => navigate(`/product/laptop/${product.laptop_id}`, { state: { product } })}
-            className='border border-gray-300 p-4 mb-2 rounded-lg hover:cursor-pointer'
+            className='border border-gray-300 p-4 rounded-lg hover:cursor-pointer'
         >
             <CardContent>
                 <img src={product.product.image_url[0]} className='object-contain size-52' alt="" />
                 <h2 className='text-xl font-semibold'>
-                    {product.laptop_name}
+                    {product[name]}
                 </h2>
-                <p className='text-red-600 font-bold text-left'>{product.price.toLocaleString()}đ</p>
+                <p className='text-red-600 font-bold text-center'>{product.price.toLocaleString()}đ</p>
             </CardContent>
         </Card>
     )

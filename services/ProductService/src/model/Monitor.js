@@ -21,6 +21,28 @@ export const getMonitorById = async (id) => {
     })
 }
 
+export const getMonitorVariations = async (product_id) => {
+    const monitors = await prisma.monitor.findMany({
+        include: {
+            product: {
+                select: { 
+                    product_name: true, 
+                    image_url: true,
+                    brand: true
+                }
+            }
+        },
+        where: {
+            product_id: product_id
+        }
+    })
+
+    return monitors.map((item) => ({
+        ...item,
+        varDisplay: item.screen_size_inches + ' inch ' + item.refresh_rate_hz + 'Hz ' + item.panel
+    }))
+}
+
 export const createMonitor = async (monitorData) => {
     const { product_id, ...rest } = monitorData;
     

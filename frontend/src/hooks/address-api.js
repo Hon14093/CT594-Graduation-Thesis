@@ -20,3 +20,21 @@ export const createAddress = async (data) => {
         console.error("Error fetching data:", error); 
     }
 }
+
+export const updateAddress = async (address_id, data) => {
+    try {
+        const response = await axios.put(`${API_URL}/address/update/${address_id}`, data);
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const deleteAddress = async (address_id) => {
+    try {
+        const response = await axios.delete(`${API_URL}/address/delete/${address_id}`)
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

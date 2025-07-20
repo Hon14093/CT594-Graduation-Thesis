@@ -9,7 +9,7 @@ import ProductCard from './ProductCard'
 
 export default function ProductsDisplay({ data, slug }) {
     return (
-        <section className='max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh] gap-2 flex flex-col'>
+        <section className='max-w-[1280px] mx-auto py-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh] gap-2 flex flex-col'>
             <h1 className='font-semibold text-left uppercase text-3xl text-techBlue'>Sắp xếp theo</h1>
             
             <article className='text-techBlue'>
@@ -41,19 +41,25 @@ export default function ProductsDisplay({ data, slug }) {
                 </ToggleGroup>
             </article>
 
-            <article>
+            <article className='pt-2'>
                 {data.length === 0 || !data ? (
                     <div>Đang xử lý...</div>
                 ) : (
-                    slug === 'laptop' ? (
-                        <div className='grid grid-cols-4 gap-4'>
-                            {data.map((item, index) => (
-                                <ProductCard product={item} key={index} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div>asdasdasd</div>
-                    )
+                    // slug === 'laptop' ? (
+                    //     <div className='grid grid-cols-4 gap-4'>
+                    //         {data.map((item, index) => (
+                    //             <ProductCard product={item} key={index} />
+                    //         ))}
+                    //     </div>
+                    // ) : (
+                    //     <div>asdasdasd</div>
+                    // )
+
+                    <div className='grid grid-cols-4 gap-4'>
+                        {data.map((item, index) => (
+                            <ProductCard product={item} key={index} />
+                        ))}
+                    </div>
                 )}
             </article>
         </section>

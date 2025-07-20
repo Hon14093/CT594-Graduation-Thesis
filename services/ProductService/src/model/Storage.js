@@ -21,6 +21,29 @@ export const getStorageById = async (id) => {
     })
 }
 
+export const getStorageVariations = async (product_id) => {
+    const storages = await prisma.storage.findMany({
+        include: {
+            product: {
+                select: { 
+                    product_name: true, 
+                    image_url: true,
+                    brand: true
+                }
+            }
+        },
+        where: {
+            product_id: product_id
+        }
+    })
+
+    return storages.map((storage) => ({
+        ...storage,
+        varDisplay: storage.capacity_gb
+    }))
+
+}
+
 export const createStorage = async (storageData) => {
     const { product_id, ...rest } = storageData;
     

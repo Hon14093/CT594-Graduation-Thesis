@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/context/AuthContext'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -7,11 +7,17 @@ import Bread_Crumb from '@/components/layout/Bread_Crumb'
 import Sidebar from '@/components/PersonalPage/Sidebar'
 import InfoCard from '@/components/PersonalPage/InfoCard'
 import AccountAddress from '@/components/PersonalPage/AccountAddress'
+import { getAccountInfoById } from '@/hooks/account-api'
 
 export default function PersonalPage() {
     const { tab } = useParams();
     const { logout, user } = useAuth();
     const navigate = useNavigate();
+    const [account, setAccount] = useState();
+
+    useEffect(() => {
+        getAccountInfoById(user.account_id, setAccount);
+    }, [user])
 
     const bread = [
         { link: '/', label: 'Trang chủ'},
@@ -30,31 +36,35 @@ export default function PersonalPage() {
     })
 
     return (
-        <div className='w-full'>
+        <div className='w-full min-h-screen flex flex-col'>
             <Header darkBG={false} />
 
             <Bread_Crumb data={bread} />
 
-            <section className="min-h-screen bg-mistGray text-lg flex pt-3 max-w-[1280px] mx-auto">
-                <Sidebar account={user} />
+            <section className="flex-grow overflow-y-auto min-h-0 text-lg flex pt-3 max-w-[1280px] mx-auto w-full">
+                <Sidebar account={account} />
 
                 <article className="flex-1 p-8">
                     <div className="flex justify-between items-center mb-6">
                         <h1 className="text-3xl font-bold capitalize">{tabName()}</h1>
-                        <Button variant="destructive" className='text-lg p-4'>Đăng xuất</Button>
+                        <Button variant='destructive' className={`text-lg p-4`} onClick={() => {
+                            logout();
+                            navigate('/');
+                        }}>
+                            Đăng xuất
+                        </Button>
                     </div>
                     
                     {tab === "info" && (
                         <>
                             <p className="text-muted-foreground mb-6 max-w-xl text-left">
-                                Manage your personal information, including phone numbers and email address where you can be contacted.
+                                Quản lý các thông tin cá nhân của bạn, bao gồm số điện thoại và địa chỉ email.
                             </p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <InfoCard label="Name" value="Irakli talavadze" />
-                                <InfoCard label="Date of Birth" value="07 July 1993" />
-                                <InfoCard label="Country Region" value="Georgia, Tbilisi" />
-                                <InfoCard label="Language" value="English (UK) - English" />
-                                <InfoCard label="Contactable at" value="ikakodesign@gmail.com" />
+                                <InfoCard label="Tên người dùng" value={account?.username} />
+                                <InfoCard label="Email" value={account?.email} />
+                                <InfoCard label="Số điện thoại" value={account?.phone} />
+                                <InfoCard label="Ngày tạo tài khoản" value={account?.date_created} />
                             </div>
                         </>
                     )}
@@ -64,17 +74,7 @@ export default function PersonalPage() {
                     {tab === "gifts" && <p>Gift cards content goes here.</p>}
                 </article>
             </section>
-
-
-
-
-
-            {/* <Button variant='destructive' onClick={() => {
-                logout();
-                navigate('/');
-            }}>
-                Log out
-            </Button> */}
+{/* I want this section to fill the screen height wise */}
         </div>
     )
 }

@@ -4,7 +4,12 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Bread_Crumb from '@/components/layout/Bread_Crumb';
 import ProductsDisplay from '@/components/ShopPage/ProductsDisplay';
-import { getLaptops } from '@/hooks/variation-api'
+import { 
+    getLaptops, getRAMs,
+    getCables,getDocks,
+    getAdapters, getStorages,
+    getMonitors
+} from '@/hooks/variation-api'
 
 export default function ShopPage() {
     const { slug } = useParams();
@@ -22,9 +27,11 @@ export default function ShopPage() {
                 console.log('Fetching laptop...');
                 break;
             case 'ram':
+                await getRAMs(setData);
                 console.log('Fetching ram...');
                 break;
         }
+
         return translatedSlug;
     }
 

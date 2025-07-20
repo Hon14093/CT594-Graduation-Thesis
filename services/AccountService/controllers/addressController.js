@@ -1,4 +1,4 @@
-import { createAddress, getAddressById, getAddressesByAccountId, getAllAddresses } from "../model/Address.js";
+import { createAddress, getAddressById, getAddressesByAccountId, getAllAddresses, removeAddress, updateAddress } from "../model/Address.js";
 
 export const returnAddressesByAccountId = async (req,res) => {
     try {
@@ -57,5 +57,35 @@ export const createNewAddress = async (req,res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const editAddress = async (req,res) => {
+    try {
+        const { address_id } = req.params;
+        const data = req.body;
+        console.log(data)
+        const updatedAddress = await updateAddress(address_id, data);
+        res.status(201).json({
+            success: 1,
+            updatedAddress
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+        console.log(error)
+    }
+}
+
+export const deleteAddress = async (req,res) => {
+    try {
+        const { address_id } = req.params;
+        const deletedAddress = await removeAddress(address_id);
+        res.status(201).json({
+            success: 1,
+            deletedAddress
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+        console.log(error)
     }
 }

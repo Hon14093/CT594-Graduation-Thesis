@@ -26,3 +26,16 @@ export const getAddressById = async (address_id) => {
         }
     })
 }
+
+export const updateAddress = async (address_id, data) => {
+    return prisma.address.update({
+        where: { address_id },
+        data
+    })
+}
+
+export const removeAddress = async (address_id) => {
+    return prisma.address.delete({
+        where: { address_id }
+    })
+}
