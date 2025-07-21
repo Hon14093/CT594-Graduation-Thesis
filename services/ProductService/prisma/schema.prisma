@@ -30,6 +30,7 @@ model product {
   category_id  Int
   description  String?
   image_url    String[]
+  Review       Review[]
   adapter      adapter[]
   cable        cable[]
   dock         dock[]
@@ -194,4 +195,14 @@ model storage {
   product_id       String  @db.Uuid
   storage_name     String
   product          product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_monitor")
+}
+
+model Review {
+  review_id   String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  review_date DateTime @default(now()) @db.Timestamp(6)
+  star        Int
+  comment     String?  @db.VarChar(1000)
+  product_id  String   @db.Uuid
+  account_id  String   @db.Uuid
+  product     product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_product_review")
 }

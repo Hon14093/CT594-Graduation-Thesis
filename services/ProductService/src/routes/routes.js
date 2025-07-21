@@ -23,6 +23,7 @@ import {
     getComponentNameAndId,
     returnVariations
 } from '../controllers/componentController.js';
+import { returnReviewsByProductId } from '../controllers/reviewController.js';
 
 const router = express.Router();
 
@@ -75,6 +76,6 @@ router.put('/adapters/update/:id', updateAdapterController);
 router.delete('/adapters/delete/:id', deleteAdapterController);
 
 router.get('/find-type/:type/:id', getComponentNameAndId);
-router.get('/variations/:type/:id', returnVariations)
+router.get('/variations/:type/:id', returnVariations);
 
 export default router;

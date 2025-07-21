@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import productRoutes from './src/routes/routes.js'
+import reviewRoutes from './src/routes/addressRoutes.js'
 import imageUpload from './src/imageUpload.js'
 
 dotenv.config();
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/manage/product', productRoutes);
+app.use('/review', reviewRoutes);
 app.use('/image/', imageUpload);
 
 app.listen(PORT, () => {

@@ -7,7 +7,7 @@ import { Button } from '../ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs'
 import { Card, CardContent } from '../ui/card';
 import { DetailsModal } from '../modals/order/DetailsModal';
-import DetailsModalWithReview from '../modals/order/DetailsModalWithReview';
+import { DetailsModalWithReview } from '../modals/order/DetailsModalWithReview';
 import { Eye } from 'lucide-react';
 
 export default function MyOrders() {
@@ -63,7 +63,7 @@ export default function MyOrders() {
                     </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="processing">
+                <TabsContent value="processing" className={`pt-4`}>
                     <DataTable data={processingOrders} columns={columnsWithActions} />
 
                     <DetailsModal 
@@ -73,14 +73,14 @@ export default function MyOrders() {
                     />
                 </TabsContent>
 
-                <TabsContent value="delivered">
-                    {/* <DataTable data={deliveredOrders} columns={columnsWithActions} />
+                <TabsContent value="delivered" className={`pt-4`}>
+                    <DataTable data={deliveredOrders} columns={columnsWithActions} />
 
                     <DetailsModalWithReview 
                         order={selectedOrder}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
-                    /> */}
+                    />
                 </TabsContent>
 
             </Tabs>

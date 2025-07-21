@@ -26,7 +26,7 @@ export default function OrderStatusComboBox({ value, onChange }) {
 
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-[150px] justify-between">
+                    <Button variant="outline" className="w-[250px] justify-between text-lg">
                         {value ? statuses.find((status) => status.status_id === value)?.status_name : "Chọn trạng thái"}
                     </Button>
                 </PopoverTrigger>
@@ -37,6 +37,7 @@ export default function OrderStatusComboBox({ value, onChange }) {
                             {statuses.map((status) => (
                                 <CommandItem
                                     key={status.status_id}
+                                    className={`!text-lg`}
                                     onSelect={() => {
                                         onChange(status.status_id);
                                         setOpen(false);

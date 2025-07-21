@@ -32,7 +32,7 @@ export const getOrderDetailsData = async (order_id, setData) => {
                 key => key.endsWith('_name')
             ) || null;
 
-            console.log(name)
+            console.log('getting details')
 
             return {
                 ...detail,
