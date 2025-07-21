@@ -14,21 +14,18 @@ import {
 export default function ShopPage() {
     const { slug } = useParams();
     const [data, setData] = useState([]);
-    let translatedSlug = '';
 
     useEffect(() => {
-        translateSlug(slug);
+        getItemsBySlug(slug);
     }, [slug]);
 
-    const translateSlug = async (slug) => {
+    const getItemsBySlug = async (slug) => {
         switch (slug) {
             case 'laptop':
                 await getLaptops(setData);
-                console.log('Fetching laptop...');
                 break;
             case 'ram':
                 await getRAMs(setData);
-                console.log('Fetching ram...');
                 break;
             case 'man-hinh':
                 await getMonitors(setData);
@@ -46,8 +43,6 @@ export default function ShopPage() {
                 await getStorages(setData);
                 break;
         }
-
-        return translatedSlug;
     }
 
     const bread = [
