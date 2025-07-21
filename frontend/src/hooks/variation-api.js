@@ -2,6 +2,17 @@ import axios from "axios";
 
 const API_URL = 'http://localhost:5000';
 
+
+export const getVariations = async (type, id, setData) => {
+    try {
+        const result = await axios.get(`${API_URL}/manage/product/variations/${type}/${id}`)
+        console.log(result.data.variations);
+        setData(result.data.variations);
+    } catch (error) {
+        console.error("Error fetching data:", error); 
+    }
+}
+
 export const getLaptops = async (setData) => {
     try {
         const result = await axios.get(`${API_URL}/manage/product/laptops/all`);

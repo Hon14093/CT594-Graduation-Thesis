@@ -38,10 +38,6 @@ function Orders() {
         getProcessedOrders(setData)
     }, []);
 
-    const test = () => {
-        console.log(data)
-    }
-
     const handleViewDetails = (order) => {
         setSelectedOrder(order);
         setIsDetailsModalOpen(true);

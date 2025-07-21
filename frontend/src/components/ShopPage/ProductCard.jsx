@@ -34,7 +34,7 @@ export default function ProductCard({ product }) {
         >
             <CardContent>
                 <img src={product.product.image_url[0]} className='object-contain size-52' alt="" />
-                <h2 className='text-xl font-semibold'>
+                <h2 className='text-xl font-semibold font-mono'>
                     {product[name]}
                 </h2>
                 <p className='text-red-600 font-bold text-center'>{product.price.toLocaleString()}đ</p>

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/carousel"
 import { Input } from '../ui/input';
 import { ShoppingCart } from 'lucide-react';
-import { getLaptopVariations } from '@/hooks/variation-api';
+import { getLaptopVariations, getVariations } from '@/hooks/variation-api';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
 
@@ -20,10 +20,23 @@ export default function VariationSelection({ product }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getLaptopVariations(product.product_id, setVariations);
+        
+        console.log("Model:", model, product);
+
+        getVariations(model.replace("_model", ""), product.product_id, setVariations);
     }, []);
 
-    // const 
+    const model = Object.keys(product).find(
+        key => key.endsWith('_model')
+    ) || null; // this returns "laptop_model" or "ram_model" etc.
+
+    const id = Object.keys(product).find(
+        key => key.endsWith('_id')
+    ) || null; 
+
+    const name = Object.keys(product).find(
+        key => key.endsWith('_name')
+    ) || null;
 
     const handleQtyChange = (e) => {
         let value = parseInt(e.target.value, 10);
@@ -88,40 +101,38 @@ export default function VariationSelection({ product }) {
 
             <Card>
                 <CardContent className='text-left'>
-                    <div className='text-2xl font-semibold'>
-                        {product.laptop_name}
+                    <div className='text-2xl font-semibold font-mono'>
+                        {product[name]}
                     </div>
 
                     <div className='text-2xl text-red-600 font-semibold py-2 flex'>
-                        {product.price.toLocaleString()} vnđ
+                        <p className='font-mono'>{parseInt(product.price).toLocaleString()} vnđ</p>
 
                         <div className='ml-auto text-black font-normal text-lg'>
                             Trong kho: {product.qty_in_stock}
                         </div>
                     </div>
 
-                    <div className='flex gap-4 py-2 flex-wrap justify-center'>
+                    <div className='flex gap-4 py-2 flex-wrap justify-center text-lg'>
                         {variations ? (
                             <>
-                            {variations.map((variation) => (
-                                variation.laptop_id === product.laptop_id ? (
+                            {variations.map((variation, index) => (
+                                variation[id] === product[id] ? (
                                     <button 
-                                        key={variation.laptop_id} 
+                                        key={index} 
                                         className='bg-techBlue border-2 text-white rounded-lg p-2 w-40 h-32'
                                     >
-                                        <div>{variation.cpu}</div>
-                                        <div>{variation.gpu}</div>
+                                        <div>{variation.varDisplay}</div>
                                     </button>
                                 ) : (
                                     <button 
-                                        key={variation.laptop_id} 
+                                        key={index} 
                                         onClick={() => {
-                                            navigate(`/product/laptop/${variation.laptop_id}`, { state: { variation } })
+                                            navigate(`/product/${model.replace("_model","")}/${variation[id]}`, { state: { variation } })
                                         }}
-                                        className='border-2 border-techBlue rounded-lg p-2 w-40 h-32'
+                                        className='border-2 border-techBlue rounded-lg p-2 w-40 h-32 '
                                     >
-                                        <div>{variation.cpu}</div>
-                                        <div>{variation.gpu}</div>
+                                        <div>{variation.varDisplay}</div>
                                     </button>
                                 )
                             ))}
@@ -132,7 +143,7 @@ export default function VariationSelection({ product }) {
                     </div>
 
                     <div className="flex mt-4 gap-5 items-center">
-                        <h2 className="text-lg font-semibold">Số lượng:</h2>
+                        <h2 className="text-lg font-semibold  ml-auto">Số lượng:</h2>
                         <Input 
                             type="number" 
                             className="max-w-20 border border-darkOlive" 
@@ -142,11 +153,11 @@ export default function VariationSelection({ product }) {
                         />
                     </div>
 
-                    <div className='mt-4'>
+                    <div className='mt-4 flex ml-auto'>
                         {product.qty_in_stock > 0 ? (
                             <button 
                                 type='button'
-                                className='big-action-button !py-1 flex items-center'
+                                className='big-action-button !py-1 flex items-center ml-auto'
                                 onClick={(e) => {
                                     e.preventDefault();
                                     handleAddItem();

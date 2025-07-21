@@ -30,6 +30,21 @@ export default function ShopPage() {
                 await getRAMs(setData);
                 console.log('Fetching ram...');
                 break;
+            case 'man-hinh':
+                await getMonitors(setData);
+                break;
+            case 'bo-chuyen-doi':
+                await getAdapters(setData);
+                break;
+            case 'day-cap':
+                await getCables(setData);
+                break;
+            case 'usb-dock':
+                await getDocks(setData);
+                break;
+            case 'o-cung':
+                await getStorages(setData);
+                break;
         }
 
         return translatedSlug;

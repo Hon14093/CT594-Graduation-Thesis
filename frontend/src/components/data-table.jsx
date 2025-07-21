@@ -86,7 +86,7 @@ export function DataTable({ columns, data }) {
                             data-state={row.getIsSelected() && "selected"}
                         >
                             {row.getVisibleCells().map(cell => (
-                                <TableCell key={cell.id} className='!text-lg !text-center font-mono'>
+                                <TableCell key={cell.id} className='!text-lg !text-wrap !text-center font-mono'>
                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                 </TableCell>
                             ))}

@@ -37,9 +37,12 @@ export const getStorageVariations = async (product_id) => {
         }
     })
 
+    console.log(storages.price)
+
     return storages.map((storage) => ({
         ...storage,
-        varDisplay: storage.capacity_gb
+        price: parseFloat(storage.price),
+        varDisplay: storage.capacity_gb + " GB"
     }))
 
 }

@@ -7,6 +7,7 @@ import Bread_Crumb from '@/components/layout/Bread_Crumb'
 import Sidebar from '@/components/PersonalPage/Sidebar'
 import InfoCard from '@/components/PersonalPage/InfoCard'
 import AccountAddress from '@/components/PersonalPage/AccountAddress'
+import MyOrders from '@/components/PersonalPage/MyOrders'
 import { getAccountInfoById } from '@/hooks/account-api'
 
 export default function PersonalPage() {
@@ -44,7 +45,7 @@ export default function PersonalPage() {
             <section className="flex-grow overflow-y-auto min-h-0 text-lg flex pt-3 max-w-[1280px] mx-auto w-full">
                 <Sidebar account={account} />
 
-                <article className="flex-1 p-8">
+                <article className="flex-1 p-8 max-w-4/5">
                     <div className="flex justify-between items-center mb-6">
                         <h1 className="text-3xl font-bold capitalize">{tabName()}</h1>
                         <Button variant='destructive' className={`text-lg p-4`} onClick={() => {
@@ -70,7 +71,7 @@ export default function PersonalPage() {
                     )}
 
                     {tab === "address" && <AccountAddress />}
-                    {tab === "orders" && <p>Order history content goes here.</p>}
+                    {tab === "orders" && <MyOrders />}
                     {tab === "gifts" && <p>Gift cards content goes here.</p>}
                 </article>
             </section>

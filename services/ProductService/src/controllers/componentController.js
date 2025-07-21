@@ -93,7 +93,7 @@ export const getComponentNameAndId = async (req, res) => {
 export const returnVariations = async (req,res) => {
     const { type, id } = req.params;
 
-    let component = null;
+    let components = null;
     const includeObject = {
         product: {
             select: {
@@ -107,35 +107,37 @@ export const returnVariations = async (req,res) => {
     try {
         switch (type) {
             case 'laptop':
-                component = await getLaptopVariations(id)
+                components = await getLaptopVariations(id)
                 break;
             case 'ram':
-                component = await getRamVariations(id)
+                components = await getRamVariations(id)
                 break;
             case 'cable':
-                component = await getCableVariations(id)
+                components = await getCableVariations(id)
                 break;
             case 'storage':
-                component = await getStorageVariations(id)
+                components = await getStorageVariations(id)
                 break;
             case 'monitor':
-                component = await getMonitorVariations(id)
+                components = await getMonitorVariations(id)
                 break;
             case 'dock':
-                component = await getDockVariations(id)
+                components = await getDockVariations(id)
                 break;
             case 'adapter':
-                component = await getAdapterVariations(id)
+                components = await getAdapterVariations(id)
                 break;
             default:
                 return res.status(404).json({ message: 'Invalid component type.' });
         }
 
-        if (!component) {
-            return res.status(404).json({ message: 'Component not found.' });
+        if (!components) {
+            return res.status(404).json({ message: 'Components not found.' });
         }
 
-        res.status(200).json({ success: true, component });
+        console.log(components)
+
+        res.status(200).json({ success: true, variations: components });
     } catch (error) {
         console.error(`Error fetching component ${type} with ID ${id}:`, error);
         res.status(500).json({ message: 'Internal Server Error.' });

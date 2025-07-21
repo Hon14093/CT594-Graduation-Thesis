@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createOrder, getAllOrders, getRejectedOrders, getRemainingOrders, getUnprocessedOrders, updateOrderStatus } from "../models/Order.js";
+import { createOrder, getAllOrders, getOrdersByAccountId, getRejectedOrders, getRemainingOrders, getUnprocessedOrders, updateOrderStatus } from "../models/Order.js";
 import { PrismaClient } from "@prisma/client";
 import { getOrderDetailsByOrderId } from "../models/Order_Details.js";
 const prisma = new PrismaClient();
@@ -185,6 +185,21 @@ export const returnOrderDetailsByOrderId = async (req,res) => {
             message: 'Order details with product info',
             order_id,
             details: combinedData,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const returnOrdersByAccountId = async (req,res) => {
+    try {
+        const { account_id } = req.params;
+        const orders = await getOrdersByAccountId(account_id);
+        const combinedData = await mergeData(orders);
+        res.status(200).json({
+            success: true,
+            orders: combinedData
         });
     } catch (error) {
         console.log(error);

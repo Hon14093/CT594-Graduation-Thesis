@@ -11,10 +11,14 @@ export default function ProductDetailsPage() {
     // const [product, setProduct] = useState(location.state?.product || null);
     const { slug } = useParams();
 
+    const name = Object.keys(product).find(
+        key => key.endsWith('_name')
+    ) || null;
+
     const bread = [
         { link: '/', label: 'Trang chủ'},
         { link: `/shop/${slug}`, label: `${slug}`},
-        { link: '#', label: `${product.laptop_name}`},
+        { link: '#', label: `${product[name]}`},
     ]
 
     if (!product) {

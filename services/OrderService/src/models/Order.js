@@ -94,6 +94,7 @@ export const getOrdersByAccountId = async (account_id) => {
 
     return orders.map(order => ({
         ...order,
+        order_total: order.order_total.toLocaleString() + ' vnđ',
         order_date: order.order_date.toISOString().slice(0, 10) // Extract YYYY-MM-DD
     }));
 }

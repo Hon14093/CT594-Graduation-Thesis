@@ -39,7 +39,7 @@ export const getRamVariations = async (product_id) => {
 
     return rams.map((ram) => ({
         ...ram,
-        varDisplay: ram.capacity_gb
+        varDisplay: ram.capacity_gb + 'GB'
     }))
 }
 

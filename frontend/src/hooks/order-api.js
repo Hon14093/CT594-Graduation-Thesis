@@ -68,6 +68,22 @@ export const getProcessedOrders = async (setData) => {
     }
 };
 
+export const getOrdersByAccountId = async (account_id, setProcessingOrders, setDeliveredOrders) => {
+    try {
+        const result = await axios.get(`${API_URL}/manage/order/my-orders/${account_id}`);
+        const allOrders = result.data.orders;
+
+        const delivered = allOrders.filter(order => order.status_id === 5);
+        const processing = allOrders.filter(order => order.status_id !== 5);
+
+        setDeliveredOrders(delivered);
+        setProcessingOrders(processing);
+
+    } catch (error) {
+        console.log("Lỗi khi lấy đơn hàng:", error);
+    }
+};
+
 export const updateOrderStatus = async (order_id, statusId) => {
     try {
         const result = await axios.put(`${API_URL}/manage/order/check/${order_id}`, { status_id: statusId });
