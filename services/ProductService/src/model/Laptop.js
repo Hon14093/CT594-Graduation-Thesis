@@ -7,6 +7,7 @@ export const getAllLaptops = async () => {
             product: {
                 select: { 
                     product_name: true, 
+                    description: true,
                     image_url: true,
                     brand: true
                 }
@@ -22,6 +23,7 @@ export const getAllProductVariations = async (product_id) => {
             product: {
                 select: { 
                     product_name: true, 
+                    description: true,
                     image_url: true,
                     brand: true
                 }
@@ -39,6 +41,7 @@ export const getLaptopVariations = async (product_id) => {
             product: {
                 select: { 
                     product_name: true, 
+                    description: true,
                     image_url: true,
                     brand: true
                 }

@@ -94,15 +94,6 @@ export const returnVariations = async (req,res) => {
     const { type, id } = req.params;
 
     let components = null;
-    const includeObject = {
-        product: {
-            select: {
-                product_name: true,
-                image_url: true,
-                brand: true
-            }
-        }
-    }
 
     try {
         switch (type) {
@@ -135,8 +126,6 @@ export const returnVariations = async (req,res) => {
             return res.status(404).json({ message: 'Components not found.' });
         }
 
-        console.log(components)
-
         res.status(200).json({ success: true, variations: components });
     } catch (error) {
         console.error(`Error fetching component ${type} with ID ${id}:`, error);
@@ -161,6 +150,8 @@ export const returnAllLaptops = async (req,res) => {
                 laptop_price: laptop.price.toLocaleString() + " vnđ"
             }
         })
+
+        // console.log('laptop:', formattedData)
 
         res.status(200).json({
             success: true,

@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer';
 import Bread_Crumb from '@/components/layout/Bread_Crumb';
 import VariationSelection from '@/components/ProductDetailsPage/VariationSelection';
 import ReviewSection from '@/components/ProductDetailsPage/ReviewSection';
+import ProductInfo from '@/components/ProductDetailsPage/ProductInfo';
 
 export default function ProductDetailsPage() {
     const location = useLocation();
@@ -33,6 +34,8 @@ export default function ProductDetailsPage() {
             <Bread_Crumb data={bread} />
 
             <VariationSelection product={product} />
+
+            <ProductInfo product={product} />
 
             <ReviewSection productId={product.product_id} />
 

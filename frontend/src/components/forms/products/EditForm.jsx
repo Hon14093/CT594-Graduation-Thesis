@@ -99,10 +99,12 @@ export default function EditForm({ product, onClose, onSubmitSuccess }) {
 
                     <article className="grid w-full items-center gap-1.5">
                         <Label htmlFor="product_des">Miêu tả</Label>
-                        <Textarea 
-                            id="product_des" 
-                            defaultValue={description}
-                            placeholder="Miêu tả" 
+                        <Textarea
+                            id="product_des"
+                            placeholder="Miêu tả"
+                            rows={5}
+                            className="!max-h-[200px] !overflow-y-auto"
+                            autoResize={false}
                             onChange={(e) => setDescription(e.target.value)}
                             required
                         />

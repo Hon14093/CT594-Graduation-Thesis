@@ -20,3 +20,6 @@
   font-style: normal;
 }
 
+svg.star-svg {
+    display: inline;
+}

@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:5000';
 
 export const createReview = async (review) => {
     try {
-        const result = await axios.get(`${API_URL}/review/create`, review);
+        const result = await axios.post(`${API_URL}/review/create`, review);
         return result.data;
     } catch (error) {
         console.log(error);

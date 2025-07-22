@@ -21,19 +21,21 @@ import { Button } from "@/components/ui/button";
 import { Eye } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-export default function SpecsTable({ product }) {
+export default function SpecsTable({ data }) {
     const [open, setOpen] = useState(false);
 
     // remove field
     const { 
-        product: _, 
+        data: _, 
         name, 
         model, 
         product_id, 
+        product,
+        image_url,
         qty_in_stock, 
         price, 
-        ...specs 
-    } = product;
+        ...specs  
+    } = data;
 
     // English to Vietnamese translation mapping
     const translations = {
@@ -61,10 +63,47 @@ export default function SpecsTable({ product }) {
         monitor_tech: "Công nghệ màn hình",
         in_box_component: "Thành phần trong hộp",
         weight_kg: "Trọng lượng (kg)",
+
+        // Adapter fields
+        adapter_model: "Model bộ chuyển đổi",
+        input_port: "Cổng đầu vào",
+        output_port: "Cổng đầu ra",
+        ethernet_speed_mbps: "Tốc độ Ethernet (Mbps)",
+        max_data_rate_gbps: "Tốc độ dữ liệu tối đa (Gbps)",
+        max_output_watt: "Công suất đầu ra tối đa (W)",
+
+        // Cable fields
+        cable_model: "Model dây cáp",
+        connector_a: "Đầu kết nối A",
+        connector_b: "Đầu kết nối B",
+        cable_length_cm: "Chiều dài dây (cm)",
+        weight_g: "Trọng lượng (g)",
+        max_resolution: "Độ phân giải tối đa",
+
+        // Dock fields
+        dock_model: "Model dock",
+        connection_port: "Cổng kết nối",
+        dimensions_mm: "Kích thước (mm)",
+        max_external_monitors: "Số màn hình ngoài hỗ trợ",
+        hdmi: "Cổng HDMI",
+        usb_a_ports: "Các cổng USB-A",
+        usb_c_ports: "Các cổng USB-C",
+        sd_card_slot: "Khe thẻ SD",
+        microsd_card_slot: "Khe thẻ microSD",
+
+        // Storage fields
+        storage_model: "Model ổ cứng",
+        interface: "Giao diện kết nối",
+        form_factor: "Chuẩn kích thước",
+        physical_profile: "Kích thước vật lý",
+        read_speed_mbps: "Tốc độ đọc (MB/s)",
+        write_speed_mbps: "Tốc độ ghi (MB/s)",
         
         // Common fields
         voltage: "Điện áp",
-        quantity: "Số lượng trong kho"
+        quantity: "Số lượng trong kho",
+        brand: "Thương hiệu",
+        material: "Chất liệu"
     };
 
     const formatValue = (value) => {

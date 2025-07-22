@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { 
     getAllProducts,
     createProduct,
@@ -156,6 +157,53 @@ export const createNewCategory = async (req,res) => {
             message: 'Category created successfully',
             category: newCategory
         });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+
+
+
+
+
+
+
+
+export const returnPopularProducts = async (req,res) => {
+    try {
+        const completedOrders = await axios.get('http://localhost:5004/manage/order/completed');
+        const orderDetails = await getSpecificOrderDetails(completedOrders);
+
+        let productSales = {};
+        orderDetails.forEach(od => {
+            const productId = od.Product_Weight.Product.product_id;
+            if (!productSales[productId]) {
+                productSales[productId] = {
+                    product: od.Product_Weight.Product,
+                    totalSold: 0
+                };
+            }
+            productSales[productId].totalSold += od.quantity;
+        });
+
+        const sortedProducts = Object.values(productSales)
+            .sort((a, b) => b.totalSold - a.totalSold)
+            .slice(0, 3)
+            .map(item => ({
+                ...item.product,
+                variations: item.product.Product_Weight.map(weight => ({
+                    pw_id: weight.pw_id,
+                    product_price: weight.product_price,
+                    qty_in_stock: weight.qty_in_stock,
+                    weight_id: weight.weight_id,
+                    weight_name: weight.Weight_Option.weight_name
+                })),
+                total_sold: item.totalSold
+            }));
+    
+        res.status(200).json({ sortedProducts });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Internal Server Error' });

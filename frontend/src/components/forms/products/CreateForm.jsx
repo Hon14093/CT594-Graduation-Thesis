@@ -89,9 +89,22 @@ export default function CreateForm({ onSubmitSuccess }) {
 
                     <article className="grid w-full items-center gap-1.5">
                         <Label htmlFor="product_des">Miêu tả</Label>
-                        <Textarea 
+                        {/* <Textarea 
                             id="product_des" 
                             placeholder="Miêu tả" 
+                            autoResize={false}
+                            rows={5} // Limits to ~5 lines (adjust as needed)
+                            className="overflow-y-auto max-h-50" // Adds scroll if content exceeds
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                        /> */}
+
+                        <Textarea
+                            id="product_des"
+                            placeholder="Miêu tả"
+                            rows={5}
+                            className="!max-h-[200px] !overflow-y-auto"
+                            autoResize={false}
                             onChange={(e) => setDescription(e.target.value)}
                             required
                         />

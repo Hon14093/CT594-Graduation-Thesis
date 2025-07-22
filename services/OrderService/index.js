@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import analyticRoutes from './src/routes/analyticRoutes.js';
 import paymentRoutes from './src/routes/paymentRoutes.js'
 import orderRoutes from './src/routes/orderRoutes.js'
 
@@ -18,8 +19,10 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.use('/analytic', analyticRoutes);
 app.use('/payment', paymentRoutes);
 app.use('/manage/order', orderRoutes);
+
 
 app.listen(PORT, () => {
     console.log("Server is running on port " + PORT);

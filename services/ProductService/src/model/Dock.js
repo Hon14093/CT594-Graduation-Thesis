@@ -40,6 +40,7 @@ export const getDockVariations = async (product_id) => {
             product: {
                 select: { 
                     product_name: true, 
+                    description: true,
                     image_url: true,
                     brand: true
                 }

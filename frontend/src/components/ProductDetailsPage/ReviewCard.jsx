@@ -22,7 +22,7 @@ const ReviewCard = ({ review }) => {
                             <Star key={index} fill={index < rating ? "currentColor" : "none"} stroke="currentColor" />
                         ))}
                     </div>
-                    <p className="text-gray-600 mt-2">{comment}</p>
+                    <p className="text-lg mt-2 text-left">{comment}</p>
                 </div>
             
         </div>

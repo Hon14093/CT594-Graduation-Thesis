@@ -54,11 +54,10 @@ export default function ReviewForm({ detail, open, onClose }) {
                     <div className='pb-5'>
                         <p className='font-bold text-lg'>Sản phẩm:  </p>
 
-                        {/* This is the problem */}
                         {detail?.product?.product?.product_name || "Loading..."}
 
                     </div>
-                    <div className='mx-auto pb-5'>
+                    <div className='mx-auto pb-5 star-rating-wrapper'>
                         <Rating
                             onClick={handleRating}
                             transition

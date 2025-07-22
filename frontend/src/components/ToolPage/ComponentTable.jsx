@@ -197,7 +197,7 @@ export default function ComponentTable({ laptop, onCheck }) {
                                                 <TableCell className="text-right">{item.price.toLocaleString()}₫</TableCell>
                                                 <TableCell className="text-center">{item.quantity}</TableCell>
                                                 <TableCell className='text-center'>
-                                                    <SpecsTable product={item} />
+                                                    <SpecsTable data={item} />
                                                 </TableCell>
                                                 <TableCell>
                                                     <button
