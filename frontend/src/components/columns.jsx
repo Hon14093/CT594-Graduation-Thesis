@@ -26,6 +26,14 @@ export const productColumns = [
 ];
 
 
+export const accountColumns = [
+    { accessorKey: "username", header: "Tên tài khoản" },
+    { accessorKey: "role.role_name", header: "Chức vụ" },
+    { accessorKey: "email", header: "Email" },
+    { accessorKey: "date_created", header: "Ngày tạo" },
+    // { accessorKey: "slug", header: "Slug" },
+]
+
 export const categoryColumns = [
     { accessorKey: "category_id", header: "ID danh mục" },
     { accessorKey: "category_name", header: "Tên danh mục" },

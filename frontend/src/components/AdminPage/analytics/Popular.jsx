@@ -6,28 +6,33 @@ import StatusChart from './StatusChart'
 export default function Popular({ products, discount}) {
     return (
         <section className='grid grid-cols-2 gap-4'>
-            {/* <Card>
-                <CardContent className='p-4 grid gap-4'>
+            <Card>
+                <CardContent className=' grid gap-4'>
                     <h1 className='font-semibold text-lg'>Các sản phẩm bán chạy</h1>
-                    {products.map((item) => (
-                        <div
-                            key={`${item.product_id}-${item.weight_id}`}
-                            className="flex items-start gap-4"
-                        >
-                            <img
-                                src={item.image_url}
-                                alt={item.product_name}
-                                className="w-20 h-20 object-cover rounded"
-                            />
+                    <ScrollArea className={`h-72`}>
+                        <div className='grid gap-4'>
+                            {products?.map((item, index) => (
+                                <article
+                                    key={`${index}`}
+                                    className="flex gap-4 items-center shadow-md"
+                                >
+                                    <img
+                                        src={item.image_url}
+                                        alt={item.name}
+                                        className="size-24 object-contain rounded"
+                                    />
 
-                            <div>
-                                <p className="font-medium">{item.product_name}</p>
-                                <p className="font-medium">Đã bán: {item.total_sold}</p>
-                            </div>
+                                    <div className='text-left'>
+                                        <p className="font-semibold font-mono">{item.name}</p>
+                                        <p className="font-medium">Đã bán: {item.count}</p>
+                                        <p className="font-medium">Số lượng trong kho: {item.qty_in_stock}</p>
+                                    </div>
+                                </article>
+                            ))}
                         </div>
-                    ))}
+                    </ScrollArea>
                 </CardContent>
-            </Card> */}
+            </Card>
 
             <StatusChart />
         </section>

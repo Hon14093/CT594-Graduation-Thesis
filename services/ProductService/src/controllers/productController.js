@@ -14,6 +14,13 @@ import {
     createCategories,
     getAllCategories,
 } from "../model/Category.js";
+import { getAllLaptops } from '../model/Laptop.js';
+import { getAllRams } from '../model/Ram.js';
+import { getAllMonitors } from '../model/Monitor.js';
+import { getAllCables } from '../model/Cable.js';
+import { getAllDocks } from '../model/Dock.js';
+import { getAllAdapters } from '../model/Adatper.js';
+import { getAllStorages } from '../model/Storage.js';
 
 export const returnAllProducts = async (req,res) => {
     try {
@@ -168,44 +175,82 @@ export const createNewCategory = async (req,res) => {
 
 
 
-
-
-
-export const returnPopularProducts = async (req,res) => {
+export const returnPopularProducts = async (req, res) => {
     try {
-        const completedOrders = await axios.get('http://localhost:5004/manage/order/completed');
-        const orderDetails = await getSpecificOrderDetails(completedOrders);
+        // 1. Fetch completed orders from Order service
+        const completedOrdersRes = await axios.get('http://localhost:5004/manage/order/completed');
+        const completedOrders = completedOrdersRes.data.orders || [];
 
-        let productSales = {};
-        orderDetails.forEach(od => {
-            const productId = od.Product_Weight.Product.product_id;
-            if (!productSales[productId]) {
-                productSales[productId] = {
-                    product: od.Product_Weight.Product,
-                    totalSold: 0
+        console.log('fetch order completed', completedOrders)
+
+        // 2. Extract order IDs
+        const orderIds = completedOrders.map(order => order.order_id);
+
+        // 3. For each order ID, get order details via GET request
+        let allOrderDetails = [];
+
+        for (const id of orderIds) {
+            const orderDetailsRes = await axios.get(`http://localhost:5004/manage/order/details/all/${id}`);
+            // console.log('fetch order details', orderDetailsRes)
+            allOrderDetails.push(...(orderDetailsRes.data.details || []));
+        }
+
+        console.log('all order details', allOrderDetails)
+
+        // 4. Fetch all components
+        const laptops = await getAllLaptops();
+        const rams = await getAllRams();
+        const monitors = await getAllMonitors();
+        const cables = await getAllCables();
+        const docks = await getAllDocks();
+        const adapters = await getAllAdapters();
+        const storages = await getAllStorages();
+
+        const allComponents = [
+            ...laptops,
+            ...rams,
+            ...monitors,
+            ...cables,
+            ...docks,
+            ...adapters,
+            ...storages
+        ];
+
+        // 5. Count frequency of item_ref_id in order details
+        const frequencyMap = {};
+
+        for (const detail of allOrderDetails) {
+            const itemId = detail.item_ref_id;
+            frequencyMap[itemId] = (frequencyMap[itemId] || 0) + 1;
+        }
+
+        // 6. Attach frequency to each product and filter those that were actually sold
+        const productsWithCount = allComponents
+            .filter(prod => frequencyMap[prod.laptop_id || prod.ram_id || prod.monitor_id || prod.cable_id || prod.dock_id || prod.adapter_id || prod.storage_id])
+            .map(prod => {
+                const id =
+                    prod.laptop_id ||
+                    prod.ram_id ||
+                    prod.monitor_id ||
+                    prod.cable_id ||
+                    prod.dock_id ||
+                    prod.adapter_id ||
+                    prod.storage_id;
+
+                return {
+                    ...prod,
+                    item_ref_id: id,
+                    count: frequencyMap[id]
                 };
-            }
-            productSales[productId].totalSold += od.quantity;
-        });
+            });
 
-        const sortedProducts = Object.values(productSales)
-            .sort((a, b) => b.totalSold - a.totalSold)
-            .slice(0, 3)
-            .map(item => ({
-                ...item.product,
-                variations: item.product.Product_Weight.map(weight => ({
-                    pw_id: weight.pw_id,
-                    product_price: weight.product_price,
-                    qty_in_stock: weight.qty_in_stock,
-                    weight_id: weight.weight_id,
-                    weight_name: weight.Weight_Option.weight_name
-                })),
-                total_sold: item.totalSold
-            }));
-    
-        res.status(200).json({ sortedProducts });
+        // 7. Sort by count DESC and return
+        const sortedProducts = productsWithCount.sort((a, b) => b.count - a.count);
+
+        res.status(200).json({ popularProducts: sortedProducts });
+
     } catch (error) {
-        console.log(error);
+        console.error('Error in returnPopularProducts:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
-}
+};

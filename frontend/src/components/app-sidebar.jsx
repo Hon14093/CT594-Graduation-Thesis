@@ -7,6 +7,7 @@ import {
 	ClipboardList,
 	ClipboardCheck,
 	BriefcaseBusiness,
+	CircleUserRound
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -36,6 +37,11 @@ const data = {
 			icon: ChartColumn,
 		},
 		{
+			name: "Tài Khoản",
+			url: "http://localhost:5173/admin/accounts",
+			icon: CircleUserRound,
+		},
+		{
 			name: "Sản Phẩm",
 			url: "http://localhost:5173/admin/products",
 			icon: Boxes,
@@ -51,11 +57,6 @@ const data = {
 			icon: BriefcaseBusiness,
 		},
 		{
-			name: "Khuyến Mãi",
-			url: "http://localhost:5173/admin/discounts",
-			icon: TicketPercent,
-		},
-		{
 			name: "Duyệt Đơn Hàng",
 			url: "http://localhost:5173/admin/orders/check",
 			icon: ClipboardCheck,
@@ -64,6 +65,11 @@ const data = {
 			name: "Đơn Hàng",
 			url: "http://localhost:5173/admin/orders/processed",
 			icon: ClipboardList,
+		},
+		{
+			name: "Khuyến Mãi",
+			url: "http://localhost:5173/admin/discounts",
+			icon: TicketPercent,
 		},
 	],
 }

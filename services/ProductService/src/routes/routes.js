@@ -3,6 +3,7 @@ import {
     returnAllProducts, returnAllBrands, returnAllCategories, createNewBrand,
     createNewCategory, createNewProduct, editProduct, removeProduct,
     returnAllProductByCategory,
+    returnPopularProducts,
 } from '../controllers/productController.js';
 import { 
     returnAllLaptops, 
@@ -77,5 +78,6 @@ router.delete('/adapters/delete/:id', deleteAdapterController);
 
 router.get('/find-type/:type/:id', getComponentNameAndId);
 router.get('/variations/:type/:id', returnVariations);
+router.get('/popular', returnPopularProducts);
 
 export default router;

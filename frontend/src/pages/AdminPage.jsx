@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
+import Accounts from '@/components/AdminPage/Accounts'
 import Analytics from '@/components/AdminPage/Analytics'
 import Brands from '@/components/AdminPage/Brands'
 import Categories from '@/components/AdminPage/Categories'
@@ -23,6 +24,7 @@ export default function AdminPage() {
             <AppSidebar />
 
             <Routes>
+                <Route path="/accounts" element={<Accounts />} />
                 <Route path="/" element={<Analytics />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/brands" element={<Brands />} />

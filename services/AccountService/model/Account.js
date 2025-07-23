@@ -59,6 +59,7 @@ export const getAllAccounts = async () => {
             phone: true,
             date_created: true,
             password: false,
+            is_active: true,
             role: true
         },
     });
@@ -69,4 +70,27 @@ export const getAllAccounts = async () => {
     }));
 
     return formattedData;
+}
+
+export const getCustomerCount = async () => {
+    return await prisma.account.count({
+        where: {
+            role: {
+                role_id: 1
+            }
+        }
+    })
+}
+
+export const updateAccountStatus = async (account_id, is_active) => {
+    return await prisma.account.update({
+        where: { account_id: account_id },
+        data: { is_active: is_active }
+    })
+}
+
+export const removeAccount = async (account_id) => {
+    return await prisma.account.delete({
+        where: { account_id: account_id }
+    })
 }
