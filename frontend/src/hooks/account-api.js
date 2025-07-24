@@ -22,6 +22,18 @@ export const getAccounts = async (setData) => {
     }
 }
 
+// This is for employee and admin account creation
+export const createAccount = async (data) => {
+    try {
+        const result = await axios.post(`${API_URL}/account/create`, data);
+        console.log(result.data);
+        return result;
+    } catch (error) {
+        console.error("Error creating account:", error);
+        throw error; // Re-throw the error for further handling if needed
+    }
+}
+
 export const updateAccountStatus = async (account_id, new_status) => {
     try {
         const result = await axios.put(`${API_URL}/account/update-status/${account_id}`, { new_status });

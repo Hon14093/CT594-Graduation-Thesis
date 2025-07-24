@@ -2,8 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import analyticRoutes from './src/routes/analyticRoutes.js';
-import paymentRoutes from './src/routes/paymentRoutes.js'
-import orderRoutes from './src/routes/orderRoutes.js'
+import discountRoutes from './src/routes/discountRoutes.js';
+import paymentRoutes from './src/routes/paymentRoutes.js';
+import orderRoutes from './src/routes/orderRoutes.js';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/analytic', analyticRoutes);
+app.use('/discount', discountRoutes);
 app.use('/payment', paymentRoutes);
 app.use('/manage/order', orderRoutes);
 

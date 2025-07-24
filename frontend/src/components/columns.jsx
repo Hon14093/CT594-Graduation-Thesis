@@ -66,9 +66,15 @@ export const orderDetailsColumns = [
         )
     },
     { accessorKey: "product.product.brand.brand_name", header: "Thương hiệu" },
-    { accessorKey: "price", header: "Giá" },
+    { 
+        accessorKey: "price", header: "Giá",
+        cell: ({ row }) => <div>{row.original.price.toLocaleString()} vnđ</div>
+    },
     { accessorKey: "quantity", header: "Số Lượng" },
-    { accessorKey: "subtotal", header: "Thành Tiền" },
+    { 
+        accessorKey: "subtotal", header: "Thành Tiền",
+        cell: ({ row }) => <div>{row.original.subtotal.toLocaleString()} vnđ</div>
+    },
 ]
 
 export const checkOrdersColumns = [
@@ -194,4 +200,20 @@ export const adapterColumns = [
         cell: ({ row }) => <div>{row.original.price.toLocaleString()} vnđ</div>
     },
     { accessorKey: "qty_in_stock", header: "Số lượng " },
+]
+
+export const discountColumns = [
+    { accessorKey: "discount_code", header: "Mã khuyến mãi" },
+    { 
+        accessorKey: "discount_value", header: "Giá trị khuyến mãi",
+        cell: ({ row }) => <div>{row.original.discount_value.toLocaleString()} vnđ</div>
+    },
+    { 
+        accessorKey: "min_order_total", header: "Đơn hàng tối thiểu",
+        cell: ({ row }) => <div>{row.original.min_order_total.toLocaleString()} vnđ</div>
+    },
+    { 
+        accessorKey: "date_created", header: "Ngày tạo",
+        cell: ({ row }) => <div>{row.original.date_created.slice(0,10)}</div>
+    },
 ]

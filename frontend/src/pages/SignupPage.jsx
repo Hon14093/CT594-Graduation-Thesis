@@ -65,7 +65,7 @@ export default function SignupPage() {
                         </div>
 
                         <button type='submit' className='block w-3/4 mx-auto !text-lg button text-techBlue hover:text-white bg-white'>
-                            Đăng Nhập
+                            Đăng Ký
                         </button>
 
                         <div className='font-mono mt-4 text-[14px] flex flex-col text-center gap-2'>

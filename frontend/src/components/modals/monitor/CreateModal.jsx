@@ -157,7 +157,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                         <article className="flex items-center gap-1.5">
                             <p className='font-semibold'>Mã màn hình:</p>
                             <Input 
-                                className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
+                                className="max-w-96 ml-auto"
                                 placeholder="Mã màn hình" 
                                 onChange={(e) => setModel(e.target.value)}
                                 

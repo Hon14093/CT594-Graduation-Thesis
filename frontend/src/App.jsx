@@ -14,12 +14,14 @@ import ProductDetailsPage from './pages/ProductDetailsPage'
 import AdminPage from './pages/AdminPage'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
+import { Toaster } from 'sonner'
 import './App.css'
 
 function App() {
 	return (
 		<AuthProvider>
 			<CartProvider>
+				<Toaster />
 				<Router>
 					<Routes>
 						<Route path='/' element={<HomePage />} />

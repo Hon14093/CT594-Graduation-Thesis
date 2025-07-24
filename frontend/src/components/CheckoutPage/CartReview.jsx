@@ -5,7 +5,7 @@ import { Banknote } from 'lucide-react'
 import { loadStripe } from '@stripe/stripe-js'
 import axios from 'axios'
 
-export default function CartReview({ cartItems, currentData }) {
+export default function CartReview({ cartItems, currentData, discount }) {
     const [note, setNote] = useState(null);
     const [loading, setLoading] = useState(false);
     let orderData = {
@@ -118,7 +118,7 @@ export default function CartReview({ cartItems, currentData }) {
                 <div className='flex'>
                     <b>Khuyến mãi:</b>
                     <div className='ml-auto'>
-                        -0 vnđ
+                        - {discount.toLocaleString()} vnđ
                     </div>
                 </div>
 
@@ -133,10 +133,6 @@ export default function CartReview({ cartItems, currentData }) {
             <div className=' px-5'>
                 <Separator className='my-3' />
             </div>
-
-            <button onClick={() => console.log(orderData)}>
-                Check
-            </button>
             
             <article className='mt-4'>
                 <button 

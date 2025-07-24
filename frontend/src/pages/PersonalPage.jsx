@@ -49,8 +49,8 @@ export default function PersonalPage() {
                     <div className="flex justify-between items-center mb-6">
                         <h1 className="text-3xl font-bold capitalize">{tabName()}</h1>
                         <Button variant='destructive' className={`text-lg p-4`} onClick={() => {
-                            logout();
                             navigate('/');
+                            logout();
                         }}>
                             Đăng xuất
                         </Button>

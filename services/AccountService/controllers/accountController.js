@@ -1,4 +1,21 @@
-import { getAccountInfo, getAllAccounts, getCustomerCount, removeAccount, updateAccountStatus } from "../model/Account.js";
+import { createAccount, getAccountInfo, getAllAccounts, getCustomerCount, removeAccount, updateAccountStatus } from "../model/Account.js";
+
+// This is for employee and admin accounts
+export const AddAccount = async (req,res) => {
+    try {
+        const data = req.body;
+        const newAccount = await createAccount(data);
+
+        res.status(201).json({
+            success: true,
+            message: 'Create accounts',
+            account: newAccount
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
 
 export const returnAllAccounts = async (req,res) => {
     try {

@@ -9,18 +9,8 @@ export const createAccount = async (data) => {
 
 export const findAccountByEmail = async (email) => {
     return await prisma.account.findUnique({
-        select: {
-            account_id: true,
-            username: true,
-            email: true,
-            phone: true,
-            date_created: true,
-            password: true,
-            role: {
-                select: {
-                    role_name: true
-                }
-            }
+        include: {
+            role: true
         },
         where: {
             email: email

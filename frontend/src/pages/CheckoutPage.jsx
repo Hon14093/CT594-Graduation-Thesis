@@ -6,9 +6,9 @@ import PaymentMethod from '@/components/CheckoutPage/PaymentMethod'
 import ShippingMethod from '@/components/CheckoutPage/ShippingMethod'
 import CartReview from '@/components/CheckoutPage/CartReview'
 import { Separator } from '@/components/ui/separator'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { getDiscountByCode } from '@/hooks/discount-api'
 import { useCart } from '@/context/CartContext'
+import { toast } from 'sonner'
 import four from '../assets/images/4.png'
 
 export default function CheckoutPage() {
@@ -20,14 +20,41 @@ export default function CheckoutPage() {
     const [shippingPrice, setShippingPrice] = useState(20000);
     const [discount_id, setDiscount_id] = useState(null);
     const [discountCode, setDiscountCode] = useState();
+    const [discountAmount, setDiscountAmount] = useState(0);
 
     let tempOrder = {
-        order_total: cart.total_price + shippingPrice, // missing discount amount
+        order_total: cart.total_price + shippingPrice - discountAmount,
         account_id: cart.account_id,
         sm_id: sm,
         discount_id: discount_id,
         address_id: addressId,
-        pm_id: pm
+        pm_id: pm,
+        discount_id: discount_id
+    }
+
+    const calculateDiscount = (minOrder, value) => {
+        const totalPrice = cart.total_price
+        if (totalPrice >= minOrder) {
+            
+            setDiscountAmount(value)
+
+            toast("Mã giảm giá đã được áp dụng");
+        } else {
+            toast("Đơn hàng của bạn không đủ điều kiện để sử dụng mã giảm giá này");
+        }
+    }
+
+    const handleApplyDiscount = async () => {
+        const discount = await getDiscountByCode(discountCode);
+
+        if (discount) {
+            setDiscount_id(discount.discount_id);
+            tempOrder.discount_id = discount.discount_id;
+
+            calculateDiscount(discount.min_order_total, discount.discount_value);
+        } else {
+            toast('Mã giảm giá không hợp lệ');
+        }
     }
 
     return (
@@ -41,9 +68,9 @@ export default function CheckoutPage() {
                         </Link>
                     </section> 
 
-                    <button onClick={() => console.log(cart)}>
+                    {/* <button onClick={() => console.log(cart)}>
                         Check
-                    </button>
+                    </button> */}
 
                     <Separator className='mt-4 mb-8' />
                     
@@ -71,9 +98,11 @@ export default function CheckoutPage() {
                             <input 
                                 className='!text-lg border-2 border-crimson w-1/2 py-2 px-3 rounded-l-lg'
                                 placeholder='Nhập khuyến mãi (nếu có)...'
+                                onChange={(e) => setDiscountCode(e.target.value)}
                             />
                             <button 
                                 className='bg-crimson text-lg py-2 px-4 text-white rounded-r-lg hover:text-crimson hover:bg-white border-r-2 border-y-2 border-crimson'
+                                onClick={() => handleApplyDiscount()}
                             >
                                 Áp dụng
                             </button>
@@ -84,7 +113,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className='col-span-5 bg-techBlue text-white'>
-                    <CartReview cartItems={cartItems} currentData={tempOrder}/>
+                    <CartReview cartItems={cartItems} currentData={tempOrder} discount={discountAmount} />
                 </div>
             </div>
         </div>

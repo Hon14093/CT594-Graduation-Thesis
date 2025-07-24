@@ -21,6 +21,10 @@ export const login = async (req,res) => {
             return res.status(404).json({ message: "Không tìm thấy tài khoản." });
         }
 
+        if (!account.is_active) {
+            return res.status(401).json({ message: "Tài khoản đã bị vô hiệu hóa!" })
+        }
+
         const isPasswordValid = await bcrypt.compare(password, account.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: "Sai mật khẩu!" });

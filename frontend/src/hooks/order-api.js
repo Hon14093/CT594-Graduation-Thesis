@@ -84,6 +84,17 @@ export const getOrdersByAccountId = async (account_id, setProcessingOrders, setD
     }
 };
 
+export const getAllOrdersByAccountId = async (account_id, setOrders) => {
+    try {
+        const result = await axios.get(`${API_URL}/manage/order/my-orders/${account_id}`);
+        const allOrders = result.data.orders;
+
+        setOrders(allOrders)
+    } catch (error) {
+        console.log("Lỗi khi lấy đơn hàng:", error);
+    }
+};
+
 export const updateOrderStatus = async (order_id, statusId) => {
     try {
         const result = await axios.put(`${API_URL}/manage/order/check/${order_id}`, { status_id: statusId });

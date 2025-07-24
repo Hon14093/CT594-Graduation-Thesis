@@ -13,9 +13,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { orderDetailsColumns } from '@/components/columns';
 import { getOrderDetailsData } from '@/hooks/order-api';
-import ReviewForm from './ReviewForm';
 
-export function DetailsModalWithReview({ order, open, onClose }) {
+export function OrderDetailsModal({ order, open, onClose }) {
     if (!order) return null;
 
     const [data, setData] = useState([]);
@@ -120,14 +119,8 @@ export function DetailsModalWithReview({ order, open, onClose }) {
                             </section>
 
                             <DataTable 
-                                columns={columnsWithActions}
+                                columns={orderDetailsColumns}
                                 data={data}
-                            />
-
-                            <ReviewForm 
-                                detail={selectedDetail}
-                                open={isReviewFormOpen}
-                                onClose={() => setIsReviewFormOpen(false)}
                             />
                         </ScrollArea>
 

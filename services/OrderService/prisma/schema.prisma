@@ -8,12 +8,12 @@ datasource db {
 }
 
 model discount {
-  discount_id         String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  discount_code       String
-  discount_value      Float   @db.Real
-  max_discount_amount Float   @db.Real
-  min_order_total     Float   @db.Real
-  order               order[]
+  discount_id     String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  discount_code   String
+  discount_value  Float    @db.Real
+  min_order_total Float    @db.Real
+  date_created    DateTime @default(now()) @db.Timestamp(6)
+  order           order[]
 }
 
 model order {

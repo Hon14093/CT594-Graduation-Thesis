@@ -14,8 +14,10 @@ import { Card, CardHeader, CardContent } from '../ui/card'
 import { Button } from '../ui/button'
 import { DataTable } from '../data-table'
 import { accountColumns } from '../columns'
-import { getAccounts, updateAccountStatus } from '@/hooks/account-api'
+import { getAccounts, updateAccountStatus, deleteAccount } from '@/hooks/account-api'
 import DetailsModal from '../modals/account/DetailsModal'
+import ConfirmDeleteModal from '../generic-delete-modal'
+import CreateModal from '../modals/account/CreateModal'
 import { Switch } from '../ui/switch'
 
 export default function Accounts() {
@@ -23,6 +25,7 @@ export default function Accounts() {
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
+    const [deleteOpen, setDeleteOpen] = useState(false);
     
     useEffect(() => {
         getAccounts(setData);
@@ -37,9 +40,22 @@ export default function Accounts() {
         setIsDetailsModalOpen(true);
     }
 
-    const handleDelete = (product) => {
+    const handleDelete1 = (product) => {
         setSelectedAccount(product);
         setIsDeleteModalOpen(true);
+    }
+
+    const handleDelete = async () => {
+        if (!selectedAccount) return;
+
+        try {
+            await deleteAccount(selectedAccount.account_id);
+            handleSubmitSuccess(); // Refresh or toast, etc.
+            setDeleteOpen(false); // Close modal
+            setSelectedAccount(null);  // Clear state
+        } catch (error) {
+            console.error("Failed to delete address:", error)
+        }
     }
 
     const actionColumns = [
@@ -75,7 +91,10 @@ export default function Accounts() {
                         <Eye />
                     </Button>
                     <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
-                        onClick={() => handleDelete(row.original)}
+                        onClick={() => {
+                            setDeleteOpen(true)
+                            setSelectedAddress(address)
+                        }}
                     >
                         <Trash2 />
                     </Button>
@@ -111,8 +130,10 @@ export default function Accounts() {
                             Danh sách tài khoản
                         </div>
 
-                        <div className='ml-auto'>
-                            {/* <CreateModal onSubmitSuccess={handleSubmitSuccess} /> */}
+                        <div className='ml-auto flex gap-4'>
+                            <CreateModal onSubmitSuccess={handleSubmitSuccess} role_id={2} />
+
+                            <CreateModal onSubmitSuccess={handleSubmitSuccess} role_id={3} />
                         </div>
                     </div>                    
                 </CardHeader>
@@ -127,6 +148,15 @@ export default function Accounts() {
                         account={selectedAccount}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
+                    />
+
+                    <ConfirmDeleteModal 
+                        open={deleteOpen}
+                        onClose={() => {
+                            setSelectedAccount(null)
+                            setDeleteOpen(false)
+                        }}
+                        onConfirm={handleDelete}
                     />
 
                 </CardContent>
