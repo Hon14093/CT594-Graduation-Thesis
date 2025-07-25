@@ -21,7 +21,9 @@ export default function LoginPage() {
         .then(result => {
             console.log(result);
             login(result.data.token);
-            navigate('/');
+            if (result.data.user.role === 1) navigate('/');
+            else if (result.data.user.role === 2) navigate('/admin');
+            else if (result.data.user.role === 3) navigate('/admin');
         })
         .catch(result => {
             alert('Đăng nhập không thành công!');

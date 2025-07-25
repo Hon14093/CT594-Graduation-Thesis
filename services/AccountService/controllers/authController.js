@@ -18,15 +18,18 @@ export const login = async (req,res) => {
 
         const account = await findAccountByEmail(email);
         if (!account) {
+            console.log('Không tìm thấy')
             return res.status(404).json({ message: "Không tìm thấy tài khoản." });
         }
 
         if (!account.is_active) {
+            console.log('Vô hiệu hóa')
             return res.status(401).json({ message: "Tài khoản đã bị vô hiệu hóa!" })
         }
 
         const isPasswordValid = await bcrypt.compare(password, account.password);
         if (!isPasswordValid) {
+            console.log('Sai mật khẩu')
             return res.status(401).json({ message: "Sai mật khẩu!" });
         }
 
@@ -45,6 +48,7 @@ export const login = async (req,res) => {
             token,
             user: {
                 account_id: account.account_id,
+                role: account.role.role_id
             }
         });
     } catch (error) {

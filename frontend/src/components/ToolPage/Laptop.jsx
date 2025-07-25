@@ -141,6 +141,7 @@ export default function Laptop({ onLaptopSelect }) {
     return (
         <section className='max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh]'>
             <div className='grid grid-cols-2 gap-4'>
+
                 <article className='h-[55vh]'>
                     {laptop === null ? <SelectLaptop onSelectingLaptop={handleSelectLaptop} /> :
                         <Card className='h-full'>
@@ -152,7 +153,7 @@ export default function Laptop({ onLaptopSelect }) {
                                                 <img
                                                     src={image}
                                                     // alt={image.alt}
-                                                    className="object-contain size-96 rounded-lg "
+                                                    className="object-contain size-[21rem] rounded-lg "
                                                 />
                                             </CarouselItem>
                                         ))}
@@ -162,7 +163,7 @@ export default function Laptop({ onLaptopSelect }) {
                                 </Carousel>
 
                                 <button 
-                                    className='py-2 px-5 bg-red-600 text-white rounded-lg hover:bg-red-700'
+                                    className='py-2 px-5 bg-red-600 text-white rounded-lg hover:bg-red-700 '
                                     onClick={() => handleSelectLaptop(null)}
                                 >
                                     Xóa

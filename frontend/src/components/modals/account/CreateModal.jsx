@@ -13,6 +13,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Asterisk } from 'lucide-react';
 import { createAccount } from '@/hooks/account-api';
+import axios from 'axios';
 
 export default function CreateModal({ onSubmitSuccess, role_id }) { // 2 means employee, 3 means admin
     const [open, setOpen] = useState(false);
@@ -26,7 +27,7 @@ export default function CreateModal({ onSubmitSuccess, role_id }) { // 2 means e
         setOpen(false);
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit1 = async (e) => {
         e.preventDefault();
 
         try {
@@ -44,6 +45,21 @@ export default function CreateModal({ onSubmitSuccess, role_id }) { // 2 means e
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!username || !email || !phone || !password) {
+            alert('Vui lòng nhập đầy đủ thông tin!');
+            return;
+        }
+
+        axios.post('http://localhost:5002/auth/register', {username, email, phone, password, role_id})
+        .then(result => {
+            console.log(result);
+            handleSubmitSuccess();
+        })
+        .catch(result => console.log(result));
     }
 
     return (

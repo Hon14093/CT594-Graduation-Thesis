@@ -40,11 +40,6 @@ export default function Accounts() {
         setIsDetailsModalOpen(true);
     }
 
-    const handleDelete1 = (product) => {
-        setSelectedAccount(product);
-        setIsDeleteModalOpen(true);
-    }
-
     const handleDelete = async () => {
         if (!selectedAccount) return;
 
@@ -93,7 +88,7 @@ export default function Accounts() {
                     <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
                         onClick={() => {
                             setDeleteOpen(true)
-                            setSelectedAddress(address)
+                            setSelectedAccount(row.original)
                         }}
                     >
                         <Trash2 />

@@ -41,10 +41,7 @@ export default function AdminPage() {
 
                 <Route path="/orders/check" element={<CheckOrders />} />
                 <Route path="/orders/processed" element={<Orders />} />
-                
-                {/* <Route path="/products/variations" element={<Variations />} /> */}
-                {/* <Route path="/orders" element={<Orders />} /> */}
-                {/* <Route path="/check-orders" element={<CheckOrders />} /> */}
+
             </Routes>
         </SidebarProvider>
     )
