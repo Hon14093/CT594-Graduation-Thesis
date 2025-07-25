@@ -8,6 +8,7 @@ import CheckoutSuccess from './pages/CheckoutSuccess'
 import CheckoutCancel from './pages/CheckoutCancel'
 import CompatibilityToolPage from './pages/CompatibilityToolPage'
 import ShopPage from './pages/ShopPage'
+import SearchPage from './pages/SearchPage'
 import SignupPage from './pages/SignupPage'
 import PersonalPage from './pages/PersonalPage'
 import ProductDetailsPage from './pages/ProductDetailsPage'
@@ -32,6 +33,7 @@ function App() {
 						<Route path='/signup' element={<SignupPage />} />
 						<Route path='/shopping-cart' element={<Cartpage />} />
 						<Route path='/shop/:slug?' element={<ShopPage />} />
+						<Route path="/search" element={<SearchPage />} />
 						<Route path='/product/:slug/:product_id' element={<ProductDetailsPage />} />
 						<Route path='/tool' element={<CompatibilityToolPage />} />
 						<Route path='/personal/:tab' element={<PersonalPage />} />

@@ -69,7 +69,7 @@ model laptop {
   storage_installed_type String
   storage_slots          Int
   storage_slots_type     String[]
-  max_storage            String?
+  max_storage_gb         Int?
   price                  Float    @db.Real
   qty_in_stock           Int?
   laptop_name            String

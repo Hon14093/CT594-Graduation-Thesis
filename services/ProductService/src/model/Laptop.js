@@ -79,13 +79,13 @@ export const createLaptop = async (laptopData) => {
 
 export const updateLaptop = async (laptopId, updateData) => {
     return await prisma.laptop.update({
-        where: { id: laptopId },
+        where: { laptop_id: laptopId },
         data: updateData
     });
 };
 
 export const deleteLaptop = async (laptopId) => {
     return await prisma.laptop.delete({
-        where: { id: laptopId }
+        where: { laptop_id: laptopId }
     });
 };

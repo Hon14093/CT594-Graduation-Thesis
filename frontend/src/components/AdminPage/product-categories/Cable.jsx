@@ -14,12 +14,14 @@ import { DataTable } from '@/components/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { cableColumns } from '@/components/columns';
-import { getCables } from '@/hooks/variation-api';
+import { deleteCable, getCables } from '@/hooks/variation-api';
 import CreateModal from '@/components/modals/cable/CreateModal';
+import { DetailsModal } from '@/components/modals/cable/DetailsModal';
+import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Cable() {
     const [data, setData] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedCable, setSelectedCable] = useState(null);
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
@@ -33,8 +35,21 @@ export default function Cable() {
     }
 
     const handleViewDetails = (product) => {
-        setSelectedProduct(product);
+        setSelectedCable(product);
         setIsDetailsModalOpen(true);
+    }
+
+    const handleDelete = async () => {
+        if (!selectedCable) return;
+        
+        try {
+            await deleteCable(selectedCable.cable_id);
+            handleSubmitSuccess(); // Refresh or toast, etc.
+            setIsDeleteModalOpen(false); // Close modal
+            setSelectedCable(null);  // Clear state
+        } catch (error) {
+            console.error("Failed to delete address:", error)
+        }
     }
     
     const actionColumns = [
@@ -54,7 +69,10 @@ export default function Cable() {
                         <PenBox />
                     </Button>
                     <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
-                        // onClick={() => handleDelete(row.original)}
+                        onClick={() => {
+                            setSelectedCable(row.original);
+                            setIsDeleteModalOpen(true);
+                        }}
                     >
                         <Trash2 />
                     </Button>
@@ -106,11 +124,20 @@ export default function Cable() {
                         data={data} 
                     />
 
-                    {/* <DetailsModal
-                        laptop={selectedProduct}
+                    <DetailsModal
+                        cable={selectedCable}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
-                    /> */}
+                    />
+
+                    <ConfirmDeleteModal 
+                        open={isDeleteModalOpen}
+                        onClose={() => {
+                            setSelectedCable(null)
+                            setIsDeleteModalOpen(false)
+                        }}
+                        onConfirm={handleDelete}
+                    />
 
                 </CardContent>
             </Card>

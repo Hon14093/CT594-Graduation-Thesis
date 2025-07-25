@@ -14,9 +14,10 @@ import { DataTable } from '@/components/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { monitorColumns } from '@/components/columns';
-import { getMonitors } from '@/hooks/variation-api';
+import { deleteMonitor, getMonitors } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/monitor/DetailsModal';
 import CreateModal from '@/components/modals/monitor/CreateModal';
+import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Monitor() {
     const [data, setData] = useState([]);
@@ -37,6 +38,19 @@ export default function Monitor() {
         setSelectedProduct(product);
         setIsDetailsModalOpen(true);
     }
+
+    const handleDelete = async () => {
+        if (!selectedProduct) return;
+        
+        try {
+            await deleteMonitor(selectedProduct.monitor_id);
+            handleSubmitSuccess(); // Refresh or toast, etc.
+            setIsDeleteModalOpen(false); // Close modal
+            setSelectedProduct(null);  // Clear state
+        } catch (error) {
+            console.error("Failed to delete address:", error)
+        }
+    }
     
     const actionColumns = [
         ...monitorColumns,
@@ -55,7 +69,10 @@ export default function Monitor() {
                         <PenBox />
                     </Button>
                     <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
-                        // onClick={() => handleDelete(row.original)}
+                        onClick={() => {
+                            setSelectedProduct(row.original);
+                            setIsDeleteModalOpen(true);
+                        }}
                     >
                         <Trash2 />
                     </Button>
@@ -111,6 +128,15 @@ export default function Monitor() {
                         monitor={selectedProduct}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
+                    />
+
+                    <ConfirmDeleteModal 
+                        open={isDeleteModalOpen}
+                        onClose={() => {
+                            setIsDeleteModalOpen(false)
+                            setSelectedProduct(null);
+                        }}
+                        onConfirm={handleDelete}
                     />
 
                 </CardContent>

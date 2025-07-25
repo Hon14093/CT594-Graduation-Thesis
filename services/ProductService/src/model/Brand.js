@@ -30,3 +30,16 @@ export const getAllBrands = async () => {
 export const createBrand = async (data) => {
     return await prisma.brand.create({ data });
 }
+
+export const updateBrand = async (id, data) => {
+    return await prisma.brand.update({
+        where: { brand_id: id },
+        data: data
+    })
+}
+
+export const deleteBrand = async (id) => {
+    return await prisma.brand.delete({
+        where: { brand_id: id }
+    })
+}

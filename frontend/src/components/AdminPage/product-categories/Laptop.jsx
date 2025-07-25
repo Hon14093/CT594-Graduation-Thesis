@@ -14,12 +14,14 @@ import { DataTable } from '@/components/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { laptopColumns } from '@/components/columns';
-import { getLaptops } from '@/hooks/variation-api';
+import { deleteLaptop, getLaptops } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/laptop/DetailsModal';
+import CreateModal from '@/components/modals/laptop/CreateModal';
+import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Laptop() {
     const [data, setData] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedLaptop, setselectedLaptop] = useState(null);
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
@@ -32,9 +34,22 @@ export default function Laptop() {
         getLaptops(setData);
     }
 
-    const handleViewDetails = (product) => {
-        setSelectedProduct(product);
+    const handleViewDetails = (laptop) => {
+        setselectedLaptop(laptop);
         setIsDetailsModalOpen(true);
+    }
+
+    const handleDelete = async () => {
+        if (!selectedLaptop) return;
+        
+        try {
+            await deleteLaptop(selectedLaptop.laptop_id);
+            handleSubmitSuccess(); // Refresh or toast, etc.
+            setIsDeleteModalOpen(false); // Close modal
+            setselectedLaptop(null);  // Clear state
+        } catch (error) {
+            console.error("Failed to delete laptop:", error)
+        }
     }
     
     const actionColumns = [
@@ -54,7 +69,10 @@ export default function Laptop() {
                         <PenBox />
                     </Button>
                     <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
-                        // onClick={() => handleDelete(row.original)}
+                        onClick={() => {
+                            setselectedLaptop(row.original);
+                            setIsDeleteModalOpen(true);
+                        }}
                     >
                         <Trash2 />
                     </Button>
@@ -95,7 +113,7 @@ export default function Laptop() {
                         </div>
 
                         <div className='ml-auto'>
-                            {/* <CreateModal onSubmitSuccess={handleSubmitSuccess} /> */}
+                            <CreateModal onSubmitSuccess={handleSubmitSuccess} />
                         </div>
                     </div>                    
                 </CardHeader>
@@ -107,9 +125,18 @@ export default function Laptop() {
                     />
 
                     <DetailsModal
-                        laptop={selectedProduct}
+                        laptop={selectedLaptop}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
+                    />
+
+                    <ConfirmDeleteModal 
+                        open={isDeleteModalOpen}
+                        onClose={() => {
+                            setselectedLaptop(null);
+                            setIsDeleteModalOpen(false)
+                        }}
+                        onConfirm={handleDelete}
                     />
 
                 </CardContent>

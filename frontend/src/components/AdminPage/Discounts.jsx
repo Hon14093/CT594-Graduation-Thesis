@@ -146,7 +146,7 @@ export default function Discounts() {
                         open={isDeleteModalOpen}
                         onClose={() => {
                             setSelectedDiscount(null)
-                            setDeleteOpen(false)
+                            setIsDeleteModalOpen(false)
                         }}
                         onConfirm={handleDelete}
                     />

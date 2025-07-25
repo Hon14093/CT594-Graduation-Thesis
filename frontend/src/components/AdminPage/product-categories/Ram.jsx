@@ -14,9 +14,10 @@ import { DataTable } from '@/components/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { ramColumns } from '@/components/columns';
-import { getRAMs } from '@/hooks/variation-api';
+import { deleteRam, getRAMs } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/ram/DetailsModal';
 import CreateModal from '@/components/modals/ram/CreateModal';
+import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Ram() {
     const [data, setData] = useState([]);
@@ -37,6 +38,19 @@ export default function Ram() {
         setSelectedProduct(product);
         setIsDetailsModalOpen(true);
     }
+
+    const handleDelete = async () => {
+        if (!selectedProduct) return;
+        
+        try {
+            await deleteRam(selectedProduct.ram_id);
+            handleSubmitSuccess(); // Refresh or toast, etc.
+            setIsDeleteModalOpen(false); // Close modal
+            setSelectedProduct(null);  // Clear state
+        } catch (error) {
+            console.error("Failed to delete address:", error)
+        }
+    }
     
     const actionColumns = [
         ...ramColumns,
@@ -55,7 +69,10 @@ export default function Ram() {
                         <PenBox />
                     </Button>
                     <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
-                        // onClick={() => handleDelete(row.original)}
+                        onClick={() => {
+                            setSelectedProduct(row.original);
+                            setIsDeleteModalOpen(true);
+                        }}
                     >
                         <Trash2 />
                     </Button>
@@ -111,6 +128,15 @@ export default function Ram() {
                         ram={selectedProduct}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
+                    />
+
+                    <ConfirmDeleteModal 
+                        open={isDeleteModalOpen}
+                        onClose={() => {
+                            setIsDeleteModalOpen(false)
+                            setSelectedProduct(null);
+                        }}
+                        onConfirm={handleDelete}
                     />
 
                 </CardContent>

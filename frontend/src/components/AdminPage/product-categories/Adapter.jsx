@@ -14,13 +14,14 @@ import { DataTable } from '@/components/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { adapterColumns } from '@/components/columns';
-import { getAdapters } from '@/hooks/variation-api';
-// import { DetailsModal } from '@/components/modals/laptop/DetailsModal';
+import { deleteAdapter, getAdapters } from '@/hooks/variation-api';
+import { DetailsModal } from '@/components/modals/adapter/DetailsModal';
 import CreateModal from '@/components/modals/adapter/CreateModal';
+import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Adapter() {
     const [data, setData] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedAdapter, setSelectedAdapter] = useState(null);
     const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
@@ -34,8 +35,21 @@ export default function Adapter() {
     }
 
     const handleViewDetails = (product) => {
-        setSelectedProduct(product);
+        setSelectedAdapter(product);
         setIsDetailsModalOpen(true);
+    }
+
+    const handleDelete = async () => {
+        if (!selectedAdapter) return;
+        
+        try {
+            await deleteAdapter(selectedAdapter.adapter_id);
+            handleSubmitSuccess(); // Refresh or toast, etc.
+            setIsDeleteModalOpen(false); // Close modal
+            setSelectedAdapter(null);  // Clear state
+        } catch (error) {
+            console.error("Failed to delete adapter:", error)
+        }
     }
     
     const actionColumns = [
@@ -55,7 +69,10 @@ export default function Adapter() {
                         <PenBox />
                     </Button>
                     <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
-                        // onClick={() => handleDelete(row.original)}
+                        onClick={() => {
+                            setSelectedAdapter(row.original);
+                            setIsDeleteModalOpen(true);
+                        }}
                     >
                         <Trash2 />
                     </Button>
@@ -107,11 +124,21 @@ export default function Adapter() {
                         data={data} 
                     />
 
-                    {/* <DetailsModal
-                        laptop={selectedProduct}
+                    <DetailsModal
+                        adapter={selectedAdapter}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
-                    /> */}
+                    />
+
+
+                    <ConfirmDeleteModal 
+                        open={isDeleteModalOpen}
+                        onClose={() => {
+                            setIsDeleteModalOpen(false)
+                            setSelectedAdapter(null);
+                        }}
+                        onConfirm={handleDelete}
+                    />
 
                 </CardContent>
             </Card>

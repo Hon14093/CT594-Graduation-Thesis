@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from 'react-router-dom'
 import {
     DropdownMenu,
@@ -27,10 +28,20 @@ function Header({ darkBG=true }) {
     const { getTotalQuantity } = useCart();
     const itemCounts = getTotalQuantity();
 
+    const navigate = useNavigate();
+    const [query, setQuery] = useState('');
+
     useEffect(() => {
         getCategories(setCategories);
         getBrands(setBrands);
-    }, [])
+    }, []);
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (query.trim()) {
+            navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+        }
+    };
     
     useEffect(() => {
         const handleScroll = () => {
@@ -87,7 +98,7 @@ function Header({ darkBG=true }) {
                     </DropdownMenu>
                 </section>
 
-                <section >
+                {/* <section >
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <button className="px-4 py-2 rounded hover:bg-white hover:text-techBlue">Thương hiệu</button>
@@ -101,7 +112,7 @@ function Header({ darkBG=true }) {
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                </section>
+                </section> */}
 
                 <section>
                     <Link to='/tool'>
@@ -112,13 +123,17 @@ function Header({ darkBG=true }) {
                 {/* account and cart section */}
                 <section className='flex items-center gap-4 ml-auto'>
                     <article className='flex items-center ml-auto'>
-                        <button className='py-1  bg-white pl-3 rounded-l-3xl hover:cursor-pointer'>
+                        <button 
+                            className='py-1  bg-white pl-3 rounded-l-3xl hover:cursor-pointer'
+                            onClick={(e) => handleSearch(e)}
+                        >
                             <Search className="text-techBlue" size={24} />
                         </button>
                         <input 
                             type="text" 
                             className='bg-white text-techBlue pl-4 py-1 rounded-r-3xl w-64 focus:outline-none' 
                             placeholder='Tìm kiếm sản phẩm...'
+                            onChange={(e) => setQuery(e.target.value)}
                         />
                     </article>
 

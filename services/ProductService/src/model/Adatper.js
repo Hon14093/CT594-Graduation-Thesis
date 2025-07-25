@@ -59,13 +59,13 @@ export const createAdapter = async (adapterData) => {
 
 export const updateAdapter = async (adapterId, updateData) => {
     return await prisma.adapter.update({
-        where: { id: adapterId },
+        where: { adapter_id: adapterId },
         data: updateData
     });
 };
 
 export const deleteAdapter = async (adapterId) => {
     return await prisma.adapter.delete({
-        where: { id: adapterId }
+        where: { adapter_id: adapterId }
     });
 };

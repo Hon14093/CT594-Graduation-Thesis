@@ -12,14 +12,19 @@ import {
 import { Link } from 'react-router-dom'
 import { Card, CardHeader, CardContent } from '../ui/card'
 import { Button } from '../ui/button'
-import { PackagePlus } from 'lucide-react'
+import { PenBox, Trash2 } from 'lucide-react'
 import CreateModal from '../modals/brand/CreateModal'
 import { DataTable } from '../data-table'
 import { brandColumns } from '../columns'
-import { getBrands } from '@/hooks/product-api'
+import { deleteBrand, getBrands } from '@/hooks/product-api'
+import ConfirmDeleteModal from '../generic-delete-modal'
+import EditModal from '../modals/brand/EditModal'
 
 export default function Brands() {
     const [data, setData] = useState([]);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
 
     useEffect(() => {
         getBrands(setData);
@@ -28,6 +33,48 @@ export default function Brands() {
     const handleSubmitSuccess = () => {
         getBrands(setData);
     }
+
+    const handleEdit = (item) => {
+        setSelectedItem(item);
+        setIsEditModalOpen(true);
+    }
+
+    const handleDelete = async () => {
+        if (!selectedItem) return;
+        
+        try {
+            await deleteBrand(parseInt(selectedItem.brand_id));
+            handleSubmitSuccess(); // Refresh or toast, etc.
+            setIsDeleteModalOpen(false); // Close modal
+            setSelectedItem(null);  // Clear state
+        } catch (error) {
+            console.error("Failed to delete brand:", error)
+        }
+    }
+
+    const actionColumns = [
+        ...brandColumns,
+        {
+            id: 'actions',
+            cell: ({ row }) => (
+                <div className='flex gap-2 justify-center'>
+                    <Button size="sm" className="bg-green-500 border border-green-500 hover:bg-white hover:text-green-500"
+                        onClick={() => handleEdit(row.original)}
+                    >
+                        <PenBox />
+                    </Button>
+                    <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
+                        onClick={() => {
+                            setSelectedItem(row.original);
+                            setIsDeleteModalOpen(true);
+                        }}
+                    >
+                        <Trash2 />
+                    </Button>
+                </div>
+            )
+        }
+    ]
     
     return (
         <SidebarInset className='bg-mistGray'>
@@ -64,8 +111,24 @@ export default function Brands() {
 
                 <CardContent>
                     <DataTable 
-                        columns={brandColumns}
+                        columns={actionColumns}
                         data={data} 
+                    />
+
+                    <EditModal
+                        brand={selectedItem}
+                        open={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        onSubmitSuccess={handleSubmitSuccess}
+                    />
+
+                    <ConfirmDeleteModal 
+                        open={isDeleteModalOpen}
+                        onClose={() => {
+                            setSelectedItem(null)
+                            setIsDeleteModalOpen(false)
+                        }}
+                        onConfirm={handleDelete}
                     />
 
                 </CardContent>

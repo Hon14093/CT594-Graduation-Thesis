@@ -183,9 +183,9 @@ export default function Products() {
                         onSubmitSuccess={handleSubmitSuccess}
                     />
 
-                    <button onClick={() => console.log(data[0].image_url)}>
+                    {/* <button onClick={() => console.log(data[0].image_url)}>
                         Check
-                    </button>
+                    </button> */}
                 </CardContent>
             </Card>
         </SidebarInset>

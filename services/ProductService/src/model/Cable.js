@@ -59,13 +59,13 @@ export const createCable = async (cableData) => {
 
 export const updateCable = async (cableId, updateData) => {
     return await prisma.cable.update({
-        where: { id: cableId },
+        where: { cable_id: cableId },
         data: updateData
     });
 };
 
 export const deleteCable = async (cableId) => {
     return await prisma.cable.delete({
-        where: { id: cableId }
+        where: { cable_id: cableId }
     });
 };

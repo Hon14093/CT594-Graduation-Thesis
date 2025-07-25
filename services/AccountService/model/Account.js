@@ -52,6 +52,9 @@ export const getAllAccounts = async () => {
             is_active: true,
             role: true
         },
+        orderBy: { role: {
+            role_id: 'desc'
+        } }
     });
 
     const formattedData = accounts.map(account => ({

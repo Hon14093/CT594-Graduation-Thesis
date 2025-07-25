@@ -184,8 +184,8 @@ export default function SpecsTable({ data }) {
         ];
 
         return (
-            <div className="border rounded-lg overflow-hidden">
-                <table className="w-full">
+            <div className="border rounded-lg overflow-auto">
+                <table className="">
                     <tbody>
                         {Object.entries(data).map(([key, value]) => {
                             if (excludedKeys.includes(key)) return null;

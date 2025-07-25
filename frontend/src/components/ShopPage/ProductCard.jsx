@@ -11,25 +11,26 @@ export default function ProductCard({ product }) {
 
     const navigation = () => {
         if (product.laptop_id) {
-            navigate(`/laptop/${product.laptop_id}`, { state: { product } })
+            navigate(`/product/laptop/${product.laptop_id}`, { state: { product } })
         } else if (product.ram_id) {
-            navigate(`/shop/ram/${product.ram_id}`, { state: { product } })
+            navigate(`/product/ram/${product.ram_id}`, { state: { product } })
         } else if (product.cable_id) {
-            navigate(`/shop/cable/${product.cable_id}`, { state: { product } })
+            navigate(`/product/cable/${product.cable_id}`, { state: { product } })
         } else if (product.monitor_id) {
-            navigate(`/shop/monitor/${product.monitor_id}`, { state: { product } })
+            navigate(`/product/monitor/${product.monitor_id}`, { state: { product } })
         } else if (product.dock_id) {
-            navigate(`/shop/dock/${product.dock_id}`, { state: { product } })
+            navigate(`/product/dock/${product.dock_id}`, { state: { product } })
         } else if (product.adapter_id) {
-            navigate(`/shop/adapter/${product.adapter_id}`, { state: { product } })
+            navigate(`/product/adapter/${product.adapter_id}`, { state: { product } })
         }else if (product.storage_id) {
-            navigate(`/shop/storage/${product.storage_id}`, { state: { product } })
+            navigate(`/product/storage/${product.storage_id}`, { state: { product } })
         } 
     }
 
     return (
         <Card 
-            onClick={() => navigate(`/product/laptop/${product.laptop_id}`, { state: { product } })}
+            // onClick={() => navigate(`/product/laptop/${product.laptop_id}`, { state: { product } })}
+            onClick={() => navigation()}
             className='border border-gray-300 p-4 rounded-lg hover:cursor-pointer'
         >
             <CardContent>

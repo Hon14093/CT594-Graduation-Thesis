@@ -14,9 +14,10 @@ import { DataTable } from '@/components/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardHeader, CardContent } from '@/components/ui/card'
 import { storageColumns } from '@/components/columns';
-import { getStorages } from '@/hooks/variation-api';
-// import { DetailsModal } from '@/components/modals/laptop/DetailsModal';
+import { deleteStorage, getStorages } from '@/hooks/variation-api';
+import { DetailsModal } from '@/components/modals/storage/DetailsModal';
 import CreateModal from '@/components/modals/storage/CreateModal';
+import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Storage() {
     const [data, setData] = useState([]);
@@ -37,7 +38,20 @@ export default function Storage() {
         setSelectedProduct(product);
         setIsDetailsModalOpen(true);
     }
-    
+
+    const handleDelete = async () => {
+        if (!selectedProduct) return;
+        
+        try {
+            await deleteStorage(selectedProduct.storage_id);
+            handleSubmitSuccess(); // Refresh or toast, etc.
+            setIsDeleteModalOpen(false); // Close modal
+            setSelectedProduct(null);  // Clear state
+        } catch (error) {
+            console.error("Failed to delete address:", error)
+        }
+    }
+        
     const actionColumns = [
         ...storageColumns,
         {
@@ -55,7 +69,10 @@ export default function Storage() {
                         <PenBox />
                     </Button>
                     <Button size="sm" className='bg-red-500 border border-red-500 hover:bg-white hover:text-red-500'
-                        // onClick={() => handleDelete(row.original)}
+                        onClick={() => {
+                            setSelectedProduct(row.original);
+                            setIsDeleteModalOpen(true);
+                        }}
                     >
                         <Trash2 />
                     </Button>
@@ -107,11 +124,20 @@ export default function Storage() {
                         data={data} 
                     />
 
-                    {/* <DetailsModal
-                        laptop={selectedProduct}
+                    <DetailsModal
+                        storage={selectedProduct}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
-                    /> */}
+                    />
+
+                    <ConfirmDeleteModal 
+                        open={isDeleteModalOpen}
+                        onClose={() => {
+                            setIsDeleteModalOpen(false)
+                            setSelectedProduct(null);
+                        }}
+                        onConfirm={handleDelete}
+                    />
 
                 </CardContent>
             </Card>

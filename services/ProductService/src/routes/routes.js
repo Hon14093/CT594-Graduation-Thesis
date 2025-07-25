@@ -4,6 +4,11 @@ import {
     createNewCategory, createNewProduct, editProduct, removeProduct,
     returnAllProductByCategory,
     returnPopularProducts,
+    editBrand,
+    removeBrand,
+    editCategory,
+    removeCategory,
+    searchProduct,
 } from '../controllers/productController.js';
 import { 
     returnAllLaptops, 
@@ -36,9 +41,13 @@ router.delete('/delete/:product_id', removeProduct);
 
 router.get('/brands/all', returnAllBrands);
 router.post('/brands/create', createNewBrand);
+router.put('/brands/update/:brand_id', editBrand);
+router.delete('/brands/delete/:brand_id', removeBrand);
 
 router.get('/categories/all', returnAllCategories);
 router.post('/categories/create', createNewCategory);
+router.put('/categories/update/:category_id', editCategory);
+router.delete('/categories/delete/:category_id', removeCategory);
 
 router.get('/laptops/all', returnAllLaptops);
 router.get('/laptops/variations/:product_id', returnAllLaptopVariations);
@@ -79,5 +88,7 @@ router.delete('/adapters/delete/:id', deleteAdapterController);
 router.get('/find-type/:type/:id', getComponentNameAndId);
 router.get('/variations/:type/:id', returnVariations);
 router.get('/popular', returnPopularProducts);
+
+router.get('/search', searchProduct);
 
 export default router;

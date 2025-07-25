@@ -95,19 +95,24 @@ export default function CreateModal({ onSubmitSuccess }) {
                 monitor_name: product.product_name + model + 
                     refreshRates.find((rate) => rate.id === refreshId).label + 'Hz',
                 panel: panelTypes.find((type) => type.id === panelId).label,
-                brightness_nits: brightness,
-                response_time_ms: responseTime,
+                brightness_nits: parseInt(brightness),
+                response_time_ms: parseInt(responseTime),
                 bit_depth: bitDepths.find((depth) => depth.id === depthId).label,
                 color_range: colorRange,
                 resolution: resolutions.find((res) => res.id === resId).label,
-                screen_size: screenSize,
-                refresh_rate_hz: refreshRates.find((rate) => rate.id === refreshId).label,
+                screen_size_inches: parseInt(screenSize),
+                refresh_rate_hz: parseInt(refreshRates.find((rate) => rate.id === refreshId).label),
+                vesa_mount: vesa,
+                power_w: parseInt(powerConsume),
+                weight_kg: parseFloat(weightKg),
                 ports: {
                     hdmi: hdmiPorts,
                     display_port: dpPorts
                 },
-                price: price,
-                qty_in_stock: stock
+                monitor_tech: tech,
+                in_box_component: inbox,
+                price: parseFloat(price),
+                qty_in_stock: parseInt(stock)
             }
 
             console.log(monitor);
@@ -275,15 +280,8 @@ export default function CreateModal({ onSubmitSuccess }) {
                             portTypeLabel="DisplayPort"
                         />
 
-                        {/* <PortInput
-                            ports={usbAPorts}
-                            setPorts={setUsbAPorts}
-                            versionOptions={USB_A_VERSIONS}
-                            portTypeLabel="USB-A"
-                        /> */}
-
                         <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Kích thước màn hình (inch):</p>
+                            <p className='font-semibold'>Hỗ trợ VESA:</p>
                             <RadioGroup 
                                 defaultValue="option-one" 
                                 className='ml-auto flex gap-5'
@@ -321,6 +319,18 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
                                 placeholder="Công xuất" 
                                 onChange={(e) => setPowerConsume(e.target.value)}
+                                type={`number`}
+                            />
+                            <Asterisk color='red' size={20}/>
+                        </article>
+
+                        <article className="flex items-center gap-1.5">
+                            <p className='font-semibold'>Cân nặng (Kg):</p>
+                            <Input 
+                                className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
+                                placeholder="Cân nặng kg" 
+                                onChange={(e) => setWeightKg(e.target.value)}
+                                type={`number`}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>

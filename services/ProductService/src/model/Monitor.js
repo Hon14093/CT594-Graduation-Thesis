@@ -59,13 +59,13 @@ export const createMonitor = async (monitorData) => {
 
 export const updateMonitor = async (monitorId, updateData) => {
     return await prisma.monitor.update({
-        where: { id: monitorId },
+        where: { monitor_id: monitorId },
         data: updateData
     });
 };
 
 export const deleteMonitor = async (monitorId) => {
     return await prisma.monitor.delete({
-        where: { id: monitorId }
+        where: { monitor_id: monitorId }
     });
 };

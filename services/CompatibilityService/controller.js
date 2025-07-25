@@ -201,8 +201,9 @@ function isPortCompatible(laptop, storage) {
 const checkStorage = async (storage_id, laptop) => {
     const storage = await getStorageById(storage_id);
 
-    if (storage.form_factor !== "Portable") {
-        if (laptop.storage_installed_gbs + storage.capacity_gb > laptop.max_storage) {
+    if (storage.form_factor !== "Di động") {
+        
+        if (laptop.storage_installed_gbs + storage.capacity_gb > laptop.max_storage_gb) {
             return {
                 category: "Lưu trữ",
                 status: 0,

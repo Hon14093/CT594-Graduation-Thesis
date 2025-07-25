@@ -16,6 +16,7 @@ app.use(express.json());
 app.use('/manage/product', productRoutes);
 app.use('/review', reviewRoutes);
 app.use('/image/', imageUpload);
+// app.get('/components/search', )
 
 app.listen(PORT, () => {
     console.log("Server is running on port " + PORT);

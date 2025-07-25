@@ -59,13 +59,13 @@ export const createRam = async (ramData) => {
 
 export const updateRam = async (ramId, updateData) => {
     return await prisma.ram.update({
-        where: { id: ramId },
+        where: { ram_id: ramId },
         data: updateData
     });
 };
 
 export const deleteRam = async (ramId) => {
     return await prisma.ram.delete({
-        where: { id: ramId }
+        where: { ram_id: ramId }
     });
 };

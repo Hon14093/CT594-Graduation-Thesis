@@ -8,11 +8,15 @@ import {
 } from "../model/Product.js";
 import { 
     createBrand,
-    getAllBrands
+    deleteBrand,
+    getAllBrands,
+    updateBrand
 } from "../model/Brand.js";
 import { 
     createCategories,
+    deleteCategory,
     getAllCategories,
+    updateCategory,
 } from "../model/Category.js";
 import { getAllLaptops } from '../model/Laptop.js';
 import { getAllRams } from '../model/Ram.js';
@@ -140,6 +144,43 @@ export const createNewBrand = async (req,res) => {
     }
 }
 
+export const editBrand = async (req, res) => {
+    try {
+        const { brand_id } = req.params;
+        const data = req.body;
+        if (!brand_id) {
+            return res.status(400).json({ message: 'Brand ID is required' });
+        }
+        const updatedBrand = await updateBrand(parseInt(brand_id), data);
+        res.status(200).json({
+            success: true,
+            message: 'Brand updated successfully',
+            brand: updatedBrand
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+export const removeBrand = async (req, res) => {
+    try {
+        const { brand_id } = req.params;
+        if (!brand_id) {
+            return res.status(400).json({ message: 'Brand ID is required' });
+        }
+        const deletedBrand = await deleteBrand(parseInt(brand_id));
+        res.status(200).json({
+            success: true,
+            message: 'Brand deleted successfully',
+            brand: deletedBrand
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
 //---------------------------------------------------------------
 export const returnAllCategories = async (req,res) => {
     try {
@@ -170,6 +211,42 @@ export const createNewCategory = async (req,res) => {
     }
 }
 
+export const editCategory = async (req, res) => {
+    try {
+        const { category_id } = req.params;
+        const data = req.body;
+        if (!category_id) {
+            return res.status(400).json({ message: 'Category ID is required' });
+        }
+        const updatedCategory = await updateCategory(parseInt(category_id), data);
+        res.status(200).json({
+            success: true,
+            message: 'Category updated successfully',
+            category: updatedCategory
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+export const removeCategory = async (req, res) => {
+    try {
+        const { category_id } = req.params;
+        if (!category_id) {
+            return res.status(400).json({ message: 'Category ID is required' });
+        }
+        const deletedCategory = await deleteCategory(parseInt(category_id));
+        res.status(200).json({
+            success: true,
+            message: 'Category deleted successfully',
+            category: deletedCategory
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
 
 
 
@@ -254,3 +331,41 @@ export const returnPopularProducts = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+export const searchProduct = async (req, res) => {
+    const { q } = req.query;
+    if (!q) return res.status(400).json({ error: 'Missing query' });
+
+    try {
+        const laptops = await getAllLaptops();
+        const rams = await getAllRams();
+        const monitors = await getAllMonitors();
+        const cables = await getAllCables();
+        const docks = await getAllDocks();
+        const adapters = await getAllAdapters();
+        const storages = await getAllStorages();
+
+        const allComponents = [
+            ...laptops,
+            ...rams,
+            ...monitors,
+            ...cables,
+            ...docks,
+            ...adapters,
+            ...storages
+        ];
+
+        const filtered = allComponents.filter(item => {
+            const nameKey = Object.keys(item).find(key => key.endsWith('_name'));
+            if (!nameKey) return false; // If no name field found, exclude this item
+
+            const nameValue = item[nameKey];
+            return nameValue?.toLowerCase().includes(q.toLowerCase());
+        });
+
+        res.json(filtered);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+}

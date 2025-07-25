@@ -83,25 +83,6 @@ export function DetailsModal({ dock, open, onClose }) {
                                     );
                             }
 
-                            // Handle display_output_ports
-                            // if (key === "display_output_ports" && Array.isArray(value)) {
-                            // if (value.length === 0) return null;
-                            //     return (
-                            //         <tr key={key} className="border-b border-gray-200">
-                            //         <td className="py-3 px-4 font-medium w-1/3">
-                            //             {VIETNAMESE_DOCK_SPECS[key]}
-                            //         </td>
-                            //         <td className="py-2 px-4 space-y-1">
-                            //             {value.map((port, i) => (
-                            //             <div key={`display-${i}`}>
-                            //                 {port.type ? `${port.type} — version ${port.version}, số lượng ${port.quantity}` : JSON.stringify(port)}
-                            //             </div>
-                            //             ))}
-                            //         </td>
-                            //         </tr>
-                            //     );
-                            // }
-
                             return (
                                 <tr key={key} className="border-b border-gray-200">
                                     <td className="py-3 px-4 font-medium w-1/3">

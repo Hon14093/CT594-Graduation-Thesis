@@ -63,13 +63,13 @@ export const createStorage = async (storageData) => {
 
 export const updateStorage = async (storageId, updateData) => {
     return await prisma.storage.update({
-        where: { id: storageId },
+        where: { storage_id: storageId },
         data: updateData
     });
 };
 
 export const deleteStorage = async (storageId) => {
     return await prisma.storage.delete({
-        where: { id: storageId }
+        where: { storage_id: storageId }
     });
 };

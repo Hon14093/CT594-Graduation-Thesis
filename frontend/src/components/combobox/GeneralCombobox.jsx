@@ -10,7 +10,7 @@ import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui/popover"
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -33,7 +33,7 @@ export function GeneralCombobox({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-96 justify-between !text-lg font-normal"
+                    className="w-96 justify-between !text-lg font-normal ml-auto"
                 >
                     {selectedItem ? selectedItem.label : placeholder}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

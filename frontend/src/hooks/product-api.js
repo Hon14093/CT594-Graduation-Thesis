@@ -68,6 +68,14 @@ export const createBrand = async (brand) => {
     }
 }
 
+export const updateBrand = async (id, data) => {
+    return await axios.put(`${API_URL}/manage/product/brands/update/${id}`, data);
+};
+
+export const deleteBrand = async (id) => {
+    return await axios.delete(`${API_URL}/manage/product/brands/delete/${id}`);
+};
+
 //-----------------------------------------------------------
 export const getCategories = async (setData) => {
     try {
@@ -86,3 +94,11 @@ export const createCategories = async (category) => {
         console.log(error);
     }
 }
+
+export const updateCategory = async (id, data) => {
+    return await axios.put(`${API_URL}/manage/product/categories/update/${id}`, data);
+};
+
+export const deleteCategory = async (id) => {
+    return await axios.delete(`${API_URL}/manage/product/categories/delete/${id}`);
+};

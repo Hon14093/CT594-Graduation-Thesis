@@ -9,6 +9,7 @@ export function Combobox({ options, value, onChange, placeholder = "Select..." }
         <div className="relative">
             <Button
                 variant="outline"
+                
                 role="combobox"
                 aria-expanded={open}
                 className="w-56 justify-between"

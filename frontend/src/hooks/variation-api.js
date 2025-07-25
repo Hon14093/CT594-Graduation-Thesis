@@ -101,6 +101,7 @@ export const updateLaptop = async (id, data) => {
     return await axios.put(`${API_URL}/manage/product/laptops/update/${id}`, data);
 };
 export const deleteLaptop = async (id) => {
+    console.log(id)
     return await axios.delete(`${API_URL}/manage/product/laptops/delete/${id}`);
 };
 

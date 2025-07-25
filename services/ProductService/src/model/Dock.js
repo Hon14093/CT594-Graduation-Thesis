@@ -59,13 +59,13 @@ export const getDockVariations = async (product_id) => {
 
 export const updateDock = async (dockId, updateData) => {
     return await prisma.dock.update({
-        where: { id: dockId },
+        where: { dock_id: dockId },
         data: updateData
     });
 };
 
 export const deleteDock = async (dockId) => {
     return await prisma.dock.delete({
-        where: { id: dockId }
+        where: { dock_id: dockId }
     });
 };

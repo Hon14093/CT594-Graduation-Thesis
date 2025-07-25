@@ -141,7 +141,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 <SelectProduct onSelectItem={handleSelectProduct} category='usb dock' />
                             ) : (
                                 <>
-                                    <div className='mr-2'>{product.product_name}</div>
+                                    <div className='mr-2 ml-auto'>{product.product_name}</div>
                                     <Button variant='ghost' className='border'
                                         onClick={() => setProduct('')}
                                     >

@@ -69,12 +69,6 @@ export default function ProductsDisplay({ data, slug }) {
                     >
                         Giá cao - thấp
                     </ToggleGroupItem>
-                    {/* <ToggleGroupItem
-                        value="best-selling"
-                        className="px-5 border border-techBlue rounded-lg data-[state=on]:bg-techBlue data-[state=on]:text-white hover:bg-techBlue/70 hover:text-white"
-                    >
-                        Bán chạy
-                    </ToggleGroupItem> */}
                 </ToggleGroup>
             </article>
 
@@ -89,18 +83,6 @@ export default function ProductsDisplay({ data, slug }) {
                     </div>
                 )}
             </article>
-
-            {/* <article className='pt-2'>
-                {data.length === 0 || !data ? (
-                    <div>Đang xử lý...</div>
-                ) : (
-                    <div className='grid grid-cols-4 gap-4'>
-                        {data.map((item, index) => (
-                            <ProductCard product={item} key={index} />
-                        ))}
-                    </div>
-                )}
-            </article> */}
         </section>
     )
 }
