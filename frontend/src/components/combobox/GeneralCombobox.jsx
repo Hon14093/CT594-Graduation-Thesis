@@ -17,7 +17,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function GeneralCombobox({ 
-    data, 
+    data, // this is an array of items in the combobox
     placeholder = "Select...", 
     value, 
     onChange 

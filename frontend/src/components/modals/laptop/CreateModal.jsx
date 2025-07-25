@@ -21,17 +21,17 @@ import SelectProduct from '../SelectProduct';
 import { createLaptop } from '@/hooks/variation-api';
 
 const resolutions = [
-    { id: "1080p", label: "FHD (1920x1080)" }, 
-    { id: "2k", label: "QHD (2560x1440)" }, 
-    { id: "4k", label: "UHD (3840x2160)" }, 
-    { id: "8k", label: "FUHD (7680×4320)" }, 
+    { id: "1080p", label: "1920x1080" }, 
+    { id: "2k", label: "2560x1440" }, 
+    { id: "4k", label: "3840x2160" }, 
+    { id: "8k", label: "7680×4320" }, 
 ];
 
 const wifiVersions = [
-    { id: "wifi5", label: "Wi-Fi 5 (802.11ac)" },
-    { id: "wifi6", label: "Wi-Fi 6 (802.11ax)" },
-    { id: "wifi6e", label: "Wi-Fi 6E (802.11ax + 6GHz)" },
-    { id: "wifi7", label: "Wi-Fi 7 (802.11be)" },
+    { id: "wifi5", label: "Wi-Fi 5" },
+    { id: "wifi6", label: "Wi-Fi 6" },
+    { id: "wifi6e", label: "Wi-Fi 6E" },
+    { id: "wifi7", label: "Wi-Fi 7" },
 ];
 
 const bluetoothVersions = [
@@ -63,16 +63,12 @@ export default function CreateModal({ onSubmitSuccess }) {
     const [refreshRate, setRefreshRate] = useState(0); // this is for laptop screen
     const [panel, setPanel] = useState('');
     const [screenSize, setScreenSize] = useState(0);
-    const [resolution, setResolution] = useState('');
     const [monitorTech, setMonitorTech] = useState('');
     const [soundTech, setSoundTech] = useState('');
     const [os, setOs] = useState('');
     const [batteryWh, setBatteryWh] = useState(0);
     const [weightKg, setWeightKg] = useState(0);
-    const [wifiVer, setWifiVer] = useState('');
-    const [bluetoothVer, setBluetoothVer] = useState('');
     const [storageInstalled, setStorageInstalled] = useState(0);
-    const [storageType, setStorageType] = useState(''); // this means storage type installed on laptop
     const [storageSlots, setStorageSlots] = useState(0);
     const [storageSlotTypes, setStorageSlotTypes] = useState([]);
     const [maxStorage, setMaxStorage] = useState(0); // GB

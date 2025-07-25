@@ -9,6 +9,7 @@ export default function PortListForm({ defaultValue = [], onChange }) {
 
     useEffect(() => {
         setPorts(defaultValue);
+        console.log('default', defaultValue)
     }, []);
 
     useEffect(() => {
@@ -76,7 +77,7 @@ export default function PortListForm({ defaultValue = [], onChange }) {
                 </div>
             ))}
 
-            <Button onClick={addPort} type="button" variant="outline">
+            <Button onClick={addPort} type="button" variant="outline" className={`!text-lg`}>
                 <Plus className="w-4 h-4 mr-2" />
                 Thêm cổng
             </Button>

@@ -17,6 +17,7 @@ import { ramColumns } from '@/components/columns';
 import { deleteRam, getRAMs } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/ram/DetailsModal';
 import CreateModal from '@/components/modals/ram/CreateModal';
+import EditModal from '@/components/modals/ram/EditModal';
 import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Ram() {
@@ -37,6 +38,11 @@ export default function Ram() {
     const handleViewDetails = (product) => {
         setSelectedProduct(product);
         setIsDetailsModalOpen(true);
+    }
+
+    const handleEdit = (product) => {
+        setSelectedProduct(product);
+        setIsEditModalOpen(true);
     }
 
     const handleDelete = async () => {
@@ -64,7 +70,7 @@ export default function Ram() {
                         <Eye />
                     </Button>
                     <Button size="sm" className="bg-green-500 border border-green-500 hover:bg-white hover:text-green-500"
-                        // onClick={() => handleEdit(row.original)}
+                        onClick={() => handleEdit(row.original)}
                     >
                         <PenBox />
                     </Button>
@@ -128,6 +134,13 @@ export default function Ram() {
                         ram={selectedProduct}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
+                    />
+
+                    <EditModal
+                        ram={selectedProduct}
+                        open={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        onSubmitSuccess={handleSubmitSuccess}
                     />
 
                     <ConfirmDeleteModal 

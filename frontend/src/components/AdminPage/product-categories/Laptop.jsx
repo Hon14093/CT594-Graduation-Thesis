@@ -17,6 +17,7 @@ import { laptopColumns } from '@/components/columns';
 import { deleteLaptop, getLaptops } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/laptop/DetailsModal';
 import CreateModal from '@/components/modals/laptop/CreateModal';
+import EditModal from '@/components/modals/laptop/EditModal';
 import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Laptop() {
@@ -37,6 +38,11 @@ export default function Laptop() {
     const handleViewDetails = (laptop) => {
         setselectedLaptop(laptop);
         setIsDetailsModalOpen(true);
+    }
+
+    const handleEdit = (laptop) => {
+        setselectedLaptop(laptop);
+        setIsEditModalOpen(true);
     }
 
     const handleDelete = async () => {
@@ -64,7 +70,7 @@ export default function Laptop() {
                         <Eye />
                     </Button>
                     <Button size="sm" className="bg-green-500 border border-green-500 hover:bg-white hover:text-green-500"
-                        // onClick={() => handleEdit(row.original)}
+                        onClick={() => handleEdit(row.original)}
                     >
                         <PenBox />
                     </Button>
@@ -128,6 +134,13 @@ export default function Laptop() {
                         laptop={selectedLaptop}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
+                    />
+
+                    <EditModal
+                        laptop={selectedLaptop}
+                        open={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        onSubmitSuccess={handleSubmitSuccess}
                     />
 
                     <ConfirmDeleteModal 

@@ -41,20 +41,21 @@ export default function StorageSlotSelector({ value = [], onChange }) {
                 <PopoverContent className="p-0" modal={true}>
                     <Command>
                         <CommandGroup>
-                        {storageTypes.map(item => (
-                            <CommandItem
-                                key={item.id}
-                                onSelect={() => handleSelect(item.id)}
-                            >
-                            {item.label}
-                            </CommandItem>
-                        ))}
+                            {storageTypes.map(item => (
+                                <CommandItem
+                                    className={`!text-lg`}
+                                    key={item.id}
+                                    onSelect={() => handleSelect(item.id)}
+                                >
+                                    {item.label}
+                                </CommandItem>
+                            ))}
                         </CommandGroup>
                     </Command>
                 </PopoverContent>
             </Popover>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 text-lg">
                 {selected.map((id) => (
                     <div
                         key={id}
@@ -62,10 +63,10 @@ export default function StorageSlotSelector({ value = [], onChange }) {
                     >
                         {getLabel(id)}
                         <button
-                        onClick={() => handleRemove(id)}
-                        className="ml-2 hover:text-red-500"
+                            onClick={() => handleRemove(id)}
+                            className="ml-2 hover:text-red-500"
                         >
-                        <X size={14} />
+                            <X size={14} />
                         </button>
                     </div>
                 ))}
