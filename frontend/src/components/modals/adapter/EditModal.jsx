@@ -7,13 +7,11 @@ import {
     DialogHeader,
     DialogTitle
 } from "@/components/ui/dialog";
-import { Plus, Trash2, Asterisk } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Plus, Asterisk } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { GeneralCombobox } from '@/components/combobox/GeneralCombobox';
-import SelectProduct from '../SelectProduct';
-import { Input } from '@/components/ui/input';
-import { createAdapter } from '@/hooks/variation-api';
+import { updateAdapter } from '@/hooks/variation-api';
 
 const connectionPorts = [
     // USB-A ports
@@ -65,35 +63,29 @@ const resolutions = [
     { id: "4k-30", label: "3840x2160@30Hz" }, { id: "4k-60", label: "3840x2160@60Hz" },
 ];
 
-export default function CreateModal({ onSubmitSuccess }) {
-    const [open, setOpen] = useState(false);
-    const [model, setModel] = useState('');
-    const [ethernetSpeedGbps, setEthernetSpeedGbps] = useState(0);
-    const [maxDataRateGbps, setMaxDataRateGbps] = useState(0);
-    const [maxOutputWatt, setMaxOutputWatt] = useState(0);
-    const [price, setPrice] = useState(0);
-    const [stock, setStock] = useState(1);
-    const [product, setProduct] = useState('');
+export default function EditModal({ adapter, open, onClose, onSubmitSuccess }) {
+    if (!adapter) return null;
 
-    const [inputPortId, setInputPortId] = useState("");
-    const [outputPortId, setOutputPortId] = useState("");
-    const [connectionPortBId, setConnectionPortBId] = useState(""); // not used
-    const [hdmiVerId, setHdmiVerId] = useState("");
-    const [dpVerId, SetDpVerId] = useState("");
-    const [maxResId, setMaxResId] = useState("");
+    const [model, setModel] = useState(adapter.adapter_model);
+    const [ethernetSpeedGbps, setEthernetSpeedGbps] = useState(adapter.ethernet_speed_mbps);
+    const [maxDataRateGbps, setMaxDataRateGbps] = useState(adapter.max_data_rate_gbps);
+    const [maxOutputWatt, setMaxOutputWatt] = useState(adapter.max_output_watt);
 
-    const handleSelectProduct = (category, item) => { setProduct(item) }
+    const [price, setPrice] = useState(adapter.price);
+    const [stock, setStock] = useState(adapter.qty_in_stock);
+    const [product, setProduct] = useState(adapter.product);
 
-    const handleSubmitSuccess = () => {
-        onSubmitSuccess();
-        setOpen(false);
-    }
-
+    const [inputPortId, setInputPortId] = useState(connectionPorts.find((item) => item.label === adapter.input_port)?.id);
+    const [outputPortId, setOutputPortId] = useState(connectionPorts.find((item) => item.label === adapter.output_port)?.id)
+    const [hdmiVerId, setHdmiVerId] = useState(hdmiVersions.find((item) => item.label === adapter.hdmi_version)?.id);
+    const [dpVerId, SetDpVerId] = useState(dpVersions.find((item) => item.label === adapter.dp_version)?.id);
+    const [maxResId, setMaxResId] = useState(resolutions.find((item) => item.label === adapter.max_resolution)?.id);
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const adapter = {
+            const edited = {
                 product_id: product.product_id,
                 adapter_model: model,
                 adapter_name: product.product_name + model,
@@ -109,29 +101,21 @@ export default function CreateModal({ onSubmitSuccess }) {
                 qty_in_stock: parseInt(stock)                
             }
 
-            console.log(adapter);
-            const res = await createAdapter(adapter);
-            if (res.status === 201) handleSubmitSuccess();
+            const res = await updateAdapter(adapter.adapter_id, edited);
+            if (res.data.success) {
+                onSubmitSuccess();
+                onClose();
+            }
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button variant='outline' onClick={() => setOpen(true)}>
-                    <Plus />
-                    Thêm bộ chuyển đổi
-                </Button>
-            </DialogTrigger>
-
+        <Dialog open={open} onOpenChange={onClose} >
             <DialogContent className='!max-w-none lg:w-2/5 max-h-[80vh] flex flex-col'>
                 <DialogHeader>
-                    <DialogTitle>Thêm bộ chuyển đổi</DialogTitle>
-                    <DialogDescription className='text-base text-black'>
-                        Nhập chính xác các thông tin
-                    </DialogDescription>
+                    <DialogTitle className='pb-5'>Cập nhật thông tin bộ chuyển đổi</DialogTitle>
                 </DialogHeader>
 
                 <ScrollArea className="flex-1 overflow-y-auto pr-2 h-96">
@@ -139,27 +123,16 @@ export default function CreateModal({ onSubmitSuccess }) {
 
                         <article className="flex w-full items-center gap-1.5">
                             <p className='font-semibold'>Sản phẩm:</p>
-                            {product === '' ? (
-                                <SelectProduct onSelectItem={handleSelectProduct} category='bộ chuyển đổi' />
-                            ) : (
-                                <>
-                                    <div className='mr-2 ml-auto'>{product.product_name}</div>
-                                    <Button variant='ghost' className='border'
-                                        onClick={() => setProduct('')}
-                                    >
-                                        <Trash2 color='red' />
-                                    </Button>
-                                </>
-                            )}
+                            <div className='mr-2 ml-auto'>{product.product_name}</div>
                         </article>
 
                         <article className="flex items-center gap-1.5">
                             <p className='font-semibold'>Mã bộ chuyển đổi:</p>
                             <Input 
-                                className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
+                                className="max-w-96 ml-auto"  
                                 placeholder="Mã bộ chuyển đổi" 
                                 onChange={(e) => setModel(e.target.value)}
-                                
+                                defaultValue={model}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -290,7 +263,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                         </article>
 
                         <button type='submit' className='big-action-button mb-2'>
-                            Thêm bộ chuyển đổi
+                            Cập nhật bộ chuyển đổi
                         </button>
                     </form>
                 </ScrollArea>

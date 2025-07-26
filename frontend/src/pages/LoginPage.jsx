@@ -22,7 +22,7 @@ export default function LoginPage() {
             console.log(result);
             login(result.data.token);
             if (result.data.user.role === 1) navigate('/');
-            else if (result.data.user.role === 2) navigate('/admin');
+            else if (result.data.user.role === 2) navigate('/employee');
             else if (result.data.user.role === 3) navigate('/admin');
         })
         .catch(result => {

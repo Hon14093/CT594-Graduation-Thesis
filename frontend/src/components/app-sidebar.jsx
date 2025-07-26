@@ -23,8 +23,10 @@ import {
 	SidebarHeader,
 	SidebarRail,
 } from "@/components/ui/sidebar"
+import { useAuth } from "@/context/AuthContext"
 
-const data = {
+
+const admin = {
 	user: {
 		name: "shadcn",
 		email: "m@example.com",
@@ -74,9 +76,46 @@ const data = {
 	],
 }
 
+const employee = {
+	user: {
+		name: "shadcn",
+		email: "m@example.com",
+		avatar: "/avatars/shadcn.jpg",
+	},
+	projects: [
+		{
+			name: "Thống Kê",
+			url: "http://localhost:5173/employee",
+			icon: ChartColumn,
+		},
+		{
+			name: "Sản Phẩm",
+			url: "http://localhost:5173/employee/products",
+			icon: Boxes,
+		},
+		{
+			name: "Thương Hiệu",
+			url: "http://localhost:5173/employee/brands",
+			icon: BriefcaseBusiness,
+		},
+		{
+			name: "Duyệt Đơn Hàng",
+			url: "http://localhost:5173/employee/orders/check",
+			icon: ClipboardCheck,
+		},
+		{
+			name: "Đơn Hàng",
+			url: "http://localhost:5173/employee/orders/processed",
+			icon: ClipboardList,
+		},
+	],
+}
+
 export function AppSidebar({
 	...props
 }) {
+	const { user } = useAuth();
+	console.log(user?.role)
 	return (
 		(<Sidebar collapsible="icon" {...props} className='raleway'>
 			<SidebarHeader className='bg-techBlue text-white'>
@@ -86,7 +125,11 @@ export function AppSidebar({
 			</SidebarHeader>
 
 			<SidebarContent className='bg-techBlue text-white'>
-				<NavProjects projects={data.projects} />
+				{user?.role === 3 ? (
+					<NavProjects projects={admin.projects} />
+				) : (
+					<NavProjects projects={employee.projects} />
+				)}
 			</SidebarContent>
 
 			<SidebarFooter className='bg-techBlue text-white'>

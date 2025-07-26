@@ -13,6 +13,7 @@ import SignupPage from './pages/SignupPage'
 import PersonalPage from './pages/PersonalPage'
 import ProductDetailsPage from './pages/ProductDetailsPage'
 import AdminPage from './pages/AdminPage'
+import EmployeePage from './pages/EmployeePage'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { Toaster } from 'sonner'
@@ -41,6 +42,7 @@ function App() {
 						{/* <Route path="/account/:tab" element={<PersonalPage />} /> */}
 
 						<Route path='/admin/*' element={<AdminPage />} />
+						<Route path='/employee/*' element={<EmployeePage />} />
 					</Routes>
 				</Router>
 			</CartProvider>

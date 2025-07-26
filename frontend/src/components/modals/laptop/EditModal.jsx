@@ -280,11 +280,6 @@ export default function EditModal({ laptop, open, onClose, onSubmitSuccess }) {
 
                         <article className="flex items-center gap-1.5">
                             <p className='font-semibold'>Độ phân giải:</p>
-                            {/* <Input 
-                                className="max-w-96 ml-auto"  
-                                placeholder="Độ phân giải" 
-                                onChange={(e) => setResolution(e.target.value)}
-                            /> */}
                             <GeneralCombobox
                                 data={resolutions}
                                 placeholder="Chọn độ phân giải..."

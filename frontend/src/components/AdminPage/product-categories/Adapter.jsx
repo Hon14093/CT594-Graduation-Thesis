@@ -17,6 +17,7 @@ import { adapterColumns } from '@/components/columns';
 import { deleteAdapter, getAdapters } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/adapter/DetailsModal';
 import CreateModal from '@/components/modals/adapter/CreateModal';
+import EditModal from '@/components/modals/adapter/EditModal';
 import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Adapter() {
@@ -37,6 +38,11 @@ export default function Adapter() {
     const handleViewDetails = (product) => {
         setSelectedAdapter(product);
         setIsDetailsModalOpen(true);
+    }
+
+    const handleEdit = (item) => {
+        setSelectedAdapter(item);
+        setIsEditModalOpen(true);
     }
 
     const handleDelete = async () => {
@@ -64,7 +70,7 @@ export default function Adapter() {
                         <Eye />
                     </Button>
                     <Button size="sm" className="bg-green-500 border border-green-500 hover:bg-white hover:text-green-500"
-                        // onClick={() => handleEdit(row.original)}
+                        onClick={() => handleEdit(row.original)}
                     >
                         <PenBox />
                     </Button>
@@ -128,6 +134,13 @@ export default function Adapter() {
                         adapter={selectedAdapter}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
+                    />
+                    
+                    <EditModal
+                        adapter={selectedAdapter}
+                        open={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        onSubmitSuccess={handleSubmitSuccess}
                     />
 
 

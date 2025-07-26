@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
             try {
                 const decodedToken = jwtDecode(storedToken);
                 setUser(decodedToken);
+                console.log('user', user)
                 setIsLoggedIn(true);
             } catch (error) {
                 console.error("Error decoding token:", error);

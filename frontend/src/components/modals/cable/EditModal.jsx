@@ -7,13 +7,11 @@ import {
     DialogHeader,
     DialogTitle
 } from "@/components/ui/dialog";
-import { Plus, Trash2, Asterisk } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Plus, Asterisk } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { GeneralCombobox } from '@/components/combobox/GeneralCombobox';
-import SelectProduct from '../SelectProduct';
-import { Input } from '@/components/ui/input';
-import { createAdapter } from '@/hooks/variation-api';
+import { updateCable } from '@/hooks/variation-api';
 
 const connectionPorts = [
     // USB-A ports
@@ -65,40 +63,44 @@ const resolutions = [
     { id: "4k-30", label: "3840x2160@30Hz" }, { id: "4k-60", label: "3840x2160@60Hz" },
 ];
 
-export default function CreateModal({ onSubmitSuccess }) {
-    const [open, setOpen] = useState(false);
-    const [model, setModel] = useState('');
-    const [ethernetSpeedGbps, setEthernetSpeedGbps] = useState(0);
-    const [maxDataRateGbps, setMaxDataRateGbps] = useState(0);
-    const [maxOutputWatt, setMaxOutputWatt] = useState(0);
-    const [price, setPrice] = useState(0);
-    const [stock, setStock] = useState(1);
-    const [product, setProduct] = useState('');
+export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
+    if (!cable) return null;
 
-    const [inputPortId, setInputPortId] = useState("");
-    const [outputPortId, setOutputPortId] = useState("");
-    const [connectionPortBId, setConnectionPortBId] = useState(""); // not used
-    const [hdmiVerId, setHdmiVerId] = useState("");
-    const [dpVerId, SetDpVerId] = useState("");
-    const [maxResId, setMaxResId] = useState("");
+    const [model, setModel] = useState(cable.cable_model);
+    const [cableLengthCm, setCableLengthCm] = useState(cable.cable_length_cm);
+    const [material, setMaterial] = useState(cable.material);
+    const [weightG, setWeightG] = useState(cable.weight_g);
+    const [ethernetSpeedGbps, setEthernetSpeedGbps] = useState(cable.ethernet_speed_mbps);
+    const [maxDataRateGbps, setMaxDataRateGbps] = useState(cable.max_data_rate_gbps);
+    const [maxOutputWatt, setMaxOutputWatt] = useState(cable.max_output_watt);
+    const [price, setPrice] = useState(cable.price);
+    const [stock, setStock] = useState(cable.qty_in_stock);
+    const [product, setProduct] = useState(cable.product);
 
-    const handleSelectProduct = (category, item) => { setProduct(item) }
+    const [connectionPortAId, setConnectionPortAId] = useState(
+        connectionPorts.find((item) => item.label === cable.connector_a)?.id
+    );
+    const [connectionPortBId, setConnectionPortBId] = useState(
+        connectionPorts.find((item) => item.label === cable.connector_a)?.id
+    );
 
-    const handleSubmitSuccess = () => {
-        onSubmitSuccess();
-        setOpen(false);
-    }
-
+    const [hdmiVerId, setHdmiVerId] = useState(hdmiVersions.find((item) => item.label === cable.hdmi_version)?.id);
+    const [dpVerId, SetDpVerId] = useState(dpVersions.find((item) => item.label === cable.dp_version)?.id);
+    const [maxResId, setMaxResId] = useState(resolutions.find((item) => item.label === cable.max_resolution)?.id);
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const adapter = {
+            const edited = {
                 product_id: product.product_id,
-                adapter_model: model,
-                adapter_name: product.product_name + model,
-                input_port: connectionPorts.find((port) => port.id === inputPortId)?.label || null,
-                output_port: connectionPorts.find((port) => port.id === outputPortId)?.label || null,
+                cable_model: model,
+                cable_name: product.product_name + " " + model,
+                connector_a: connectionPorts.find((port) => port.id === connectionPortAId)?.label || null,
+                connector_b: connectionPorts.find((port) => port.id === connectionPortBId)?.label || null,
+                cable_length_cm: parseInt(cableLengthCm),
+                material: material,
+                weight_g: parseInt(weightG),
                 hdmi_version: hdmiVersions.find((ver) => ver.id === hdmiVerId)?.label,
                 dp_version: dpVersions.find((ver) => ver.id === dpVerId)?.label,
                 max_resolution: resolutions.find((res) => res.id === maxResId)?.label || null,
@@ -106,32 +108,24 @@ export default function CreateModal({ onSubmitSuccess }) {
                 max_data_rate_gbps: parseFloat(maxDataRateGbps),
                 max_output_watt: parseFloat(maxOutputWatt),
                 price: parseFloat(price),
-                qty_in_stock: parseInt(stock)                
+                qty_in_stock: parseInt(stock)               
             }
 
-            console.log(adapter);
-            const res = await createAdapter(adapter);
-            if (res.status === 201) handleSubmitSuccess();
+            const res = await updateCable(cable.cable_id, edited);
+            if (res.data.success) {
+                onSubmitSuccess();
+                onClose();
+            }
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button variant='outline' onClick={() => setOpen(true)}>
-                    <Plus />
-                    Thêm bộ chuyển đổi
-                </Button>
-            </DialogTrigger>
-
+        <Dialog open={open} onOpenChange={onClose} >
             <DialogContent className='!max-w-none lg:w-2/5 max-h-[80vh] flex flex-col'>
                 <DialogHeader>
-                    <DialogTitle>Thêm bộ chuyển đổi</DialogTitle>
-                    <DialogDescription className='text-base text-black'>
-                        Nhập chính xác các thông tin
-                    </DialogDescription>
+                    <DialogTitle className='pb-5'>Cập nhật thông tin bộ chuyển đổi</DialogTitle>
                 </DialogHeader>
 
                 <ScrollArea className="flex-1 overflow-y-auto pr-2 h-96">
@@ -139,81 +133,78 @@ export default function CreateModal({ onSubmitSuccess }) {
 
                         <article className="flex w-full items-center gap-1.5">
                             <p className='font-semibold'>Sản phẩm:</p>
-                            {product === '' ? (
-                                <SelectProduct onSelectItem={handleSelectProduct} category='bộ chuyển đổi' />
-                            ) : (
-                                <>
-                                    <div className='mr-2 ml-auto'>{product.product_name}</div>
-                                    <Button variant='ghost' className='border'
-                                        onClick={() => setProduct('')}
-                                    >
-                                        <Trash2 color='red' />
-                                    </Button>
-                                </>
-                            )}
+                            <div className='mr-2 ml-auto'>{product.product_name}</div>
                         </article>
 
                         <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Mã bộ chuyển đổi:</p>
+                            <p className='font-semibold'>Mã dây cáp:</p>
                             <Input 
                                 className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
-                                placeholder="Mã bộ chuyển đổi" 
+                                placeholder="Mã dây cáp" 
                                 onChange={(e) => setModel(e.target.value)}
+                                defaultValue={model}
+                            />
+                            <Asterisk color='red' size={20}/>
+                        </article>
+
+                        <article className="flex items-center gap-1.5">
+                            <p className='font-semibold'>Đầu kết nối A:</p>
+                            <div className='ml-auto'>
+                                <GeneralCombobox
+                                    data={connectionPorts}
+                                    placeholder="Chọn loại cổng kết nối..."
+                                    value={connectionPortAId}
+                                    onChange={setConnectionPortAId}
+                                />
+                            </div>
+                            <Asterisk color='red' size={20}/>
+                        </article>
+
+                        <article className="flex items-center gap-1.5">
+                            <p className='font-semibold'>Đầu kết nối B:</p>
+                            <div className='ml-auto'>
+                                <GeneralCombobox
+                                    data={connectionPorts}
+                                    placeholder="Chọn loại cổng kết nối..."
+                                    value={connectionPortBId}
+                                    onChange={setConnectionPortBId}
+                                />
+                            </div>
+                            <Asterisk color='red' size={20}/>
+                        </article>
+
+                        <article className="flex items-center gap-1.5">
+                            <p className='font-semibold'>Độ dài dây cáp (cm):</p>
+                            <Input 
+                                className="max-w-96 ml-auto"
+                                placeholder="Độ dài dây cáp" 
+                                onChange={(e) => setCableLengthCm(e.target.value)}
+                                type='number'
+                                // defaultValue={}
+                            />
+                            <Asterisk color='red' size={20}/>
+                        </article>
+
+                        <article className="flex items-center gap-1.5">
+                            <p className='font-semibold'>Vật liệu:</p>
+                            <Input 
+                                className="max-w-96 ml-auto"
+                                placeholder="Vật liệu" 
+                                onChange={(e) => setMaterial(e.target.value)}
                                 
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
 
                         <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Cổng đầu vào:</p>
-                            <div className='ml-auto'>
-                                <GeneralCombobox
-                                    data={connectionPorts}
-                                    placeholder="Chọn loại cổng kết nối..."
-                                    value={inputPortId}
-                                    onChange={setInputPortId}
-                                />
-                            </div>
+                            <p className='font-semibold'>Trọng lượng:</p>
+                            <Input 
+                                className="max-w-96 ml-auto"
+                                placeholder="Trọng lượng" 
+                                onChange={(e) => setWeightG(e.target.value)}
+                                type='number'
+                            />
                             <Asterisk color='red' size={20}/>
-                        </article>
-
-                        <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Cổng đầu ra:</p>
-                            <div className='ml-auto'>
-                                <GeneralCombobox
-                                    data={connectionPorts}
-                                    placeholder="Chọn loại cổng kết nối..."
-                                    value={outputPortId}
-                                    onChange={setOutputPortId}
-                                />
-                            </div>
-                            <Asterisk color='red' size={20}/>
-                        </article>
-
-                        <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Phiên bản HDMI (nếu có):</p>
-                            <div className='ml-auto'>
-                                <GeneralCombobox
-                                    data={hdmiVersions}
-                                    placeholder="Chọn phiên bản..."
-                                    value={hdmiVerId}
-                                    onChange={setHdmiVerId}
-                                />
-                            </div>
-                            <Asterisk color='white' size={20}/>
-                        </article>
-
-                        <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Phiên bản DisplayPort (nếu có):</p>
-                            <div className='ml-auto'>
-                                <GeneralCombobox
-                                    data={dpVersions}
-                                    placeholder="Chọn phiên bản..."
-                                    value={dpVerId}
-                                    onChange={SetDpVerId}
-                                />
-                            </div>
-                            <Asterisk color='white' size={20}/>
                         </article>
 
                         <article className="flex items-center gap-1.5">
@@ -250,7 +241,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 type='number'
                                 
                             />
-                            <Asterisk color='red' size={20}/>
+                            <Asterisk color='white' size={20}/>
                         </article>
 
                         <article className="flex items-center gap-1.5">
@@ -262,7 +253,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 type='number'
                                 
                             />
-                            <Asterisk color='red' size={20}/>
+                            <Asterisk color='white' size={20}/>
                         </article>
 
                         <article className="flex items-center gap-1.5">
@@ -290,8 +281,9 @@ export default function CreateModal({ onSubmitSuccess }) {
                         </article>
 
                         <button type='submit' className='big-action-button mb-2'>
-                            Thêm bộ chuyển đổi
+                            Thêm dây cáp
                         </button>
+                        
                     </form>
                 </ScrollArea>
             </DialogContent>
