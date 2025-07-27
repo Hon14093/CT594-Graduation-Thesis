@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { 
     Dialog,
     DialogTrigger,
@@ -7,15 +7,11 @@ import {
     DialogHeader,
     DialogTitle
 } from "@/components/ui/dialog";
-import { Plus, Trash2, Asterisk } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Plus, Asterisk } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { GeneralCombobox } from '@/components/combobox/GeneralCombobox';
-import SelectProduct from '../SelectProduct';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { createStorage } from '@/hooks/variation-api';
-import { PortInput } from '@/components/port-input';
+import { updateRam, updateStorage } from '@/hooks/variation-api';
 
 const ssdInterfaces = [
     { id: "usb-a-2.0", label: "USB-A 2.0" }, { id: "usb-a-3.0", label: "USB-A 3.0" },
@@ -37,35 +33,42 @@ const ssdFormFactors = [
     { id: "portable", label: "Di động"}
 ];
 
-export default function CreateModal({ onSubmitSuccess }) {
-    const [open, setOpen] = useState(false);
-    const [model, setModel] = useState('');
-    const [capacityGb, setCapacityGb] = useState(256);
-    const [weightG, setWeightG] = useState(10);
-    const [readSpeed, setReadSpeed] = useState(0) // mbps
-    const [writeSpeed, setWriteSpeed] = useState(0) // mbps
-    const [price, setPrice] = useState(0);
-    const [stock, setStock] = useState(1);
-    const [product, setProduct] = useState('');    
+export default function EditModal({ storage, open, onClose, onSubmitSuccess }) {
+    if (!storage) return null;
+
+    useEffect(() => {
+        if (storage.physical_profile) {
+            const [l, w, h] = storage.physical_profile.split("x").map(Number);
+            setLength(l || 0);
+            setWidth(w || 0);
+            setHeight(h || 0);
+        }
+    }, [storage.physical_profile]);
+
+    const [model, setModel] = useState(storage.storage_model);
+    const [capacityGb, setCapacityGb] = useState(storage.capacity_gb);
+    const [weightG, setWeightG] = useState(storage.weight_g);
+    const [readSpeed, setReadSpeed] = useState(storage.read_speed_mbps) // mbps
+    const [writeSpeed, setWriteSpeed] = useState(storage.write_speed_mbps) // mbps
+    const [price, setPrice] = useState(storage.price);
+    const [stock, setStock] = useState(storage.qty_in_stock);
+    const [product, setProduct] = useState(storage.product);    
 
     const [length, setLength] = useState(0);
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
-    const [connectionPortId, setConnectionPortId] = useState("");
-    const [ffId, setFfId] = useState("");
+    const [connectionPortId, setConnectionPortId] = useState(
+        ssdInterfaces.find((item) => item.label === storage.interface)?.id
+    );
+    const [ffId, setFfId] = useState(
+        ssdFormFactors.find((item) => item.label === storage.form_factor)?.id
+    );
     
-    const handleSelectProduct = (category, item) => { setProduct(item) }
-
-    const handleSubmitSuccess = () => {
-        onSubmitSuccess();
-        setOpen(false);
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const storage = {
+            const edited = {
                 product_id: product.product_id,
                 storage_model: model,
                 storage_name: product.product_name + " " + model + " " + capacityGb + "GB",
@@ -80,48 +83,29 @@ export default function CreateModal({ onSubmitSuccess }) {
                 qty_in_stock: parseInt(stock)
             }
 
-            console.log(storage);
-            const res = await createStorage(storage);
-            if (res.status === 201) handleSubmitSuccess();
+            const res = await updateStorage(ram.ram_id, edited);
+            if (res.data.success) {
+                onSubmitSuccess();
+                onClose();
+            }
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button variant='outline' onClick={() => setOpen(true)}>
-                    <Plus />
-                    Thêm ổ cứng
-                </Button>
-            </DialogTrigger>
-
+        <Dialog open={open} onOpenChange={onClose} >
             <DialogContent className='!max-w-none lg:w-2/5 max-h-[80vh] flex flex-col'>
                 <DialogHeader>
-                    <DialogTitle>Thêm ổ cứng</DialogTitle>
-                    <DialogDescription className='text-base text-black'>
-                        Nhập chính xác các thông tin
-                    </DialogDescription>
+                    <DialogTitle className='pb-5'>Cập nhật thông tin RAM</DialogTitle>
                 </DialogHeader>
 
                 <ScrollArea className="flex-1 overflow-y-auto pr-2 h-96">
                     <form onSubmit={(e) => handleSubmit(e)} className="text-lg text-black grid gap-4">
-
+                    
                         <article className="flex w-full items-center gap-1.5">
                             <p className='font-semibold'>Sản phẩm:</p>
-                            {product === '' ? (
-                                <SelectProduct onSelectItem={handleSelectProduct} category='Ổ cứng' />
-                            ) : (
-                                <>
-                                    <div className='mr-2 ml-auto'>{product.product_name}</div>
-                                    <Button variant='ghost' className='border'
-                                        onClick={() => setProduct('')}
-                                    >
-                                        <Trash2 color='red' />
-                                    </Button>
-                                </>
-                            )}
+                            <div className='mr-2 ml-auto'>{product.product_name}</div>
                         </article>
 
                         <article className="flex items-center gap-1.5">
@@ -130,7 +114,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
                                 placeholder="Mã ổ cứng" 
                                 onChange={(e) => setModel(e.target.value)}
-                                
+                                defaultValue={model}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -142,6 +126,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 placeholder="Dung lượng" 
                                 onChange={(e) => setCapacityGb(e.target.value)}
                                 type='number'
+                                defaultValue={capacityGb}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -180,18 +165,21 @@ export default function CreateModal({ onSubmitSuccess }) {
                                     placeholder="Dài" 
                                     onChange={(e) => setLength(e.target.value)}
                                     type='number'
+                                    defaultValue={length}
                                 />
                                 <Input 
                                     className=""
                                     placeholder="Rộng" 
                                     onChange={(e) => setWidth(e.target.value)}
                                     type='number'
+                                    defaultValue={width}
                                 />
                                 <Input 
                                     className=""
                                     placeholder="Cao" 
                                     onChange={(e) => setHeight(e.target.value)}
                                     type='number'
+                                    defaultValue={height}
                                 />
                             </div>
                             <Asterisk color='red' size={20}/>
@@ -204,6 +192,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 placeholder="Cân nặng" 
                                 onChange={(e) => setWeightG(e.target.value)}
                                 type='number'
+                                defaultValue={weightG}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -215,6 +204,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 placeholder="Tốc độ đọc" 
                                 onChange={(e) => setReadSpeed(e.target.value)}
                                 type='number'
+                                defaultValue={readSpeed}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -222,10 +212,11 @@ export default function CreateModal({ onSubmitSuccess }) {
                         <article className="flex items-center gap-1.5">
                             <p className='font-semibold'>Tốc độ ghi (Mbps):</p>
                             <Input 
-                                className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
+                                className="max-w-96 ml-auto"  
                                 placeholder="Tốc độ ghi" 
                                 onChange={(e) => setWriteSpeed(e.target.value)}
                                 type='number'
+                                defaultValue={writeSpeed}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -237,7 +228,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 placeholder="Giá bán" 
                                 onChange={(e) => setPrice(e.target.value)}
                                 type='number'
-                                
+                                defaultValue={price}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -249,13 +240,13 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 placeholder="Số lượng trong kho" 
                                 onChange={(e) => setStock(e.target.value)}
                                 type='number'
-                                
+                                defaultValue={stock}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
 
                         <button type='submit' className='big-action-button mb-2'>
-                            Thêm ổ cứng
+                            Cập nhật ổ cứng
                         </button>
                     </form>
                 </ScrollArea>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Card, CardContent } from '../ui/card'
 import SpecsTable from '../specs-table'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function ProductInfo({ product }) {
     
@@ -20,9 +21,9 @@ export default function ProductInfo({ product }) {
                 <CardContent>
                     <span className='text-xl font-bold'>Mô tả sản phẩm</span>
 
-                    <div className='text-lg text-justify'>
+                    <ScrollArea className='text-lg text-justify h-[55vh]'>
                         {product?.product?.description}
-                    </div>
+                    </ScrollArea>
                     
                 </CardContent>
             </Card>
