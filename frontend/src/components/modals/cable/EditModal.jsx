@@ -125,7 +125,7 @@ export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
         <Dialog open={open} onOpenChange={onClose} >
             <DialogContent className='!max-w-none lg:w-2/5 max-h-[80vh] flex flex-col'>
                 <DialogHeader>
-                    <DialogTitle className='pb-5'>Cập nhật thông tin bộ chuyển đổi</DialogTitle>
+                    <DialogTitle className='pb-5'>Cập nhật thông tin dây cáp</DialogTitle>
                 </DialogHeader>
 
                 <ScrollArea className="flex-1 overflow-y-auto pr-2 h-96">
@@ -180,7 +180,7 @@ export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
                                 placeholder="Độ dài dây cáp" 
                                 onChange={(e) => setCableLengthCm(e.target.value)}
                                 type='number'
-                                // defaultValue={}
+                                defaultValue={cableLengthCm}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -191,7 +191,7 @@ export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
                                 className="max-w-96 ml-auto"
                                 placeholder="Vật liệu" 
                                 onChange={(e) => setMaterial(e.target.value)}
-                                
+                                defaultValue={material}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -203,6 +203,7 @@ export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
                                 placeholder="Trọng lượng" 
                                 onChange={(e) => setWeightG(e.target.value)}
                                 type='number'
+                                defaultValue={weightG}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -227,7 +228,7 @@ export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
                                 placeholder="Tốc độ của cổng Ethernet" 
                                 onChange={(e) => setEthernetSpeedGbps(e.target.value)}
                                 type='number'
-                                
+                                defaultValue={ethernetSpeedGbps}
                             />
                             <Asterisk color='white' size={20}/>
                         </article>
@@ -239,7 +240,7 @@ export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
                                 placeholder="Tốc độ truyền tối đa" 
                                 onChange={(e) => setMaxDataRateGbps(e.target.value)}
                                 type='number'
-                                
+                                defaultValue={maxDataRateGbps}
                             />
                             <Asterisk color='white' size={20}/>
                         </article>
@@ -251,7 +252,7 @@ export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
                                 placeholder="Công xuất tối đa" 
                                 onChange={(e) => setMaxOutputWatt(e.target.value)}
                                 type='number'
-                                
+                                defaultValue={maxOutputWatt}
                             />
                             <Asterisk color='white' size={20}/>
                         </article>
@@ -263,7 +264,7 @@ export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
                                 placeholder="Giá bán" 
                                 onChange={(e) => setPrice(e.target.value)}
                                 type='number'
-                                
+                                defaultValue={price}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -275,13 +276,13 @@ export default function EditModal({ cable, open, onClose, onSubmitSuccess }) {
                                 placeholder="Số lượng trong kho" 
                                 onChange={(e) => setStock(e.target.value)}
                                 type='number'
-                                
+                                defaultValue={stock}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
 
                         <button type='submit' className='big-action-button mb-2'>
-                            Thêm dây cáp
+                            Cập nhật dây cáp
                         </button>
                         
                     </form>

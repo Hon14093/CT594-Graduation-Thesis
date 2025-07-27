@@ -38,6 +38,7 @@ model product {
   brand        brand     @relation(fields: [brand_id], references: [brand_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_product_brand")
   category     category  @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_product_category")
   ram          ram[]
+  review       review[]
   storage      storage[]
 }
 
@@ -68,7 +69,7 @@ model laptop {
   storage_installed_type String
   storage_slots          Int
   storage_slots_type     String[]
-  max_storage            String?
+  max_storage_gb         Int?
   price                  Float    @db.Real
   qty_in_stock           Int?
   laptop_name            String
@@ -194,4 +195,14 @@ model storage {
   product_id       String  @db.Uuid
   storage_name     String
   product          product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_monitor")
+}
+
+model review {
+  review_id   String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  review_date DateTime @default(now()) @db.Timestamp(6)
+  star        Int
+  comment     String?  @db.VarChar(1000)
+  product_id  String   @db.Uuid
+  account_id  String   @db.Uuid
+  product     product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, map: "fk_product_review")
 }

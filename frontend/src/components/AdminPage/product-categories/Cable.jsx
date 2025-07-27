@@ -17,6 +17,7 @@ import { cableColumns } from '@/components/columns';
 import { deleteCable, getCables } from '@/hooks/variation-api';
 import CreateModal from '@/components/modals/cable/CreateModal';
 import { DetailsModal } from '@/components/modals/cable/DetailsModal';
+import EditModal from '@/components/modals/cable/EditModal';
 import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Cable() {
@@ -37,6 +38,11 @@ export default function Cable() {
     const handleViewDetails = (product) => {
         setSelectedCable(product);
         setIsDetailsModalOpen(true);
+    }
+
+    const handleEdit = (product) => {
+        setSelectedCable(product);
+        setIsEditModalOpen(true);
     }
 
     const handleDelete = async () => {
@@ -64,7 +70,7 @@ export default function Cable() {
                         <Eye />
                     </Button>
                     <Button size="sm" className="bg-green-500 border border-green-500 hover:bg-white hover:text-green-500"
-                        // onClick={() => handleEdit(row.original)}
+                        onClick={() => handleEdit(row.original)}
                     >
                         <PenBox />
                     </Button>
@@ -122,6 +128,13 @@ export default function Cable() {
                     <DataTable 
                         columns={actionColumns}
                         data={data} 
+                    />
+
+                    <EditModal
+                        cable={selectedCable}
+                        open={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        onSubmitSuccess={handleSubmitSuccess}
                     />
 
                     <DetailsModal

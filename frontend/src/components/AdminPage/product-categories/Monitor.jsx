@@ -17,6 +17,7 @@ import { monitorColumns } from '@/components/columns';
 import { deleteMonitor, getMonitors } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/monitor/DetailsModal';
 import CreateModal from '@/components/modals/monitor/CreateModal';
+import EditModal from '@/components/modals/monitor/EditModal';
 import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Monitor() {
@@ -37,6 +38,11 @@ export default function Monitor() {
     const handleViewDetails = (product) => {
         setSelectedProduct(product);
         setIsDetailsModalOpen(true);
+    }
+
+    const handleEdit = (product) => {
+        setSelectedProduct(product);
+        setIsEditModalOpen(true);
     }
 
     const handleDelete = async () => {
@@ -64,7 +70,7 @@ export default function Monitor() {
                         <Eye />
                     </Button>
                     <Button size="sm" className="bg-green-500 border border-green-500 hover:bg-white hover:text-green-500"
-                        // onClick={() => handleEdit(row.original)}
+                        onClick={() => handleEdit(row.original)}
                     >
                         <PenBox />
                     </Button>
@@ -128,6 +134,13 @@ export default function Monitor() {
                         monitor={selectedProduct}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
+                    />
+
+                    <EditModal
+                        monitor={selectedProduct}
+                        open={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        onSubmitSuccess={handleSubmitSuccess}
                     />
 
                     <ConfirmDeleteModal 

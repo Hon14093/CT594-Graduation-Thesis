@@ -97,7 +97,6 @@ export default function SpecsTable({ data }) {
         ram_type: "Loại RAM",
         capacity_gb: "Dung lượng (GB)",
         frequency_mhz: "Tần số (MHz)",
-        voltage: "Điện áp (V)",
         latency: "Độ trễ",
         
         // Monitor fields

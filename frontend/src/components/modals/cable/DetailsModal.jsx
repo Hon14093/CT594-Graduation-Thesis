@@ -19,7 +19,6 @@ import SpecsTable from '@/components/specs-table';
 export function DetailsModal({ cable, open, onClose }) {
     if (!cable) return null;
 
-
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className='w-[1200px] !max-w-none'>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { 
     Dialog,
     DialogTrigger,
@@ -7,21 +7,19 @@ import {
     DialogHeader,
     DialogTitle
 } from "@/components/ui/dialog";
-import { Plus, Trash2, Asterisk } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Plus, Asterisk } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { PortInput } from '@/components/port-input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { GeneralCombobox } from '@/components/combobox/GeneralCombobox';
-import SelectProduct from '../SelectProduct';
-import { Input } from '@/components/ui/input';
+import { updateMonitor } from '@/hooks/variation-api';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { createMonitor } from '@/hooks/variation-api';
-import { PortInput } from '@/components/port-input';
 
 const resolutions = [
-    { id: "1080p", label: "FHD (1920x1080)" }, 
-    { id: "2k", label: "QHD (2560x1440)" }, 
-    { id: "4k", label: "UHD (3840x2160)" }, 
-    { id: "8k", label: "FUHD (7680×4320)" }, 
+    { id: "1080p", label: "1920x1080" }, 
+    { id: "2k", label: "2560x1440" }, 
+    { id: "4k", label: "3840x2160" }, 
+    { id: "8k", label: "7680×4320" }, 
 ];
 
 const panelTypes = [
@@ -39,51 +37,57 @@ const bitDepths = [
 
 const refreshRates= [
     { id: "60", label: "60" }, { id: "75", label: "75" }, { id: "120", label: "120" },
-    { id: "144", label: "144" }, { id: "165", label: "165" }, { id: "240", label: "240" },
-    { id: "360", label: "360" }
+    { id: "144", label: "144" }, { id: "165", label: "165" },  { id: "180", label: "180" },
+    { id: "240", label: "240" }, { id: "360", label: "360" }
 ];
 
 const HDMI_VERSIONS = ["1.4", "2.0", "2.1"];
 const DP_VERSIONS = ["1.2", "1.4", "1.4a", "2.0", "2.1"];
 
-export default function CreateModal({ onSubmitSuccess }) {
-    const [open, setOpen] = useState(false);
-    const [model, setModel] = useState('');
-    const [brightness, setBrightness] = useState(200);
-    const [responseTime, setResponseTime] = useState(5);
-    const [colorRange, setColorRange] = useState('');
-    const [screenSize, setScreenSize] = useState(0);
-    const [vesa, setVesa] = useState('');
-    const [tech, setTech] = useState('');
-    const [inbox, setInbox] = useState('');
-    const [powerConsume, setPowerConsume] = useState(0);
-    const [weightKg, setWeightKg] = useState(0);
-    const [price, setPrice] = useState(0);
-    const [stock, setStock] = useState(1);
-    const [product, setProduct] = useState('');
+export default function EditModal({ monitor, open, onClose, onSubmitSuccess }) {
+    if (!monitor) return null;
 
-    const [panelId, setPanelId] = useState('');
-    const [depthId, setDepthId] = useState('');
-    const [resId, setResId] = useState("");
-    const [refreshId, setRefreshId] = useState('');
-    const [hdmiPorts, setHdmiPorts] = useState([]);
-    const [dpPorts, setDpPorts] = useState([]);
+    const [model, setModel] = useState(monitor.monitor_model);
+    const [brightness, setBrightness] = useState(monitor.brightness_nits);
+    const [responseTime, setResponseTime] = useState(monitor.response_time_ms);
+    const [colorRange, setColorRange] = useState(monitor.color_range);
+    const [screenSize, setScreenSize] = useState(monitor.screen_size_inches);
+    const [vesa, setVesa] = useState(monitor.vesa_mount);
+    const [tech, setTech] = useState(monitor.monitor_tech );
+    const [inbox, setInbox] = useState(monitor.in_box_component);
+    const [powerConsume, setPowerConsume] = useState(monitor.power_w);
+    const [weightKg, setWeightKg] = useState(monitor.weight_kg);
+    const [price, setPrice] = useState(monitor.price);
+    const [stock, setStock] = useState(monitor.qty_in_stock);
+    const [product, setProduct] = useState(monitor.product);
+
+    const [panelId, setPanelId] = useState(
+        panelTypes.find((item) => item.label === monitor.panel)?.id
+    );
+    const [depthId, setDepthId] = useState(
+        bitDepths.find((item) => item.label === monitor.bit_depth)?.id
+    );
+    const [resId, setResId] = useState(
+        resolutions.find((item) => item.label === monitor.resolution)?.id
+    );
+    const [refreshId, setRefreshId] = useState(
+        refreshRates.find((item) => parseInt(item.label) === monitor.refresh_rate_hz)?.id
+    );
+    const [hdmiPorts, setHdmiPorts] = useState(monitor.ports.hdmi);
+    const [dpPorts, setDpPorts] = useState(monitor.ports.display_port);
+
+    useEffect(() => {
+        console.log(monitor.bit_depth)
+    }, [])
     
-    const handleSelectProduct = (category, item) => { setProduct(item) }
-
-    const handleSubmitSuccess = () => {
-        onSubmitSuccess();
-        setOpen(false);
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const monitor = {
+            const edited = {
                 product_id: product.product_id,
                 monitor_model: model,
-                monitor_name: product.product_name + model + 
+                monitor_name: product.product_name + model + " " +
                     refreshRates.find((rate) => rate.id === refreshId).label + 'Hz',
                 panel: panelTypes.find((type) => type.id === panelId).label,
                 brightness_nits: parseInt(brightness),
@@ -106,48 +110,29 @@ export default function CreateModal({ onSubmitSuccess }) {
                 qty_in_stock: parseInt(stock)
             }
 
-            console.log(monitor);
-            const res = await createMonitor(monitor);
-            if (res.status === 201) handleSubmitSuccess();
+            const res = await updateMonitor(monitor.monitor_id, edited);
+            if (res.data.success) {
+                onSubmitSuccess();
+                onClose();
+            }
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button variant='outline' onClick={() => setOpen(true)}>
-                    <Plus />
-                    Thêm màn hình
-                </Button>
-            </DialogTrigger>
-
+        <Dialog open={open} onOpenChange={onClose} >
             <DialogContent className='!max-w-none lg:w-2/5 max-h-[80vh] flex flex-col'>
                 <DialogHeader>
-                    <DialogTitle>Thêm màn hình</DialogTitle>
-                    <DialogDescription className='text-base text-black'>
-                        Nhập chính xác các thông tin
-                    </DialogDescription>
+                    <DialogTitle className='pb-5'>Cập nhật thông tin màn hình</DialogTitle>
                 </DialogHeader>
 
                 <ScrollArea className="flex-1 overflow-y-auto pr-2 h-96">
                     <form onSubmit={(e) => handleSubmit(e)} className="text-lg text-black grid gap-4">
-
+                    
                         <article className="flex w-full items-center gap-1.5">
                             <p className='font-semibold'>Sản phẩm:</p>
-                            {product === '' ? (
-                                <SelectProduct onSelectItem={handleSelectProduct} category='Màn hình' />
-                            ) : (
-                                <>
-                                    <div className='mr-2 ml-auto'>{product.product_name}</div>
-                                    <Button variant='ghost' className='border'
-                                        onClick={() => setProduct('')}
-                                    >
-                                        <Trash2 color='red' />
-                                    </Button>
-                                </>
-                            )}
+                            <div className='mr-2 ml-auto'>{product.product_name}</div>
                         </article>
 
                         <article className="flex items-center gap-1.5">
@@ -156,7 +141,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 className="max-w-96 ml-auto"
                                 placeholder="Mã màn hình" 
                                 onChange={(e) => setModel(e.target.value)}
-                                
+                                defaultValue={model}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -216,6 +201,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
                                 placeholder="125% sRGB, 90% DCI-P3,..." 
                                 onChange={(e) => setColorRange(e.target.value)}
+                                defaultValue={colorRange}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -239,6 +225,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
                                 placeholder="Kích thước" 
                                 onChange={(e) => setScreenSize(e.target.value)}
+                                defaultValue={screenSize}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -300,6 +287,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
                                 placeholder="ELMB Sync, Shadow Boost,..." 
                                 onChange={(e) => setTech(e.target.value)}
+                                defaultValue={vesa}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -311,6 +299,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 placeholder="Công xuất" 
                                 onChange={(e) => setPowerConsume(e.target.value)}
                                 type={`number`}
+                                defaultValue={powerConsume}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -322,6 +311,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 placeholder="Cân nặng kg" 
                                 onChange={(e) => setWeightKg(e.target.value)}
                                 type={`number`}
+                                defaultValue={weightKg}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -332,6 +322,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
                                 placeholder="Thiết bị trong hộp" 
                                 onChange={(e) => setInbox(e.target.value)}
+                                defaultValue={inbox}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -343,7 +334,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 placeholder="Giá bán" 
                                 onChange={(e) => setPrice(e.target.value)}
                                 type='number'
-                                
+                                defaultValue={price}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
@@ -355,13 +346,13 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 placeholder="Số lượng trong kho" 
                                 onChange={(e) => setStock(e.target.value)}
                                 type='number'
-                                
+                                defaultValue={stock}
                             />
                             <Asterisk color='red' size={20}/>
                         </article>
 
                         <button type='submit' className='big-action-button mb-2'>
-                            Thêm màn hình
+                            Cập nhật màn hình
                         </button>
                     </form>
                 </ScrollArea>

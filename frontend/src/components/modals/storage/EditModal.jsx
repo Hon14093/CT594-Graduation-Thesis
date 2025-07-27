@@ -11,7 +11,7 @@ import { Plus, Asterisk } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { GeneralCombobox } from '@/components/combobox/GeneralCombobox';
-import { updateRam, updateStorage } from '@/hooks/variation-api';
+import { updateStorage } from '@/hooks/variation-api';
 
 const ssdInterfaces = [
     { id: "usb-a-2.0", label: "USB-A 2.0" }, { id: "usb-a-3.0", label: "USB-A 3.0" },
@@ -97,7 +97,7 @@ export default function EditModal({ storage, open, onClose, onSubmitSuccess }) {
         <Dialog open={open} onOpenChange={onClose} >
             <DialogContent className='!max-w-none lg:w-2/5 max-h-[80vh] flex flex-col'>
                 <DialogHeader>
-                    <DialogTitle className='pb-5'>Cập nhật thông tin RAM</DialogTitle>
+                    <DialogTitle className='pb-5'>Cập nhật thông tin ổ cứng</DialogTitle>
                 </DialogHeader>
 
                 <ScrollArea className="flex-1 overflow-y-auto pr-2 h-96">
