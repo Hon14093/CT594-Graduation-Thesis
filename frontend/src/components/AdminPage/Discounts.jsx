@@ -13,8 +13,9 @@ import { Eye, PenBox, Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Card, CardHeader, CardContent } from '../ui/card'
 import { DataTable } from '../data-table'
-import { deleteDiscount, getAllDiscounts } from '@/hooks/discount-api'
+import { deleteDiscount, getAllDiscounts, updateDiscountStatus } from '@/hooks/discount-api'
 import { discountColumns } from '../columns'
+import { Switch } from '../ui/switch'
 import CreateModal from '../modals/discount/CreateModal'
 import { DetailsModal } from '../modals/discount/DetailsModal'
 import EditModal from '../modals/discount/EditModal'
@@ -60,6 +61,26 @@ export default function Discounts() {
 
     const columnsWithActions = [
         ...discountColumns,
+        {
+            accessorKey: "is_active",
+            header: "Kích hoạt?",
+            cell: ({ row }) => {
+                const discount = row.original;
+                const [status, setStatus] = useState(discount.is_active);
+
+                const handleStatusChange = async (new_status) => {
+                    setStatus(new_status);
+                    await updateDiscountStatus(discount.discount_id, new_status);
+                };
+
+                return (
+                    <Switch
+                        checked={status}
+                        onCheckedChange={(value) => handleStatusChange(value)}
+                    />
+                );
+            },
+        },
         {
             id: 'actions',
             cell: ({ row }) => (

@@ -88,6 +88,7 @@ export function DetailsModal({ dock, open, onClose }) {
                                     <td className="py-3 px-4 font-medium w-1/3">
                                         {VIETNAMESE_DOCK_SPECS[key] || key.replace(/_/g, " ")}
                                     </td>
+                                    
                                     <td className="py-2 px-4">
                                         {formatDockValue(key, value)}
                                     </td>

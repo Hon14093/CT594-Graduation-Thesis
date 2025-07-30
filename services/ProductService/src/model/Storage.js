@@ -11,6 +11,9 @@ export const getAllStorages = async () => {
                     brand: true
                 }
             }
+        },
+        orderBy: {
+            storage_name: 'desc'
         }
     })
 }

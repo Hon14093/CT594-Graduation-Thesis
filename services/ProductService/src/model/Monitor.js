@@ -11,6 +11,9 @@ export const getAllMonitors = async () => {
                     brand: true
                 }
             }
+        },
+        orderBy: {
+            monitor_name: 'desc'
         }
     });
 }

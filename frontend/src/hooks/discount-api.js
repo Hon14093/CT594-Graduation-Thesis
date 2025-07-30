@@ -31,6 +31,15 @@ export const updateDiscount = async (discount_id, data) => {
     }
 }
 
+export const updateDiscountStatus = async (discount_id, new_status) => {
+    try {
+        const result = await axios.put(`${API_URL}/discount/update-status/${discount_id}`, { new_status });
+        console.log(result.data)
+    } catch (error) {
+        console.error("Error fetching data:", error); 
+    }
+}
+
 export const deleteDiscount = async (discount_id) => {
     try {
         const result = await axios.delete(`${API_URL}/discount/delete/${discount_id}`)

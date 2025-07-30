@@ -11,6 +11,9 @@ export const getAllDocks = async () => {
                     brand: true
                 }
             }
+        },
+        orderBy: {
+            dock_name: 'desc'
         }
     });
 }

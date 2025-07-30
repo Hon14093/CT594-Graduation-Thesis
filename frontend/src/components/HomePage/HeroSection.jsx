@@ -3,6 +3,7 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import HeroCarousel from './HeroCarousel'
 
 export default function HeroSection() {
     return (
@@ -34,12 +35,17 @@ export default function HeroSection() {
                             </Button>
                         </div>
                     </div>
-                    <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] rounded-xl overflow-hidden shadow-lg">
-                        <img
+
+                    <div className="relative h-[300px] sm:h-[400px] lg:h-[450px] rounded-xl overflow-hidden shadow-lg">
+
+                        {/* I want to place a Carousel here to replace this single image */}
+                        <HeroCarousel />
+
+                        {/* <img
                             src="https://thumbs.dreamstime.com/b/man-analysis-business-accounting-laptop-45719380.jpg"
                             alt="Latest laptop models displayed on a modern desk setup"
                             className="w-full h-full object-cover"
-                        />
+                        /> */}
                     </div>
                 </div>
             </div>

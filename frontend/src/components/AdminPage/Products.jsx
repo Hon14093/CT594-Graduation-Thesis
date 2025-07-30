@@ -21,7 +21,7 @@ import {
 import { Link } from 'react-router-dom'
 import { Card, CardHeader, CardContent } from '../ui/card'
 import { Button } from '../ui/button'
-import { PackagePlus } from 'lucide-react'
+import { Switch } from '../ui/switch'
 import { DataTable } from '../data-table'
 import { getProducts } from '@/hooks/product-api'
 import { productColumns } from '../columns'

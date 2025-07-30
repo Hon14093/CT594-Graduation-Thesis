@@ -10,7 +10,6 @@ import {
 import { Plus, Asterisk } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { updateBrand } from '@/hooks/product-api';
 import { GeneralCombobox } from '@/components/combobox/GeneralCombobox';
 import StorageSlotSelector from './StorageSlotsSelector';
 import PortListForm from './PortListForm';
@@ -430,7 +429,7 @@ export default function EditModal({ laptop, open, onClose, onSubmitSuccess }) {
                         </article>
 
                         {/* gonna to re-structure the JSONB */}
-                        <PortListForm onChange={setPortData}/>
+                        <PortListForm defaultValue={portData} onChange={setPortData}/>
 
                         <article className="flex items-center gap-1.5">
                             <p className='font-semibold'>Giá bán (vnđ):</p>

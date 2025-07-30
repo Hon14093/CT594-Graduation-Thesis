@@ -7,6 +7,9 @@ export const getAllProducts = async () => {
         include: {
             category: true,
             brand: true
+        },
+        orderBy: {
+            category_id: 'desc'
         }
     })
 }

@@ -83,7 +83,7 @@ export default function EditModal({ storage, open, onClose, onSubmitSuccess }) {
                 qty_in_stock: parseInt(stock)
             }
 
-            const res = await updateStorage(ram.ram_id, edited);
+            const res = await updateStorage(storage.storage_id, edited);
             if (res.data.success) {
                 onSubmitSuccess();
                 onClose();

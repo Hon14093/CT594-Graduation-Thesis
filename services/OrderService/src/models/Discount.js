@@ -23,6 +23,13 @@ export const updateDiscount = async (discount_id, data) => {
     })
 }
 
+export const updateDiscountStatus = async (discount_id, is_active) => {
+    return await prisma.discount.update({
+        where: { discount_id: discount_id },
+        data: { is_active: is_active }
+    })
+}
+
 export const deleteDiscount = async (discount_id) => {
     return await prisma.discount.delete({
         where: {

@@ -12,6 +12,10 @@ export default function PortListForm({ defaultValue = [], onChange }) {
         console.log('default', defaultValue)
     }, []);
 
+    setTimeout(() => {
+        console.log(defaultValue);
+    }, 1000)
+
     useEffect(() => {
         onChange?.(ports);
     }, [ports]);

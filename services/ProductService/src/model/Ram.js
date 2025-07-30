@@ -11,6 +11,9 @@ export const getAllRams = async () => {
                     brand: true
                 }
             }
+        },
+        orderBy: {
+            ram_name: 'desc'
         }
     });
 }

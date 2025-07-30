@@ -6,6 +6,48 @@ import { getStorageById } from "./model/Storage.js";
 import { getCableById } from "./model/Cable.js";
 import { getAdapterById } from "./model/Adapter.js";
 
+const portVersionRank = {
+  // USB
+    "2.0": 1,
+    "3.0": 2,
+    "3.1 Gen 1": 2,
+    "3.2 Gen 1": 2,
+    "3.1 Gen 2": 3,
+    "3.2 Gen 2": 3,
+    "3.2 Gen 2x2": 4,
+    "USB4": 5,
+    "4.0": 5,
+
+    // Thunderbolt
+    "Thunderbolt 3": 5,
+    "Thunderbolt 4": 6
+};
+
+function normalizeVersion(version) {
+    return version.trim()
+        .replace(/^usb\s*/i, "")
+        .replace(/gen\s*/i, "Gen ")
+        .replace(/\s{2,}/g, " ")
+        .replace(/^thunderbolt/i, "Thunderbolt")
+        .toUpperCase()
+        .replace("GEN ", "Gen ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+// currently used for portable storage
+function comparePortVersions(v1, v2) {
+    const norm1 = normalizeVersion(v1);
+    const norm2 = normalizeVersion(v2);
+    const r1 = portVersionRank[norm1] ?? 0;
+    const r2 = portVersionRank[norm2] ?? 0;
+
+    if (r1 > r2) return 1;
+    if (r1 < r2) return -1;
+    return 0;
+}
+
+
 export const compatibilityCheck = async (req,res) => {
     try {
         const { laptop_id } = req.params;
@@ -179,22 +221,24 @@ function isPortCompatible(laptop, storage) {
     const storagePortVersion = storagePortDetails.join(" ").trim();
     const portKey = storagePortType.toUpperCase();
 
-    const laptopPorts = laptop.ports?.[portKey];
+    // const laptopPorts = laptop.ports?.[portKey];
+    const laptopPorts = laptop.ports?.find((port) => port.type === portKey);
     if (!laptopPorts) {
         return `Không tương thích: Laptop không có cổng ${storagePortType}!`
     }
 
-    // Check for exact match
-    if (laptopPorts.includes(storagePortVersion)) {
-        return "Tương thích!"
+    // Check version
+    // -1 => component port is newer than laptop port
+    // 0 => same port version (compatible)
+    // 1 => component port is older (compatible) 
+    console.log(laptopPorts.version, storagePortVersion, comparePortVersions(laptopPorts.version, storagePortVersion))
+    if (comparePortVersions(laptopPorts.version, storagePortVersion) !== -1) {
+        return `Tương thích: Cổng ${storagePortType} ${storagePortVersion} phù hợp với laptop!`
     }
 
+
     // Check for same port type but different speed/standard (partial match)
-    return "Cảnh báo: Ổ cứng không sử dụng được tối đa công xuất do khác cổng giao tiếp!"
-    // return {
-    //     status: "warning",
-    //     message: "Storage will not be able to run at max potential due to port differences"
-    // };
+    return `Cảnh báo: Ổ cứng không sử dụng được tối đa công xuất do khác phiên bản! (SSD: ${storagePortType} ${storagePortVersion}, laptop: ${laptopPorts.type} ${laptopPorts.version})`
 }
 
 
@@ -243,7 +287,8 @@ const checkDock = async (dock_id, laptop) => {
     const [dockType, ...versionParts] = dockPortType.split(' ');
     const dockVersion = versionParts.join(' ');
 
-    const laptopPorts = laptop.ports?.[dockType];
+    // const laptopPorts = laptop.ports?.[dockType];
+    const laptopPorts = laptop.ports?.find((port) => port.type === dockType);
     if (!laptopPorts || laptopPorts.length === 0) {
         return {
             category: "USB Dock",
@@ -252,7 +297,10 @@ const checkDock = async (dock_id, laptop) => {
         }
     }
 
-    if (laptopPorts.includes(dockVersion)) {
+    // -1 => component port is newer than laptop port
+    // 0 => same port version (compatible)
+    // 1 => component port is older (compatible) 
+    if (comparePortVersions(laptopPorts.version, dockVersion) !== -1) {
         return {
             category: "USB Dock",
             status: 1,
@@ -264,7 +312,8 @@ const checkDock = async (dock_id, laptop) => {
         category: "USB Dock",
         status: 2,
         laptopPorts: dockVersion,
-        message: `Cảnh báo: Laptop có cổng ${dockType} nhưng khác phiên bản (Dock: ${dockVersion}, Laptop: ${laptopPorts.join(", ")})`
+        message: `Cảnh báo: Laptop có cổng ${dockType} nhưng khác phiên bản (Dock: ${dockVersion}, 
+            Laptop: ${laptopPorts.version })`
     };
 }
 
@@ -359,26 +408,9 @@ function checkDockDisplayPorts(device) {
         result.displayPort.total += port.quantity || 0;
     })
 
-    // device.display_output_ports.forEach(port => {
-    //     if (port.type === 'HDMI') {
-    //         result.hdmi.exists = true;
-    //         result.hdmi.versions.push(port.version);
-    //         result.hdmi.total += port.quantity || 0;
-    //     }
-    //     else if (port.type === 'DisplayPort') {
-    //         result.displayPort.exists = true;
-    //         result.displayPort.versions.push(port.version);
-    //         result.displayPort.total += port.quantity || 0;
-    //     }
-    // });
-
     console.log('display outputs', result)
 
     return result;
-    // {
-    //     hdmi: { exists: true, versions: [ '2.1', '1.4' ], total: 3 },
-    //     displayPort: { exists: true, versions: [ '1.4' ], total: 1 }
-    // }
 }
 
 const checkDockWithMonitor = async (dock_id, monitor_id, laptop, adapter_id = null, cable_id = null) => {
@@ -530,8 +562,9 @@ const checkCable = async (cable_id, laptop) => {
     const to = parseConnector(cable.connector_b);
 
     const laptopPortVersions = laptop.ports?.[from.portType];
+    const laptopPorts = laptop.ports?.find((port) => port.type === from.portType);
 
-    if (!laptopPortVersions) {
+    if (!laptopPorts) {
         return {
             category: "Dây cáp",
             status: 0,
@@ -543,14 +576,18 @@ const checkCable = async (cable_id, laptop) => {
         ? laptopPortVersions
         : [laptopPortVersions];
 
-    const versionMatch = from.portVersion
-        ? versions.includes(from.portVersion)
-        : true; // allow partial match if no version given
+    // const versionMatch = from.portVersion
+    //     ? versions.includes(from.portVersion)
+    //     : true; // allow partial match if no version given
+
+    // const versionMatch = comparePortVersions(from.portVersion, laptopPorts.version);
+    const versionMatch = comparePortVersions( laptopPorts.version, from.portVersion);
+    console.log(from, laptopPorts, versionMatch)
 
     return {
         category: "Dây cáp",
-        status: versionMatch ? 1 : 2,
-        message: versionMatch
+        status: versionMatch > -1 ? 1 : 2,
+        message: versionMatch > -1
             ? `Tương thích: Cáp ${cable.connector_a} → ${cable.connector_b} phù hợp với laptop`
             : `Cảnh báo: Laptop có cổng ${from.portType} nhưng không hỗ trợ phiên bản ${from.portVersion}`
     };
@@ -569,7 +606,7 @@ const checkAdapter = async (adapter_id, laptop) => {
     };
 
     const { portType: inputType, portVersion: inputVersion } = parsePort(adapter.input_port);
-    const laptopPorts = laptop.ports?.[inputType];
+    const laptopPorts = laptop.ports?.find((port) => port.type === inputType);
 
     if (!laptopPorts) {
         return {
@@ -579,18 +616,12 @@ const checkAdapter = async (adapter_id, laptop) => {
         };
     }
 
-    const versions = Array.isArray(laptopPorts)
-        ? laptopPorts
-        : [laptopPorts];
-
-    const versionMatch = inputVersion
-        ? versions.includes(inputVersion)
-        : true;
+    const versionMatch = comparePortVersions(laptopPorts.version, inputVersion);
 
     return {
         category: "Bộ chuyển đổi",
-        status: versionMatch ? 1 : 2,
-        message: versionMatch
+        status: versionMatch > -1 ? 1 : 2,
+        message: versionMatch > -1
             ? `Tương thích: Adapter ${adapter.input_port} → ${adapter.output_port} phù hợp với laptop`
             : `Cảnh báo: Laptop có cổng ${inputType} nhưng không hỗ trợ phiên bản ${inputVersion}`
     };

@@ -21,7 +21,7 @@ export const getPopularProducts = async (setPopularProducts) => {
             const nameKey = Object.keys(item).find(key => key.endsWith('_name'));
             const name = nameKey ? item[nameKey] : 'Unnamed';
 
-            console.log('name', name, item.count)
+            console.log('name', name, item.count, item)
 
             return {
                 ...item,

@@ -11,6 +11,9 @@ export const getAllCables = async () => {
                     brand: true
                 }
             }
+        },
+        orderBy: {
+            cable_name: 'desc'
         }
     });
 }

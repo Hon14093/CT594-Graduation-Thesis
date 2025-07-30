@@ -13,6 +13,7 @@ model discount {
   discount_value  Float    @db.Real
   min_order_total Float    @db.Real
   date_created    DateTime @default(now()) @db.Timestamp(6)
+  is_active       Boolean  @default(false)
   order           order[]
 }
 

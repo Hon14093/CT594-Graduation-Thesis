@@ -45,7 +45,7 @@ export default function StorageSlotSelector({ value = [], onChange }) {
                                 <CommandItem
                                     className={`!text-lg`}
                                     key={item.id}
-                                    onSelect={() => handleSelect(item.id)}
+                                    onSelect={() => handleSelect(item.label)}
                                 >
                                     {item.label}
                                 </CommandItem>

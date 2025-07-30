@@ -12,6 +12,9 @@ export const getAllLaptops = async () => {
                     brand: true
                 }
             }
+        },
+        orderBy: {
+            laptop_name: 'desc'
         }
     });
 }

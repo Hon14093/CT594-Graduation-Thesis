@@ -17,6 +17,7 @@ import { dockColumns } from '@/components/columns';
 import { deleteDock, getDocks } from '@/hooks/variation-api';
 import { DetailsModal } from '@/components/modals/dock/DetailsModal';
 import CreateModal from '@/components/modals/dock/CreateModal';
+import EditModal from '@/components/modals/dock/EditModal';
 import ConfirmDeleteModal from '@/components/generic-delete-modal';
 
 export default function Dock() {
@@ -37,6 +38,11 @@ export default function Dock() {
     const handleViewDetails = (product) => {
         setSelectedProduct(product);
         setIsDetailsModalOpen(true);
+    }
+
+    const handleEdit = (product) => {
+        setSelectedProduct(product);
+        setIsEditModalOpen(true);
     }
 
     const handleDelete = async () => {
@@ -64,7 +70,7 @@ export default function Dock() {
                         <Eye />
                     </Button>
                     <Button size="sm" className="bg-green-500 border border-green-500 hover:bg-white hover:text-green-500"
-                        // onClick={() => handleEdit(row.original)}
+                        onClick={() => handleEdit(row.original)}
                     >
                         <PenBox />
                     </Button>
@@ -128,6 +134,13 @@ export default function Dock() {
                         dock={selectedProduct}
                         open={isDetailsModalOpen}
                         onClose={() => setIsDetailsModalOpen(false)}
+                    />
+
+                    <EditModal
+                        dock={selectedProduct}
+                        open={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        onSubmitSuccess={handleSubmitSuccess}
                     />
 
                     <ConfirmDeleteModal 

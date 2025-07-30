@@ -11,6 +11,9 @@ export const getAllAdapters = async () => {
                     brand: true
                 }
             }
+        },
+        orderBy: {
+            adapter_name: 'desc'
         }
     });
 }

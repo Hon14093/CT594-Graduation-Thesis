@@ -8,8 +8,8 @@ export default function ProductInfo({ product }) {
     useEffect(() => console.log(product), [])
 
     return (
-        <section className='max-w-[1280px] mx-auto gap-5 mb-4 grid grid-cols-3'>
-            <Card className='col-span-2'>
+        <section className='max-w-[1280px] mx-auto gap-5 mb-4 grid grid-cols-2'>
+            <Card className='col-span-1'>
                 <CardContent>
                     <span className='text-xl font-bold'>Thông số kỹ thuật</span>
 
