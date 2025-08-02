@@ -45,7 +45,7 @@ export default function RevenueChart() {
             </CardHeader>
 
             <CardContent>
-                <ChartContainer config={chartConfig} className='max-h-[400px] w-full'>
+                <ChartContainer config={chartConfig} className='max-h-[400px] w-full text-lg !font-mono'>
                     <LineChart
                         accessibilityLayer
                         data={revenues}
@@ -72,10 +72,10 @@ export default function RevenueChart() {
                         <Line
                             dataKey="revenue"
                             type="natural"
-                            stroke="var(--color-revenue)"
+                            stroke="#1E56A0"
                             strokeWidth={2}
                             dot={{
-                                fill: "var(--color-revenue)",
+                                fill: "#1E56A0",
                             }}
                             activeDot={{
                                 r: 6,

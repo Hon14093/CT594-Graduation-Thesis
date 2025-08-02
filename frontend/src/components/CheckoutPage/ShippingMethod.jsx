@@ -9,7 +9,7 @@ export default function ShippingMethod({ onSelect, setPrice }) {
                 <div className='mr-4 size-6'>
                     <img src={three} alt="" />
                 </div>
-                <div>Chọn phương thức thanh toán (*)</div>
+                <div>Chọn phương thức giao hàng (*)</div>
             </article>
 
             <article className='text-left p-2 ml-8 text-lg'>

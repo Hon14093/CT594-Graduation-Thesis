@@ -56,19 +56,34 @@ export const compatibilityCheck = async (req,res) => {
         let response = [];
 
         if (dock_id && monitor_id) {
-            console.log('dock and monitor are working')
+            // this uses adapter and cable as fall backs
             const temp = await checkDockWithMonitor(dock_id, monitor_id, laptop, adapter_id, cable_id);
             response = response.concat(temp);
+        } else if ((adapter_id || cable_id) && monitor_id) {
+            let temp1 = [];
+            let temp2 = [];
+
+            if (adapter_id) {
+                temp1 = await checkAdapterWithMonitor(adapter_id, monitor_id, laptop)
+            }
+
+            if (cable_id) {
+                temp2 = await checkCableWithMonitor(cable_id, monitor_id, laptop)
+            }
+            
+            response = response.concat(temp1)
+            response = response.concat(temp2)
         } else if (monitor_id) {
             response.push(await checkMonitor(monitor_id, laptop));
         } else if (dock_id) {
             response.push(await checkDock(dock_id, laptop));
+        } else if (adapter_id || cable_id) {
+            response.push(await checkAdapter(adapter_id, laptop));
+            response.push(await checkCable(cable_id, laptop));
         }
         
         if (ram_id) response.push(await checkRam(ram_id, laptop));
         if (storage_id) response.push(await checkStorage(storage_id, laptop));
-        if (adapter_id) response.push(await checkAdapter(adapter_id, laptop));
-        if (cable_id) response.push(await checkCable(cable_id, laptop));
         
         console.log(response)
         res.status(200).json({ response });
@@ -153,38 +168,37 @@ function formatPortList(ports) {
 // Almost done, could add check cable for lightning port in the future ----------------------------------------------
 const checkMonitor = async (monitor_id, laptop) => {
     const monitor = await getMonitorById(monitor_id);
+    const laptopHdmiPort = laptop.ports?.find(port => port.type === "HDMI") || null; // this is an Object
+    const laptopUSB_C = laptop.ports?.find(port => port.type === "USB-C") || null;
     const compatiblePorts = [];
     const midCompatiblePorts = [];
     const noCableInBox = [];
 
-    if (laptop?.ports?.["Thunderbolt 4"] || laptop?.ports?.["Thunderbolt 5"]) {
+    if (laptop?.ports?.some(port => port.type === "Thunderbolt 4" || port.type === "Thunderbolt 5")) {
         // const tbVersion = laptop.ports["Thunderbolt 4"];
         
         if (monitor?.ports?.display_port) {
             noCableInBox.push(`Thunderbolt (DP 1.4)`);
         }
-        
-        // if (monitor?.ports?.hdmi && tbVersion >= 3) {
-        //     midCompatiblePorts.push(`Thunderbolt ${tbVersion} → HDMI 2.0 (via adapter)`);
-        // }
     }
 
-    if (monitor.ports.hdmi && laptop.ports.HDMI) {
-        const laptopHdmiVer = parseFloat(laptop.ports.HDMI);
+    if (monitor.ports.hdmi && laptopHdmiPort) {
+        const laptopHdmiVer = parseFloat(laptopHdmiPort.version);
         const monitorHdmiVer = parseFloat(monitor.ports.hdmi);
 
         if (laptopHdmiVer >= monitorHdmiVer) {
-            compatiblePorts.push(`HDMI ${laptop.ports.HDMI}`);
+            compatiblePorts.push(`HDMI ${laptopHdmiPort.version}`);
         } else {
-            const standard = PORT_STANDARDS.HDMI[laptop.ports.HDMI];
+            const standard = PORT_STANDARDS.HDMI[laptopHdmiPort.version];
             if (monitor.refresh_rate_hz <= standard.maxRefresh) {
                 midCompatiblePorts.push(`HDMI ${laptop.ports.HDMI}`);
             }
         }
     }
 
-    if (monitor.ports.display_port && laptop.ports["USB-C"].includes("DP")) {
-        compatiblePorts.push("USB-C/DisplayPort 1.4");
+    // if (monitor.ports.display_port && laptop.ports["USB-C"].includes("DP")) {
+    if (monitor.ports.display_port && laptopUSB_C.supports?.includes("DP")) {
+        compatiblePorts.push("USB-C/DisplayPort");
     }
 
     if (compatiblePorts.length > 0) {
@@ -231,7 +245,6 @@ function isPortCompatible(laptop, storage) {
     // -1 => component port is newer than laptop port
     // 0 => same port version (compatible)
     // 1 => component port is older (compatible) 
-    console.log(laptopPorts.version, storagePortVersion, comparePortVersions(laptopPorts.version, storagePortVersion))
     if (comparePortVersions(laptopPorts.version, storagePortVersion) !== -1) {
         return `Tương thích: Cổng ${storagePortType} ${storagePortVersion} phù hợp với laptop!`
     }
@@ -342,7 +355,6 @@ const checkDockWithMonitor1 = async (dock_id, monitor_id, laptop) => {
     // }
 
     if (dockResult.status === 1 && monitorResult.status !== 1) {
-        console.log('working')
         if (dock_display_output.hdmi.exists) {
             const monitorHdmiVer = parseFloat(monitor.ports.hdmi[0].version);
             const dockHdmiVers = dock_display_output.hdmi.versions.map((version) => parseFloat(version));
@@ -383,7 +395,7 @@ const checkDockWithMonitor1 = async (dock_id, monitor_id, laptop) => {
 }
 
 function checkDockDisplayPorts(device) {
-    console.log('device', device.hdmi.length)
+    // console.log('device', device)
     if (!device?.hdmi?.length && !device?.display_port?.length) {
         return {
             hdmi: { exists: false, versions: [], total: 0 },
@@ -454,7 +466,7 @@ const checkDockWithMonitor = async (dock_id, monitor_id, laptop, adapter_id = nu
             additionalMessages.push({
                 category: "USB Dock",
                 status: 2,
-                message: `Cảnh báo: Dock có HDMI phiên bản thấp hơn (cần ${monitorHdmiVer}), hiệu suất có thể bị giới hạn`
+                message: `Cảnh báo: Dock có HDMI phiên bản thấp hơn, hiệu suất màn hình có thể bị giới hạn`
             });
         } else {
             additionalMessages.push({
@@ -492,54 +504,33 @@ const checkDockWithMonitor = async (dock_id, monitor_id, laptop, adapter_id = nu
     }
 
     if (adapter_id) {
-        const adapter = await getAdapterById(adapter_id);
-        const { input_port, output_port, supported_standards } = adapter;
-
-        const dockSupportedVersions = [
-            ...(dockDisplay.hdmi.versions || []),
-            ...(dockDisplay.displayPort.versions || []),
-        ];
-
-        const monitorHasPort = monitor.ports?.[output_port];
-        const dockSupportsAdapter = supported_standards.some(std => {
-            const [type, version] = std.split(" ");
-            return dockSupportedVersions.includes(version);
-        });
-
-        if (dockSupportsAdapter && monitorHasPort) {
-            additionalMessages.push({
-                category: "Bộ chuyển đổi",
-                status: 1,
-                message: `Tương thích: Màn hình có thể kết nối qua dock bằng adapter ${input_port} → ${output_port}`
-            });
-        } else {
-            additionalMessages.push({
-                category: "Bộ chuyển đổi",
-                status: 0,
-                message: `Adapter không thể giúp kết nối: Dock không hỗ trợ chuẩn ${supported_standards.join(", ")}, hoặc màn hình không có cổng ${output_port}`
-            });
-        }
+        const temp = await checkAdapterWithMonitor(adapter_id, monitor_id, laptop)
+        additionalMessages.push(temp)
     }
 
     if (cable_id) {
         const cable = await getCableById(cable_id);
-        const { from_type, to_type } = cable;
+        const { connector_a, connector_b } = cable;
 
-        const fromTypeKey = from_type.toLowerCase();
-        const dockHasFrom = dockDisplay[fromTypeKey]?.exists;
-        const monitorHasTo = monitor.ports?.[to_type];
+        const fromTypeKey = connector_a.toLowerCase(); // ex: usb-c 3.2 gen 2
+        const toTypeKey = connector_b.split(" ")[0] === "DisplayPort" ? "display_port" : "hdmi";
+        // const dockHasFrom = dockDisplay[fromTypeKey]?.exists;
+        const laptopHasFrom = laptop.ports?.some(port => port.type.toLowerCase() === fromTypeKey.split(" ")[0])
+        const monitorHasTo = monitor.ports?.[toTypeKey];
 
-        if (dockHasFrom && monitorHasTo) {
+        // console.log('laptop has', laptopHasFrom)
+
+        if (laptopHasFrom && monitorHasTo) {
             additionalMessages.push({
                 category: "Dây cáp",
                 status: 1,
-                message: `Tương thích: Màn hình có thể kết nối qua dock bằng cáp ${from_type} → ${to_type}`
+                message: `Tương thích với màn hình: Màn hình có thể kết nối với laptop bằng cáp ${connector_a} → ${connector_b}`
             });
         } else {
             additionalMessages.push({
                 category: "Dây cáp",
                 status: 0,
-                message: `Cáp không thể giúp kết nối: Không tìm thấy ${from_type} ở dock hoặc ${to_type} ở màn hình`
+                message: `Cáp không thể giúp kết nối: Không tìm thấy ${connector_a} ở laptop hoặc ${connector_b} ở màn hình`
             });
         }
     }
@@ -561,7 +552,6 @@ const checkCable = async (cable_id, laptop) => {
     const from = parseConnector(cable.connector_a);
     const to = parseConnector(cable.connector_b);
 
-    const laptopPortVersions = laptop.ports?.[from.portType];
     const laptopPorts = laptop.ports?.find((port) => port.type === from.portType);
 
     if (!laptopPorts) {
@@ -572,17 +562,9 @@ const checkCable = async (cable_id, laptop) => {
         };
     }
 
-    const versions = Array.isArray(laptopPortVersions)
-        ? laptopPortVersions
-        : [laptopPortVersions];
-
-    // const versionMatch = from.portVersion
-    //     ? versions.includes(from.portVersion)
-    //     : true; // allow partial match if no version given
-
     // const versionMatch = comparePortVersions(from.portVersion, laptopPorts.version);
     const versionMatch = comparePortVersions( laptopPorts.version, from.portVersion);
-    console.log(from, laptopPorts, versionMatch)
+    // console.log(from, laptopPorts, versionMatch)
 
     return {
         category: "Dây cáp",
@@ -592,6 +574,80 @@ const checkCable = async (cable_id, laptop) => {
             : `Cảnh báo: Laptop có cổng ${from.portType} nhưng không hỗ trợ phiên bản ${from.portVersion}`
     };
 };
+
+const checkCableWithMonitor = async (cable_id, monitor_id, laptop) => {
+    const cable = await getCableById(cable_id);
+    const monitor = await getMonitorById(monitor_id);
+
+    const allResults = [];
+    const cableResult = await checkCable(cable_id , laptop); // check cable with laptop
+    const monitorResult = await checkMonitor(monitor_id, laptop); // check monitor with laptop
+    
+    allResults.push({ ...cableResult, category: "Dây cáp" });
+    allResults.push({ ...monitorResult, category: "Màn hình" });
+
+    const additionalMessages = [];
+
+    const monitorHdmiVer = monitor.ports?.hdmi ? parseFloat(monitor.ports.hdmi[0].version) : null;
+    const monitorDPVer = monitor.ports?.display_port ? parseFloat(monitor.ports.display_port[0].version) : null;
+
+    if (cable.connector_b.includes("DisplayPort"))  {
+        const cableDPVer = cable.connector_b.split(" ")[1]; // ex: 1.2, 1.4
+        
+        if (parseFloat(cableDPVer) >= monitorDPVer) {
+            additionalMessages.push({
+                category: "Dây cáp",
+                status: 1,
+                message: `Tương thích với màn hình: Màn hình có thể kết nối với laptop bằng cáp ${cable.connector_a} → ${cable.connector_b}`
+            })
+        } else {
+            additionalMessages.push({
+                category: "Dây cáp",
+                status: 2,
+                message: `Cảnh báo: Màn hình không sử dụng được tối đa tần số quét do khác biệt phiên bản với dây cáp! (Dây cáp: ${cable.connector_b}, màn hình: ${monitor.ports.display_port} ${monitor.ports.display_port[0].version}` 
+            })
+        }
+    }
+
+    // {
+    //     category: "Dây cáp",
+    //     status: 1,
+    //     message: `Tương thích với màn hình: Màn hình có thể kết nối với laptop bằng cáp ${connector_a} → ${connector_b}`
+    // }
+
+    if (cable.connector_b.includes("HDMI")) {
+        const cableHdmiVer = cable.connector_b.split(" ")[1];
+
+        if (parseFloat(cableHdmiVer) >= monitorHdmiVer) {
+            additionalMessages.push({
+                category: "Dây cáp",
+                status: 1,
+                message: `Tương thích với màn hình: Màn hình có thể kết nối với laptop bằng cáp ${cable.connector_a} → ${cable.connector_b}`
+            })
+        } else {
+            additionalMessages.push({
+                category: "Dây cáp",
+                status: 2,
+                message: `Cảnh báo: Màn hình không sử dụng được tối đa tần số quét do khác biệt phiên bản với dây cáp! (Dây cáp: ${cable.connector_b}, màn hình: ${monitor.ports.hdmi} ${monitor.ports.hdmi[0].version}` 
+            })
+        }
+    }
+
+    if (!cable.connector_b.includes("HDMI") && !cable.connector_b.includes("DisplayPort")) {
+        additionalMessages.push({
+            category: "Dây cáp",
+            status: 0,
+            message: "Không tương thích với màn hình: Không kết nối màn hình với laptop qua dây cáp do không tìm thấy cổng HDMI và DisplayPort trên màn hình hoặc dây cáp!"
+        })
+    }
+
+    console.log(additionalMessages)
+    return allResults.concat(additionalMessages)
+}
+
+
+
+
 
 
 // check adapter ----------------------------------------------------------------------
@@ -626,3 +682,67 @@ const checkAdapter = async (adapter_id, laptop) => {
             : `Cảnh báo: Laptop có cổng ${inputType} nhưng không hỗ trợ phiên bản ${inputVersion}`
     };
 };
+
+const checkAdapterWithMonitor = async (adapter_id, monitor_id, laptop) => {
+    const adapter = await getAdapterById(adapter_id);
+    const monitor = await getMonitorById(monitor_id);
+
+    const allResults = [];
+    const adapterResult = await checkAdapter(adapter_id, laptop);
+    const monitorResult = await checkMonitor(monitor_id, laptop); // check monitor with laptop
+    
+    allResults.push({ ...adapterResult, category: "Bộ chuyển đổi" });
+    allResults.push({ ...monitorResult, category: "Màn hình" });
+
+    const additionalMessages = [];
+
+    const monitorHdmiVer = monitor.ports?.hdmi ? parseFloat(monitor.ports.hdmi[0].version) : null;
+    const monitorDPVer = monitor.ports?.display_port ? parseFloat(monitor.ports.display_port[0].version) : null;
+
+    if (adapter.output_port.includes("DisplayPort"))  {
+        const adapterDPVer = adapter.output_port.split(" ")[1]; // ex: 1.2, 1.4
+        
+        if (parseFloat(adapterDPVer) >= monitorDPVer) {
+            additionalMessages.push({
+                category: "Bộ chuyển đổi",
+                status: 1,
+                message: "Tương thích với màn hình: Có thể kết nối màn hình với laptop qua bộ chuyển đổi."
+            })
+        } else {
+            additionalMessages.push({
+                category: "Bộ chuyển đổi",
+                status: 2,
+                message: `Cảnh báo: Màn hình không sử dụng được tối đa tần số quét do khác biệt phiên bản với bộ chuyển đổi! (Bộ chuyển đổi: ${adapter.output_port}, màn hình: ${monitor.ports.display_port} ${monitor.ports.display_port[0].version}` 
+            })
+        }
+    }
+
+    if (adapter.output_port.includes("HDMI")) {
+        const adapterHdmiVer = adapter.output_port.split(" ")[1];
+
+        if (parseFloat(adapterHdmiVer) >= monitorHdmiVer) {
+            additionalMessages.push({
+                category: "Bộ chuyển đổi",
+                status: 1,
+                message: "Tương thích với màn hình: Có thể kết nối màn hình với laptop qua bộ chuyển đổi"
+            })
+        } else {
+            additionalMessages.push({
+                category: "Bộ chuyển đổi",
+                status: 2,
+                message: `Cảnh báo: Màn hình không sử dụng được tối đa tần số quét do khác biệt phiên bản với bộ chuyển đổi! (Dây cáp: ${adapter.output_port}, màn hình: ${monitor.ports.hdmi} ${monitor.ports.hdmi[0].version}` 
+            })
+        }
+    }
+
+    if (!adapter.output_port.includes("HDMI") && !adapter.output_port.includes("DisplayPort")) {
+        additionalMessages.push({
+            category: "Bộ chuyển đổi",
+            status: 0,
+            message: "Không tương thích với màn hình: Không kết nối màn hình với laptop qua bộ chuyển đổi do không tìm thấy cổng HDMI và DisplayPort trên màn hình hoặc bộ chuyển đổi!"
+        })
+    }
+
+    console.log(additionalMessages)
+    return allResults.concat(additionalMessages)
+}

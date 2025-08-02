@@ -9,7 +9,7 @@ export default function Popular({ products, discount}) {
             <Card>
                 <CardContent className=' grid gap-4'>
                     <h1 className='font-semibold text-lg'>Các sản phẩm bán chạy</h1>
-                    <ScrollArea className={`h-72`}>
+                    <ScrollArea className={`h-96`}>
                         <div className='grid gap-4'>
                             {products?.map((item, index) => (
                                 <article
