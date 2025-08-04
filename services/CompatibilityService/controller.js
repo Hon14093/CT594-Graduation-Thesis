@@ -78,12 +78,15 @@ export const compatibilityCheck = async (req,res) => {
         } else if (dock_id) {
             response.push(await checkDock(dock_id, laptop));
         } else if (adapter_id || cable_id) {
-            response.push(await checkAdapter(adapter_id, laptop));
-            response.push(await checkCable(cable_id, laptop));
+            if (adapter_id) response.push(await checkAdapter(adapter_id, laptop));
+            if (cable_id) response.push(await checkCable(cable_id, laptop));
         }
         
         if (ram_id) response.push(await checkRam(ram_id, laptop));
-        if (storage_id) response.push(await checkStorage(storage_id, laptop));
+        if (storage_id) {
+            const results = await checkStorage(storage_id, laptop);
+            response = response.concat(results)
+        }
         
         console.log(response)
         res.status(200).json({ response });
@@ -176,7 +179,6 @@ const checkMonitor = async (monitor_id, laptop) => {
 
     if (laptop?.ports?.some(port => port.type === "Thunderbolt 4" || port.type === "Thunderbolt 5")) {
         // const tbVersion = laptop.ports["Thunderbolt 4"];
-        
         if (monitor?.ports?.display_port) {
             noCableInBox.push(`Thunderbolt (DP 1.4)`);
         }
@@ -184,7 +186,7 @@ const checkMonitor = async (monitor_id, laptop) => {
 
     if (monitor.ports.hdmi && laptopHdmiPort) {
         const laptopHdmiVer = parseFloat(laptopHdmiPort.version);
-        const monitorHdmiVer = parseFloat(monitor.ports.hdmi);
+        const monitorHdmiVer = parseFloat(monitor.ports.hdmi[0].version);
 
         if (laptopHdmiVer >= monitorHdmiVer) {
             compatiblePorts.push(`HDMI ${laptopHdmiPort.version}`);
@@ -198,7 +200,8 @@ const checkMonitor = async (monitor_id, laptop) => {
 
     // if (monitor.ports.display_port && laptop.ports["USB-C"].includes("DP")) {
     if (monitor.ports.display_port && laptopUSB_C.supports?.includes("DP")) {
-        compatiblePorts.push("USB-C/DisplayPort");
+        noCableInBox.push("USB-C/DisplayPort");
+        console.log('flag 3')
     }
 
     if (compatiblePorts.length > 0) {
@@ -259,28 +262,44 @@ const checkStorage = async (storage_id, laptop) => {
     const storage = await getStorageById(storage_id);
 
     if (storage.form_factor !== "Di động") {
-        
+        if (laptop.storage_slots === 1) {
+            if (storage.capacity_gb > laptop.max_storage_gb) {
+                return [
+                    {
+                        category: "Lưu trữ",
+                        status: 0,
+                        message: "Không tương thích: Vượt quá dung lượng lưu trữ laptop hỗ trợ!"
+                    }
+                ]
+            } 
+            
+            return [
+                {
+                    category: "Lưu trữ",
+                    status: 2,
+                    message: "Cảnh báo: Laptop chỉ có 1 khe lưu trữ!"
+                },
+                {
+                    category: "Lưu trữ",
+                    status: 1,
+                    message: "Ổ cứng tương thích!"
+                }
+            ]
+        }
+
         if (laptop.storage_installed_gbs + storage.capacity_gb > laptop.max_storage_gb) {
-            return {
+            return [{
                 category: "Lưu trữ",
                 status: 0,
                 message: "Không tương thích: Vượt quá dung lượng lưu trữ laptop hỗ trợ!"
-            };
+            }];
         }
 
-        if (laptop.storage_slots === 1) {
-            return {
-                category: "Lưu trữ",
-                status: 2,
-                message: "Cảnh báo: Laptop chỉ có 1 khe lưu trữ!"
-            };
-        }
-
-        return {
+        return [{
             category: "Lưu trữ",
             status: 1,
             message: "Ổ cứng tương thích!"
-        };
+        }];
     }
 
     // Portable storage

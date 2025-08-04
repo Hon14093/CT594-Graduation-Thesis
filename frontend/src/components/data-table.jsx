@@ -38,6 +38,11 @@ export function DataTable({ columns, data }) {
             sorting,
             columnFilters,
         },
+        // initialState: {
+        //     pagination: {
+        //         pageSize: 3, // change this to any number you want temporarily
+        //     },
+        // },
     })
 
     return (
@@ -81,16 +86,16 @@ export function DataTable({ columns, data }) {
                 <TableBody>
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map(row => (
-                        <TableRow
-                            key={row.id}
-                            data-state={row.getIsSelected() && "selected"}
-                        >
-                            {row.getVisibleCells().map(cell => (
-                                <TableCell key={cell.id} className='!text-lg !text-wrap !text-center font-mono'>
-                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                </TableCell>
-                            ))}
-                        </TableRow>
+                            <TableRow
+                                key={row.id}
+                                data-state={row.getIsSelected() && "selected"}
+                            >
+                                {row.getVisibleCells().map(cell => (
+                                    <TableCell key={cell.id} className='!text-lg !text-wrap !text-center font-mono'>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
                         ))
                     ) : (
                         <TableRow>
