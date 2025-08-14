@@ -73,7 +73,7 @@ export default function CreateModal({ onSubmitSuccess }) {
     const [material, setMaterial] = useState('');
     const [weightG, setWeightG] = useState(0);
     const [ethernetSpeedGbps, setEthernetSpeedGbps] = useState(0);
-    const [maxDataRateGbps, setMaxDataRateGbps] = useState(0);
+    const [maxDataRateMbps, setMaxDataRateMbps] = useState(0);
     const [maxOutputWatt, setMaxOutputWatt] = useState(0);
     const [price, setPrice] = useState(0);
     const [stock, setStock] = useState(1);
@@ -109,7 +109,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                 dp_version: dpVersions.find((ver) => ver.id === dpVerId)?.label,
                 max_resolution: resolutions.find((res) => res.id === maxResId)?.label || null,
                 ethernet_speed_mbps: parseFloat(ethernetSpeedGbps),
-                max_data_rate_gbps: parseFloat(maxDataRateGbps),
+                max_data_rate_mbps: parseFloat(maxDataRateMbps),
                 max_output_watt: parseFloat(maxOutputWatt),
                 price: parseFloat(price),
                 qty_in_stock: parseInt(stock)                
@@ -227,7 +227,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 onChange={(e) => setWeightG(e.target.value)}
                                 type='number'
                             />
-                            <Asterisk color='red' size={20}/>
+                            <Asterisk color='white' size={20}/>
                         </article>
 
                         {/* These feels too extra */}
@@ -267,7 +267,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                     onChange={setMaxResId}
                                 />
                             </div>
-                            <Asterisk color='red' size={20}/>
+                            <Asterisk color='white' size={20}/>
                         </article>
 
                         <article className="flex items-center gap-1.5">
@@ -283,11 +283,11 @@ export default function CreateModal({ onSubmitSuccess }) {
                         </article>
 
                         <article className="flex items-center gap-1.5">
-                            <p className='font-semibold'>Tốc độ truyền dữ liệu tối đa (Gbps):</p>
+                            <p className='font-semibold'>Tốc độ truyền dữ liệu tối đa (Mbps):</p>
                             <Input 
                                 className="max-w-96 ml-auto"
                                 placeholder="Tốc độ truyền tối đa" 
-                                onChange={(e) => setMaxDataRateGbps(e.target.value)}
+                                onChange={(e) => setMaxDataRateMbps(e.target.value)}
                                 type='number'
                                 
                             />

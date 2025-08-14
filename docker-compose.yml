@@ -1,51 +1,46 @@
+version: "3.9"
 services:
-  frontend:
-    build: ./frontend
+  service1:
+    build:
+      context: ./services/AccountService
+      dockerfile: Dockerfile
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      # - node_modules:/frontend/node_modules
-      # - /app/node_modules 
-    environment:
-      - HOST=0.0.0.0
+      - "5002:5000"  # host:container
+    env_file:
+      - ./services/AccountService/.env
 
-  # auth-service:
-  #   build: ./services/AuthService
-  #   ports:
-  #     - "5001:5000"
-  #   env_file:
-  #     - ./services/AuthService/.env
-  #   depends_on:
-  #     - auth-db
+  service2:
+    build:
+      context: ./services/CartService
+      dockerfile: Dockerfile
+    ports:
+      - "5003:5000"
+    env_file:
+      - ./services/CartService/.env
 
-  # auth-db:
-  #   image: postgres
-  #   environment:
-  #     POSTGRES_USER: authuser
-  #     POSTGRES_PASSWORD: authpass
-  #     POSTGRES_DB: authdb
-  #   ports:
-  #     - "5433:5432"
-  #   # volumes:
-  #   #   - auth-db-data:/var/lib/postgresql/data
+  service3:
+    build:
+      context: ./services/CompatibilityService
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+    env_file:
+      - ./services/CompatibilityService/.env
 
-  # product-service:
-  #   build: ./services/ProductService
-  #   ports:
-  #     - "5002:5000"
-  #   env_file:
-  #     - ./services/ProductService/.env
-  #   depends_on:
-  #     - product-db
+  service4:
+    build:
+      context: ./services/OrderService
+      dockerfile: Dockerfile
+    ports:
+      - "5004:5000"
+    env_file:
+      - ./services/OrderService/.env
 
-  # product-db:
-  #   image: postgres
-  #   environment:
-  #     POSTGRES_USER: productuser
-  #     POSTGRES_PASSWORD: productpass
-  #     POSTGRES_DB: productdb
-  #   ports:
-  #     - "5434:5432"
-    # volumes:
-    #   - product-db-data:/var/lib/postgresql/data
+  service5:
+    build:
+      context: ./services/ProductService
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./services/ProductService/.env

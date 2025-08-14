@@ -37,7 +37,7 @@ const bitDepths = [
 
 const refreshRates= [
     { id: "60", label: "60" }, { id: "75", label: "75" }, { id: "120", label: "120" },
-    { id: "144", label: "144" }, { id: "165", label: "165" },  { id: "180", label: "180" },
+    { id: "144", label: "144" }, { id: "165", label: "165" }, { id: "180", label: "180" },
     { id: "240", label: "240" }, { id: "360", label: "360" }
 ];
 
@@ -76,10 +76,6 @@ export default function EditModal({ monitor, open, onClose, onSubmitSuccess }) {
     const [hdmiPorts, setHdmiPorts] = useState(monitor.ports.hdmi);
     const [dpPorts, setDpPorts] = useState(monitor.ports.display_port);
 
-    useEffect(() => {
-        console.log(monitor.bit_depth)
-    }, [])
-    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -87,7 +83,7 @@ export default function EditModal({ monitor, open, onClose, onSubmitSuccess }) {
             const edited = {
                 product_id: product.product_id,
                 monitor_model: model,
-                monitor_name: product.product_name + model + " " +
+                monitor_name: product.product_name + " " + model + " " +
                     refreshRates.find((rate) => rate.id === refreshId).label + 'Hz',
                 panel: panelTypes.find((type) => type.id === panelId).label,
                 brightness_nits: parseInt(brightness),
@@ -110,8 +106,11 @@ export default function EditModal({ monitor, open, onClose, onSubmitSuccess }) {
                 qty_in_stock: parseInt(stock)
             }
 
+            console.log('monitor', edited)
+
             const res = await updateMonitor(monitor.monitor_id, edited);
             if (res.data.success) {
+                console.log('monitor', edited)
                 onSubmitSuccess();
                 onClose();
             }

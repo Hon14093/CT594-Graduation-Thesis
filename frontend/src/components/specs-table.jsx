@@ -173,11 +173,11 @@ export default function SpecsTable({ data }) {
 
         // Exclude these keys from the table
         const excludedKeys = [
-            'laptop_id', 
+            'laptop_id',
             'product_id',
             'product',
             'image_url',
-            'price', 'laptop_price',
+            'price', 'laptop_price', 
             'laptop_name', 'name',
             'qty_in_stock'
         ];
@@ -188,21 +188,46 @@ export default function SpecsTable({ data }) {
                     <tbody>
                         {Object.entries(data).map(([key, value]) => {
                             if (excludedKeys.includes(key)) return null;
+
+                            if ((key === "ports") && Array.isArray(value)) {
+                                if (value.length === 0) return null;
+                                return (
+                                    <tr key={key} className="border-b border-gray-200">
+                                        <td className="py-3 px-4 font-medium w-1/3">
+                                            {VIETNAMESE_SPECS[key]}
+                                        </td>
+                                        <td className="py-2 px-4 space-y-1">
+                                            {value.map((port, i) => (
+                                                <div key={`${key}-${i}`}>
+                                                    <b>Cổng {port.type}:</b> phiên bản: {port.version}, số lượng: {port.quantity}
+                                                </div>
+                                            ))}
+                                        </td>
+                                    </tr>
+                                );
+                            }
                             
                             return (
                                 <tr key={key} className='border-b border-gray-200 font-mono'>
                                     <td className="py-3 px-4 font-medium">
                                         {VIETNAMESE_SPECS[key] || key.replace(/_/g, ' ')}
                                     </td>
-                                    <td className="py-2 px-4">
+
+                                    <td className='py-2 px-4'>
+                                        {formatVietnameseValue(key, value)}
+                                    </td>
+
+                                    {/* <td className="py-2 px-4">
                                         {typeof value === 'object' 
                                         ? Object.entries(value).map(([subKey, subVal]) => (
                                             <div key={subKey}>
                                                 {VIETNAMESE_SPECS[subKey] || subKey}: {Array.isArray(subVal) ? subVal.join(', ') : subVal}
+
+                                                {subKey}
                                             </div>
-                                            ))
+                                        ))
                                         : formatVietnameseValue(key, value)}
-                                    </td>
+                                    </td> */}
                                 </tr>
                             );
                         })}
@@ -230,12 +255,12 @@ export default function SpecsTable({ data }) {
     return (
         <Card className='max-h-[55vh] mt-2'>
             <ScrollArea className='h-[50vh]'>
-                <CardContent className=''>
+                <CardContent className='overflow-auto font-mono'>
                     {/* <h2 className="text-2xl font-bold pb-2">{laptop.laptop_name}</h2> */}
                     {data.laptop_id ? (
                         renderSpecsTable()
                     ) : (
-                        <Table className="border font-mono">
+                        <Table className="border font-mono w-full table-auto">
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="w-[200px]">Thông số</TableHead>

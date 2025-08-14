@@ -29,16 +29,17 @@ export default function ProductCard({ product }) {
 
     return (
         <Card 
-            // onClick={() => navigate(`/product/laptop/${product.laptop_id}`, { state: { product } })}
             onClick={() => navigation()}
-            className='border border-gray-300 p-4 rounded-lg hover:cursor-pointer'
+            className='border border-gray-300 p-4 rounded-lg hover:cursor-pointer font-mono'
         >
-            <CardContent>
-                <img src={product.product.image_url[0]} className='object-contain size-52' alt="" />
-                <h2 className='text-xl font-semibold font-mono'>
-                    {product[name]}
-                </h2>
-                <p className='text-red-600 font-bold text-center'>{product.price.toLocaleString()}đ</p>
+            <CardContent className={`h-full flex flex-col`}>
+                <div>
+                    <img src={product.product.image_url[0]} className='object-contain size-52' alt="" />
+                    <h2 className='text-xl font-semibold font-mono'>
+                        {product[name]}
+                    </h2>
+                </div>
+                <p className='text-red-600 font-bold text-center mt-auto'>{product.price.toLocaleString()}đ</p>
             </CardContent>
         </Card>
     )

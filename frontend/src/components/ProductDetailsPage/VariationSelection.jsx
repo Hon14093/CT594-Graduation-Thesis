@@ -78,7 +78,7 @@ export default function VariationSelection({ product }) {
     }
 
     return (
-        <section className='mt-4 grid grid-cols-2 max-w-[1280px] mx-auto gap-5 pb-4'>
+        <section className='mt-4 grid grid-cols-2 max-w-[1280px] mx-auto gap-5 pb-4 font-mono'>
             <Card>
                 <CardContent>
                     <Carousel className="w-full rounded-xl" opts={{ loop: true, align: "center" }}>

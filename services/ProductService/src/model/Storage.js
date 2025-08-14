@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const getAllStorages = async () => {
-    return prisma.storage.findMany({
+    const res = await prisma.storage.findMany({
         include: {
             product: {
                 select: { 
@@ -16,6 +16,13 @@ export const getAllStorages = async () => {
             storage_name: 'desc'
         }
     })
+
+    console.log(res)
+
+    return res.map((storage) => ({
+        ...storage,
+        price: parseFloat(storage.price),
+    }))
 }
 
 export const getStorageById = async (id) => {
@@ -41,7 +48,7 @@ export const getStorageVariations = async (product_id) => {
         }
     })
 
-    console.log(storages.price)
+    console.log(storages)
 
     return storages.map((storage) => ({
         ...storage,

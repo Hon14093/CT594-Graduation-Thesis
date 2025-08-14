@@ -22,7 +22,7 @@ export default function ProductInfo({ product }) {
                     <span className='text-xl font-bold'>Mô tả sản phẩm</span>
 
                     <ScrollArea className='text-lg text-justify h-[55vh]'>
-                        {product?.product?.description}
+                        {product?.product?.description || "Đang cập nhật"}
                     </ScrollArea>
                     
                 </CardContent>

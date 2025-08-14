@@ -107,7 +107,7 @@ export default function FeaturedProducts() {
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 font-mono text-lg">
-                    {popularProducts.map((product) => (
+                    {popularProducts.slice(0,4).map((product) => (
                         <Card
                             onClick={() => navigation(product)}
                             key={product.name}
@@ -122,8 +122,10 @@ export default function FeaturedProducts() {
                                 />
                             </div>
 
-                            <CardContent className="p-4 -mt-7">
-                                <h3 className="font-semibold group-hover:text-techBlue transition-colors">{product.name}</h3>
+                            <CardContent className="p-4 -mt-7 h-52  flex flex-col">
+                                <h3 className="font-semibold group-hover:text-techBlue transition-colors">
+                                    {product.name}
+                                </h3>
 
                                 <div className="mt-auto">
                                     <div className="flex items-center mt-1 text-gray-600">
