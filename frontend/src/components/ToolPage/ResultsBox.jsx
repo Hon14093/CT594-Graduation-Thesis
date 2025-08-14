@@ -21,7 +21,8 @@ export default function ResultsBox({ laptop, results }) {
     }, {});
 
     return (
-        <section className='max-w-[1280px] mx-auto -mt-5 lg:px-2 sm:px-4 mb-5'>
+        // -mt-5
+        <section className='max-w-[1280px] mx-auto mt-2 lg:px-2 sm:px-4 mb-5'>
             <Card>
                 <CardContent>
                     <div className='text-left px-3 text-2xl font-semibold'>

@@ -60,7 +60,7 @@ export default function LoginPage() {
                             Đăng Nhập
                         </button>
 
-                        <div className='font-mono mt-6 text-[14px] flex flex-col text-center gap-2'>
+                        <div className='font-mono text-[14px] flex flex-col text-center gap-2'>
                             {/* <p className=''>
                                 <a href="" className='underline hover:no-underline hover:text-bgColor'>
                                     Quên mật khẩu?

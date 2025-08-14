@@ -107,7 +107,7 @@ export default function FeaturedProducts() {
                 </div>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8 font-mono text-lg">
-                    {popularProducts.map((product) => (
+                    {popularProducts.slice(0,4).map((product) => (
                         <Card
                             onClick={() => navigation(product)}
                             key={product.name}
