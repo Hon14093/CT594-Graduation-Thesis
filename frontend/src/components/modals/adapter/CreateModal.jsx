@@ -96,7 +96,7 @@ export default function CreateModal({ onSubmitSuccess }) {
             const adapter = {
                 product_id: product.product_id,
                 adapter_model: model,
-                adapter_name: product.product_name + model,
+                adapter_name: product.product_name + " " + model,
                 input_port: connectionPorts.find((port) => port.id === inputPortId)?.label || null,
                 output_port: connectionPorts.find((port) => port.id === outputPortId)?.label || null,
                 hdmi_version: hdmiVersions.find((ver) => ver.id === hdmiVerId)?.label,
@@ -190,7 +190,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                             <Asterisk color='red' size={20}/>
                         </article>
 
-                        <article className="flex items-center gap-1.5">
+                        {/* <article className="flex items-center gap-1.5">
                             <p className='font-semibold'>Phiên bản HDMI (nếu có):</p>
                             <div className='ml-auto'>
                                 <GeneralCombobox
@@ -214,7 +214,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                                 />
                             </div>
                             <Asterisk color='white' size={20}/>
-                        </article>
+                        </article> */}
 
                         <article className="flex items-center gap-1.5">
                             <p className='font-semibold'>Độ phân giải tối đa:</p>
