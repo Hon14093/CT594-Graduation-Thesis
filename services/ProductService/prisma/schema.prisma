@@ -173,7 +173,7 @@ model cable {
   dp_version          String? @db.VarChar(20)
   max_resolution      String? @db.VarChar(50)
   ethernet_speed_mbps Int?
-  max_data_rate_gbps  Float?  @db.Real
+  max_data_rate_mbps  Float?  @db.Real
   max_output_watt     Float?  @db.Real
   price               Float   @db.Real
   qty_in_stock        Int     @default(0)

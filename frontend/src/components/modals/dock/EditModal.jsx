@@ -91,7 +91,7 @@ export default function EditModal({ dock, open, onClose, onSubmitSuccess }) {
             const edited = {
                 product_id: product.product_id,
                 dock_model: model,
-                dock_name: product.product_name  + model,
+                dock_name: product.product_name + " " + model,
                 connection_port: connectionPorts.find((port) => port.id === connectionPortId)?.label || null,
                 max_data_rate_gbps: parseFloat(maxDataRateGbps),
                 max_output_watt: parseFloat(maxOutputWatt),

@@ -39,8 +39,8 @@ const bitDepths = [
 
 const refreshRates= [
     { id: "60", label: "60" }, { id: "75", label: "75" }, { id: "120", label: "120" },
-    { id: "144", label: "144" }, { id: "165", label: "165" }, { id: "240", label: "240" },
-    { id: "360", label: "360" }
+    { id: "144", label: "144" }, { id: "165", label: "165" }, { id: "180", label: "180" }, 
+    { id: "240", label: "240" }, { id: "360", label: "360" }
 ];
 
 const HDMI_VERSIONS = ["1.4", "2.0", "2.1"];
@@ -55,7 +55,7 @@ export default function CreateModal({ onSubmitSuccess }) {
     const [screenSize, setScreenSize] = useState(0);
     const [vesa, setVesa] = useState('');
     const [tech, setTech] = useState('');
-    const [inbox, setInbox] = useState('');
+    const [inbox, setInbox] = useState('Màn hình, Dây nguồn, Dây HDMI, Dây DisplayPort');
     const [powerConsume, setPowerConsume] = useState(0);
     const [weightKg, setWeightKg] = useState(0);
     const [price, setPrice] = useState(0);
@@ -83,7 +83,7 @@ export default function CreateModal({ onSubmitSuccess }) {
             const monitor = {
                 product_id: product.product_id,
                 monitor_model: model,
-                monitor_name: product.product_name + model + 
+                monitor_name: product.product_name + " " + model + " " +
                     refreshRates.find((rate) => rate.id === refreshId).label + 'Hz',
                 panel: panelTypes.find((type) => type.id === panelId).label,
                 brightness_nits: parseInt(brightness),
@@ -331,6 +331,7 @@ export default function CreateModal({ onSubmitSuccess }) {
                             <Input 
                                 className="max-w-96 ml-auto"  // or w-48, or any fixed width you want
                                 placeholder="Thiết bị trong hộp" 
+                                defaultValue={inbox}
                                 onChange={(e) => setInbox(e.target.value)}
                             />
                             <Asterisk color='red' size={20}/>

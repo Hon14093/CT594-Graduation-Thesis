@@ -52,6 +52,7 @@ export function PortInput({
                             />
                             <Button
                                 variant="ghost"
+                                type="button"
                                 onClick={() => setPorts(ports.filter((_, i) => i !== index))}
                             >
                                 <Trash2 color="red" size={20} />
@@ -83,7 +84,7 @@ export function PortInput({
                     </div>
                 ))}
 
-                <Button variant="outline" onClick={addNewPort}>
+                <Button variant="outline" type="button" onClick={addNewPort}>
                     + Thêm {portTypeLabel}
                 </Button>
             </div>

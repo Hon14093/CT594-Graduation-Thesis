@@ -9,7 +9,7 @@ export const getAllProducts = async () => {
             brand: true
         },
         orderBy: {
-            category_id: 'desc'
+            category_id: 'asc'
         }
     })
 }

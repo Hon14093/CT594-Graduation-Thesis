@@ -122,8 +122,10 @@ export default function FeaturedProducts() {
                                 />
                             </div>
 
-                            <CardContent className="p-4 -mt-7">
-                                <h3 className="font-semibold group-hover:text-techBlue transition-colors">{product.name}</h3>
+                            <CardContent className="p-4 -mt-7 h-52  flex flex-col">
+                                <h3 className="font-semibold group-hover:text-techBlue transition-colors">
+                                    {product.name}
+                                </h3>
 
                                 <div className="mt-auto">
                                     <div className="flex items-center mt-1 text-gray-600">
