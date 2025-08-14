@@ -165,7 +165,8 @@ export default function Laptop({ onLaptopSelect }) {
         <section className='max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh]'>
             <div className='grid grid-cols-2 gap-4'>
 
-                <article className='h-[55vh]'>
+                <article className=''>
+                    {/* h-[55vh] */}
                     {laptop === null ? <SelectLaptop onSelectingLaptop={handleSelectLaptop} /> :
                         <Card className='h-full'>
                             <CardContent>
@@ -176,7 +177,7 @@ export default function Laptop({ onLaptopSelect }) {
                                                 <img
                                                     src={image}
                                                     // alt={image.alt}
-                                                    className="object-contain size-[21rem] rounded-lg "
+                                                    className="object-cover size-[21rem] rounded-lg "
                                                 />
                                             </CarouselItem>
                                         ))}
@@ -197,18 +198,18 @@ export default function Laptop({ onLaptopSelect }) {
                     }
                 </article>
 
-                <article className='max-h-[55vh] overflow-hidden'>
+                <article className='max-h-[29rem] overflow-hidden'>
                     {laptop ? 
-                        <Card className='h-[55vh]'>
+                        <Card className='h-[29rem]'>
                             <ScrollArea className='h-full'>
-                                <CardContent className=''>
+                                <CardContent className='font-mono'>
                                     <h2 className="text-2xl font-bold pb-2">{laptop.laptop_name}</h2>
                                     {renderSpecsTable()}
                                 </CardContent>
                             </ScrollArea>
                         </Card> 
                         :
-                        <Card className='h-[55vh]'>
+                        <Card className='h-[22rem]'>
                             <CardContent className='flex justify-center items-center h-full'>
                                 <p>Hãy chọn laptop để xem thông số.</p>
                             </CardContent>
