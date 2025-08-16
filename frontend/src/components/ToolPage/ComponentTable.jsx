@@ -95,7 +95,7 @@ export default function ComponentTable({ laptop, onCheck }) {
 
     return (
         // -mt-5
-        <section className="max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4  min-h-[60vh]">
+        <section className="max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh] -mt-5">
             <Card>
                 <CardContent className="">
                     <div className="overflow-x-auto">

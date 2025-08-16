@@ -103,6 +103,7 @@ export default function EditForm({ product, onClose, onSubmitSuccess }) {
                             id="product_des"
                             placeholder="Miêu tả"
                             rows={5}
+                            defaultValue={description}
                             className="!max-h-[200px] !overflow-y-auto"
                             autoResize={false}
                             onChange={(e) => setDescription(e.target.value)}
