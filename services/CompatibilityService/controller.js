@@ -474,8 +474,9 @@ const checkDockWithMonitor = async (dock_id, monitor_id, laptop, adapter_id = nu
         const dockHdmiVers = dockDisplay.hdmi.versions.map(parseFloat);
         const hasExact = dockHdmiVers.includes(monitorHdmiVer);
         const hasOlder = dockHdmiVers.some(v => v < monitorHdmiVer);
+        const hasNewer = dockHdmiVers.some(v => v > monitorHdmiVer);
 
-        if (hasExact) {
+        if (hasExact || hasNewer) {
             additionalMessages.push({
                 category: "USB Dock",
                 status: 1,
@@ -500,8 +501,9 @@ const checkDockWithMonitor = async (dock_id, monitor_id, laptop, adapter_id = nu
         const dockDPVers = dockDisplay.displayPort.versions.map(parseFloat);
         const hasExact = dockDPVers.includes(monitorDPVer);
         const hasOlder = dockDPVers.some(v => v < monitorDPVer);
+        const hasNewer = dockDPVers.some(v => v > monitorDPVer);
 
-        if (hasExact) {
+        if (hasExact || hasNewer) {
             additionalMessages.push({
                 category: "USB Dock",
                 status: 1,
@@ -523,8 +525,27 @@ const checkDockWithMonitor = async (dock_id, monitor_id, laptop, adapter_id = nu
     }
 
     if (adapter_id) {
-        const temp = await checkAdapterWithMonitor(adapter_id, monitor_id, laptop)
-        additionalMessages.push(temp)
+        const adapter = await getAdapterById(adapter_id);
+        const { input_port, output_port } = adapter;
+
+        const fromTypeKey = input_port.toLowerCase();
+        const toTypeKey = output_port.split(" ")[0] === "DisplayPort" ? "display_port" : "hdmi";
+        const laptopHasFrom = laptop.ports?.some(port => port.type.toLowerCase() === fromTypeKey.split(" ")[0]);
+        const monitorHasTo = monitor.ports?.[toTypeKey];
+
+        if (laptopHasFrom && monitorHasTo) {
+            additionalMessages.push({
+                category: "Bộ chuyển đổi",
+                status: 1,
+                message: `Tương thích với màn hình: Màn hình có thể kết nối với laptop bằng cáp ${input_port} → ${output_port}`
+            });
+        } else {
+            additionalMessages.push({
+                category: "Bộ chuyển đổi",
+                status: 0,
+                message: `Không thể giúp kết nối: Không tìm thấy ${input_port} ở laptop hoặc ${output_port} ở màn hình`
+            });
+        }
     }
 
     if (cable_id) {
@@ -533,11 +554,8 @@ const checkDockWithMonitor = async (dock_id, monitor_id, laptop, adapter_id = nu
 
         const fromTypeKey = connector_a.toLowerCase(); // ex: usb-c 3.2 gen 2
         const toTypeKey = connector_b.split(" ")[0] === "DisplayPort" ? "display_port" : "hdmi";
-        // const dockHasFrom = dockDisplay[fromTypeKey]?.exists;
-        const laptopHasFrom = laptop.ports?.some(port => port.type.toLowerCase() === fromTypeKey.split(" ")[0])
+        const laptopHasFrom = laptop.ports?.some(port => port.type.toLowerCase() === fromTypeKey.split(" ")[0]);
         const monitorHasTo = monitor.ports?.[toTypeKey];
-
-        // console.log('laptop has', laptopHasFrom)
 
         if (laptopHasFrom && monitorHasTo) {
             additionalMessages.push({
@@ -628,12 +646,6 @@ const checkCableWithMonitor = async (cable_id, monitor_id, laptop) => {
         }
     }
 
-    // {
-    //     category: "Dây cáp",
-    //     status: 1,
-    //     message: `Tương thích với màn hình: Màn hình có thể kết nối với laptop bằng cáp ${connector_a} → ${connector_b}`
-    // }
-
     if (cable.connector_b.includes("HDMI")) {
         const cableHdmiVer = cable.connector_b.split(" ")[1];
 
@@ -663,11 +675,6 @@ const checkCableWithMonitor = async (cable_id, monitor_id, laptop) => {
     console.log(additionalMessages)
     return allResults.concat(additionalMessages)
 }
-
-
-
-
-
 
 // check adapter ----------------------------------------------------------------------
 const checkAdapter = async (adapter_id, laptop) => {
