@@ -5,7 +5,7 @@ import { useCart } from '@/context/CartContext'
 import { Card, CardContent } from '../ui/card';
 
 export default function ProductList() {
-    const { cart, removeItem } = useCart();
+    const { cart, updateQuantity, removeItem } = useCart();
     const cartItems = cart.items;
 
     return (
@@ -45,8 +45,12 @@ export default function ProductList() {
                                                 className="w-16 border border-techBlue rounded px-2"
                                             />
                                         </td>
-                                        <td className="p-2">{item.price.toLocaleString()} vnđ</td>
-                                        <td className="p-2">{(item.price * item.quantity).toLocaleString()} vnđ</td>
+                                        <td className="p-2">
+                                            {item.price.toLocaleString()} vnđ
+                                        </td>
+                                        <td className="p-2">
+                                            {(item.price * item.quantity).toLocaleString()} vnđ
+                                        </td>
                                         <td className="p-2">
                                             <button onClick={() => removeItem(item.item_ref_id)} className="text-red-600">
                                                 <Trash2 />

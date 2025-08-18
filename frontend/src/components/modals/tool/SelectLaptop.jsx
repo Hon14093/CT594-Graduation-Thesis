@@ -29,7 +29,8 @@ export default function SelectLaptop({ onSelectingLaptop }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Card className='h-[55vh]'>
+                {/* h-[29rem] or h-[55vh] */}
+                <Card className='h-[29rem] w-full'>
                     <CardContent className='h-full'>
                         <Button variant='outline' 
                             onClick={() => setOpen(true)}

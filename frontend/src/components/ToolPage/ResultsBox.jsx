@@ -4,7 +4,7 @@ import { Card, CardContent } from '../ui/card';
 export default function ResultsBox({ laptop, results }) {
     if (!laptop) {
         return (
-            <section className="max-w-[1280px] mx-auto pb-4">
+            <section className="max-w-[1280px] mx-auto px-2 w-full">
                 <Card>
                     <CardContent className="">Hãy chọn laptop.</CardContent>
                 </Card>
@@ -22,7 +22,7 @@ export default function ResultsBox({ laptop, results }) {
 
     return (
         // -mt-5
-        <section className='max-w-[1280px] mx-auto -mt-5 lg:px-2 sm:px-4 mb-5 '>
+        <section className='max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 mb-3 w-full'>
             <Card>
                 <CardContent>
                     <div className='text-left px-3 text-2xl font-semibold'>

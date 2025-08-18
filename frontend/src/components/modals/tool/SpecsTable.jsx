@@ -20,8 +20,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from "@/components/ui/button";
 import { Eye } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import SpecsTable from '@/components/specs-table';
 
-export default function SpecsTable({ data }) {
+export default function SpecsTableModal({ data }) {
     const [open, setOpen] = useState(false);
 
     // remove field
@@ -144,7 +145,9 @@ export default function SpecsTable({ data }) {
                     <DialogTitle>Thông số kỹ thuật của thiết bị</DialogTitle>
                 </DialogHeader>
 
-                <ScrollArea className="flex-1 overflow-y-auto pr-2">
+                <SpecsTable data={data} />
+
+                {/* <ScrollArea className="flex-1 overflow-y-auto pr-2">
                     <Table className="border">
                         <TableHeader>
                             <TableRow>
@@ -169,7 +172,7 @@ export default function SpecsTable({ data }) {
                             })}
                         </TableBody>
                     </Table>
-                </ScrollArea>
+                </ScrollArea> */}
 
             </DialogContent>
         </Dialog>

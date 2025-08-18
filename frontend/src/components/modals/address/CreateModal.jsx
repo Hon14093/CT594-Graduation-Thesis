@@ -63,7 +63,7 @@ export default function CreateModal({ account, onSubmitSuccess }) {
 
             <DialogContent className='!max-w-none md:w-2/5'>
                 <DialogHeader>
-                    <DialogTitle>Tạo thương hiệu</DialogTitle>
+                    <DialogTitle>Tạo địa chỉ</DialogTitle>
                     <DialogDescription className='text-base text-black'>
                         Nhập chính xác các thông tin
                     </DialogDescription>

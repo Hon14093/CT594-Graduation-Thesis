@@ -4,7 +4,7 @@ import { addDiscount, editDiscount, editDiscountStatus, findDiscountByCode, remo
 const router = express.Router();
 
 router.get('/all', returnAllDiscounts);
-router.get('/find/:discount_id', findDiscountByCode);
+router.get('/find/:discount_code', findDiscountByCode);
 
 router.post('/create', addDiscount);
 

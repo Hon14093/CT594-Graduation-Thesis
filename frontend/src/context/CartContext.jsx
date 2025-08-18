@@ -49,6 +49,20 @@ export const CartProvider = ({ children }) => {
         }
     };
 
+    const updateQuantity = (item_ref_id, newQuantity) => {
+        setCart((prevCart) => {
+            const updatedItems = prevCart.items.map(item =>
+                item.item_ref_id === item_ref_id
+                    ? { ...item, quantity: newQuantity }
+                    : item
+            );
+            const total_price = updatedItems.reduce(
+                (sum, item) => sum + item.price * item.quantity, 0
+            );
+            return { ...prevCart, items: updatedItems, total_price };
+        });
+    };
+
     const removeItem = async (itemRefId) => {
         try {
             if (!user?.account_id) throw new Error('Not authenticated');
@@ -82,6 +96,7 @@ export const CartProvider = ({ children }) => {
         getCart,
         getTotalQuantity,
         addItem,
+        updateQuantity,
         removeItem,
         clearCart,
     };

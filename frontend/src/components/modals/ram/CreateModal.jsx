@@ -75,8 +75,8 @@ export default function CreateModal({ onSubmitSuccess }) {
                 ram_model: model,
                 ram_name: product.product_name + " " + model + " " + 
                     types.find((type) => type.id === typeId)?.label + " " +
-                    capacities.find((cap) => cap.id === capacityId)?.label + " " +
-                    ramSpeeds.find((speed) => speed.id === speedId)?.label,
+                    capacities.find((cap) => cap.id === capacityId)?.label + "GB " +
+                    ramSpeeds.find((speed) => speed.id === speedId)?.label + "MHz",
                 capacity_gb: parseInt(capacities.find((cap) => cap.id === capacityId)?.label.replace("GB", "")),
                 ram_type: types.find((type) => type.id === typeId)?.label,
                 frequency_mhz: parseInt(ramSpeeds.find((speed) => speed.id === speedId)?.label.replace("MHz", "")),

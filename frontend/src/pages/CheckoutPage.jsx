@@ -46,6 +46,7 @@ export default function CheckoutPage() {
 
     const handleApplyDiscount = async () => {
         const discount = await getDiscountByCode(discountCode);
+        console.log(discountCode)
 
         if (discount) {
             setDiscount_id(discount.discount_id);
@@ -98,7 +99,10 @@ export default function CheckoutPage() {
                             <input 
                                 className='!text-lg border-2 border-crimson w-1/2 py-2 px-3 rounded-l-lg'
                                 placeholder='Nhập khuyến mãi (nếu có)...'
-                                onChange={(e) => setDiscountCode(e.target.value)}
+                                onChange={(e) => {
+                                    console.log(e.target.value)
+                                    setDiscountCode(e.target.value)
+                                }}
                             />
                             <button 
                                 className='bg-crimson text-lg py-2 px-4 text-white rounded-r-lg hover:text-crimson hover:bg-white border-r-2 border-y-2 border-crimson'

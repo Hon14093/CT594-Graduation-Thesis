@@ -12,7 +12,8 @@ import {
     TableRow,
 } from '../ui/table';
 import SelectComponent from '../modals/tool/SelectComponent';
-import SpecsTable from '../modals/tool/SpecsTable';
+import SpecsTableModal from '../modals/tool/SpecsTable';
+// import SpecsTable from '../specs-table';
 
 const categories = ['RAM', 'Lưu trữ', 'USB dock', 'Bộ chuyển đổi', 'Màn hình', 'Dây cáp'];
 
@@ -85,7 +86,7 @@ export default function ComponentTable({ laptop, onCheck }) {
 
     if (!laptop) {
         return (
-            <section className="max-w-[1280px] mx-auto pb-4">
+            <section className="max-w-[1280px] mx-auto px-2 w-full">
                 <Card>
                     <CardContent className="">Hãy chọn laptop.</CardContent>
                 </Card>
@@ -95,7 +96,7 @@ export default function ComponentTable({ laptop, onCheck }) {
 
     return (
         // -mt-5
-        <section className="max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh] -mt-5">
+        <section className="max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh] w-full">
             <Card>
                 <CardContent className="">
                     <div className="overflow-x-auto">
@@ -124,7 +125,8 @@ export default function ComponentTable({ laptop, onCheck }) {
                                                 <TableCell className="text-right">{item.price.toLocaleString()}₫</TableCell>
                                                 <TableCell className="text-center">{item.quantity}</TableCell>
                                                 <TableCell className='text-center'>
-                                                    <SpecsTable data={item} />
+                                                    <SpecsTableModal data={item} />
+
                                                 </TableCell>
                                                 <TableCell>
                                                     <button
@@ -154,7 +156,23 @@ export default function ComponentTable({ laptop, onCheck }) {
                     </div>
 
                     <div className="flex justify-end mt-3 gap-4">
-                        <Button variant='outline' className='py-5 text-md'>Xóa hết</Button>
+                        <Button 
+                            variant='outline' className='py-5 text-md'
+                            onClick={() => {
+                                setItems({})
+                                setSelectedItems({
+                                    ram_id: null,
+                                    monitor_id: null,
+                                    storage_id: null,
+                                    dock_id: null,
+                                    cable_id: null,
+                                    adapter_id: null
+                                })
+                            }}
+                        >
+                            Xóa hết
+                        </Button>
+
                         <Button 
                             className="bg-techBlue py-5 px-6 text-white border border-techBlue text-md hover:text-techBlue hover:bg-white"
                             onClick = {() => handleCheck(laptop.laptop_id, selectedItems)}

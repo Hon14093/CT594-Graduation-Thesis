@@ -20,14 +20,13 @@ export default function CompatibilityToolPage() {
     }
 
     return (
-        <div className='w-full'>
+        <div className='w-full flex flex-col gap-3'>
             <Header darkBG={false} />
 
             <Bread_Crumb data={bread} />
 
             <Laptop onLaptopSelect={handleSetLaptop} />
 
-            {/* This component is not done */}
             <ComponentTable laptop={laptop} onCheck={setResults} />
 
             <ResultsBox laptop={laptop} results={results} />

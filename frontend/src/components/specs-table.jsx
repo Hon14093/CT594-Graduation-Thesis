@@ -1,15 +1,6 @@
 import React from 'react'
 import { Card, CardContent } from './ui/card';
 import { ScrollArea } from './ui/scroll-area';
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
 
 export default function SpecsTable({ data }) {
 
@@ -50,11 +41,15 @@ export default function SpecsTable({ data }) {
         // Ports (special nested translation)
         "ports": "Cổng kết nối",
         "HDMI": "Cổng HDMI",
+        "hdmi": "Cổng HDMI",
         "USB-A": "Cổng USB-A",
-        "USB-C": "Cổng USB-C", 
+        "usb_a": "Cổng USB-A",
+        "USB-C": "Cổng USB-C",
+        "usb-c": "Cổng USB-C", 
         "Ethernet": "Cổng Ethernet",
         "PD": "Sạc (Power Delivery)",
         "DP": "DisplayPort",
+        "display_port": "DisplayPort",
         
         // Storage
         "storage_installed_gbs": "Ổ cứng tích hợp (GB)",
@@ -115,6 +110,7 @@ export default function SpecsTable({ data }) {
         monitor_tech: "Công nghệ màn hình",
         in_box_component: "Thành phần trong hộp",
         weight_kg: "Trọng lượng (kg)",
+        power_w: "Công xuất",
 
         // Adapter fields
         adapter_model: "Model bộ chuyển đổi",
@@ -216,18 +212,6 @@ export default function SpecsTable({ data }) {
                                     <td className='py-2 px-4'>
                                         {formatVietnameseValue(key, value)}
                                     </td>
-
-                                    {/* <td className="py-2 px-4">
-                                        {typeof value === 'object' 
-                                        ? Object.entries(value).map(([subKey, subVal]) => (
-                                            <div key={subKey}>
-                                                {VIETNAMESE_SPECS[subKey] || subKey}: {Array.isArray(subVal) ? subVal.join(', ') : subVal}
-
-                                                {subKey}
-                                            </div>
-                                        ))
-                                        : formatVietnameseValue(key, value)}
-                                    </td> */}
                                 </tr>
                             );
                         })}
@@ -237,53 +221,88 @@ export default function SpecsTable({ data }) {
         );
     };
 
-    const formatValue = (value) => {
-        if (typeof value === 'object' && value !== null) {
+    const formatValue = (value1) => {
+        if (Array.isArray(value1)) {
+            // Handle array of ports directly
             return (
-                <div className="text-center">
-                    {Object.entries(value).map(([subKey, subValue]) => (
-                        <div key={subKey}>
-                            <span className="font-medium">{subKey}:</span> {JSON.stringify(subValue)}
+                <div className="space-y-1">
+                    {value1.map((port, i) => (
+                        <div key={i}>
+                            phiên bản: {port.version}, số lượng: {port.quantity}
                         </div>
                     ))}
                 </div>
             );
         }
-        return value;
-    };
+
+        if (typeof value1 === 'object' && value1 !== null) {
+            return (
+                <div>
+                    {Object.entries(value1).map(([key, value]) => {
+                    const isPort =
+                        key === 'hdmi' ||
+                        key === 'display_port' ||
+                        key === 'audio_jack' ||
+                        key === 'usb_a';
+
+                    if (isPort && Array.isArray(value)) {
+                        return (
+                            <div key={key} className="space-y-1">
+                                {value.map((port, i) => (
+                                    <div key={`${key}-${i}`}>
+                                        <b>Cổng {VIETNAMESE_SPECS[key]}:</b> phiên bản: {port.version}, số lượng: {port.quantity}
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    }
+
+                    return (
+                            <div key={key}>
+                            {String(value)}
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        }
+
+        return value1;
+        };
 
     return (
         <Card className='max-h-[55vh] mt-2'>
             <ScrollArea className='h-[50vh]'>
                 <CardContent className='overflow-auto font-mono'>
-                    {/* <h2 className="text-2xl font-bold pb-2">{laptop.laptop_name}</h2> */}
                     {data.laptop_id ? (
                         renderSpecsTable()
                     ) : (
-                        <Table className="border font-mono w-full table-auto">
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[200px]">Thông số</TableHead>
-                                    <TableHead>Giá trị</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
+                        <table className="border font-mono w-full table-auto">
+                            <thead>
+                                <tr>
+                                    <th className="w-[200px] border px-2 py-1">Thông số</th>
+                                    <th className="border px-2 py-1">Giá trị</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 {Object.entries(specs).map(([key, value]) => {
                                     if (value === null || value === undefined || value === '') return null;
                                     if (key.endsWith('_id')) return null;
                                     if (key.endsWith('_name')) return null;
-                                    
+
                                     return (
-                                        <TableRow key={key}>
-                                            <TableCell className="font-medium text-center">
+                                        <tr key={key}>
+                                            <td className="font-medium text-center border px-2 py-1">
                                                 {translations[key] || key}
-                                            </TableCell>
-                                            <TableCell className='text-center'>{formatValue(value)}</TableCell>
-                                        </TableRow>
+                                            </td>
+                                            <td className="text-center border px-2 py-1">
+                                                {formatValue(value)}
+                                            </td>
+                                        </tr>
                                     );
                                 })}
-                            </TableBody>
-                        </Table>
+                            </tbody>
+                        </table>
                     )}
                 </CardContent>
             </ScrollArea>

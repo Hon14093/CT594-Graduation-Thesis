@@ -67,7 +67,7 @@ export default function Laptop({ onLaptopSelect }) {
         "storage_installed_type": "Loại ổ cứng",
         "storage_slots": "Khe cắm ổ cứng",
         "storage_slots_type": "Loại khe cắm ổ cứng",
-        "max_storage": "Dung lượng tối đa",
+        "max_storage_gb": "Dung lượng lưu trữ tối đa (GB)",
         
         // Product info
         "price": "Giá bán",
@@ -105,7 +105,9 @@ export default function Laptop({ onLaptopSelect }) {
             'image_url',
             'price',
             'laptop_name',
-            'qty_in_stock'
+            'qty_in_stock',
+            'brand',
+            'laptop_price'
         ];
 
         return (
@@ -162,10 +164,10 @@ export default function Laptop({ onLaptopSelect }) {
     };
 
     return (
-        <section className='max-w-[1280px] mx-auto pt-4 lg:pt-2 lg:px-2 sm:px-4 min-h-[60vh]'>
+        <section className='max-w-[1280px] mx-auto lg:px-2 sm:px-4 min-h-[60vh] w-full'>
             <div className='grid grid-cols-2 gap-4'>
 
-                <article className='h-[55vh]'>
+                <article className=''>
                     {/* h-[55vh] */}
                     {laptop === null ? <SelectLaptop onSelectingLaptop={handleSelectLaptop} /> :
                         <Card className='h-full'>
@@ -199,9 +201,10 @@ export default function Laptop({ onLaptopSelect }) {
                     }
                 </article>
 
-                <article className='max-h-[55vh] overflow-hidden'>
+                {/* max-h-[55vh] */}
+                <article className=' overflow-hidden w-full'>
                     {laptop ? 
-                        <Card className='h-[55vh]'>
+                        <Card className='h-[29rem]'>
                             <ScrollArea className='h-full'>
                                 <CardContent className='font-mono'>
                                     <h2 className="text-2xl font-bold pb-2">{laptop.laptop_name}</h2>
@@ -210,7 +213,7 @@ export default function Laptop({ onLaptopSelect }) {
                             </ScrollArea>
                         </Card> 
                         :
-                        <Card className='h-[55vh]'>
+                        <Card className='h-[29rem] w-full'>
                             <CardContent className='flex justify-center items-center h-full'>
                                 <p>Hãy chọn laptop để xem thông số.</p>
                             </CardContent>

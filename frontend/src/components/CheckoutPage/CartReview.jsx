@@ -56,7 +56,7 @@ export default function CartReview({ cartItems, currentData, discount }) {
     }
     
     return (
-        <section className='py-6 text-lg'>
+        <section className='py-6 text-lg font-mono'>
             <h1 className='text-5xl'>GIỎ HÀNG</h1>
 
             <div className='mt-6 mx-5'>
