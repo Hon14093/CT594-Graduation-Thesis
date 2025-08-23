@@ -15,7 +15,7 @@ import SelectComponent from '../modals/tool/SelectComponent';
 import SpecsTableModal from '../modals/tool/SpecsTable';
 // import SpecsTable from '../specs-table';
 
-const categories = ['RAM', 'Lưu trữ', 'USB dock', 'Bộ chuyển đổi', 'Màn hình', 'Dây cáp'];
+const categories = ['RAM', 'Ổ cứng', 'Màn hình', 'USB dock', 'Bộ chuyển đổi', 'Dây cáp'];
 
 export default function ComponentTable({ laptop, onCheck }) {
     const [items, setItems] = useState({});

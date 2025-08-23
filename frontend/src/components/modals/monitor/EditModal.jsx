@@ -41,7 +41,7 @@ const refreshRates= [
     { id: "240", label: "240" }, { id: "360", label: "360" }
 ];
 
-const HDMI_VERSIONS = ["1.4", "2.0", "2.1"];
+const HDMI_VERSIONS = ["1.2", "1.4", "2.0", "2.1"];
 const DP_VERSIONS = ["1.2", "1.4", "1.4a", "2.0", "2.1"];
 
 export default function EditModal({ monitor, open, onClose, onSubmitSuccess }) {

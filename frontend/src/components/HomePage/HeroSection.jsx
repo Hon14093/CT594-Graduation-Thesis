@@ -31,7 +31,9 @@ export default function HeroSection() {
                                 variant="outline"
                                 className="border-techBlue text-techBlue hover:bg-techBlue/10 transition-colors"
                             >
-                                Kiểm tra tương thích
+                                <Link to='/tool'>
+                                    Kiểm tra tương thích
+                                </Link>
                             </Button>
                         </div>
                     </div>

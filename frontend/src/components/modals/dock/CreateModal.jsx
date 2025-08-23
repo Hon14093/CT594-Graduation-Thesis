@@ -40,7 +40,7 @@ const supportedResolutions = [
 
 const USB_A_VERSIONS = ["2.0", "3.0", "3.1", "3.2"];
 const USB_C_VERSIONS = ["3.0", "3.1", "3.2", "Thunderbolt 3", "Thunderbolt 4"];
-const HDMI_VERSIONS = ["1.4", "2.0", "2.1"];
+const HDMI_VERSIONS = ["1.2", "1.4", "2.0", "2.1"];
 const DP_VERSIONS = ["1.2", "1.4", "1.4a", "2.0", "2.1"];
 
 export default function CreateModal({ onSubmitSuccess }) {
